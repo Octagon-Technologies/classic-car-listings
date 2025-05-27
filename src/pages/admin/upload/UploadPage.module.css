@@ -1,0 +1,284 @@
+h6.title {
+  font-size: 1.6rem;
+  font-family: "Iceberg";
+  padding-top: 90px;
+  padding-left: 12px;
+}
+
+.field {
+  margin-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+  display: flex;
+  flex-direction: row;
+}
+
+.field:first-of-type {
+  align-items: center;
+}
+
+.field label {
+  font-family: "Advent Pro";
+  font-weight: 400;
+  color: #222222;
+  font-size: 1.3rem;
+  width: 100px;
+}
+
+.field input,
+textarea {
+  margin-left: 12px;
+  padding: 6px 8px;
+  outline: 0px;
+  border: 2px black solid;
+  flex: 1;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  transition: all 1s;
+}
+
+.field input:focus {
+  border-color: rgb(0, 141, 119);
+  border-width: 2px;
+}
+
+.field input[type="file"] {
+  border-radius: 6px;
+  width: 90%;
+  font-size: 1.05rem;
+}
+
+.field .priceDisplay {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.field .priceDisplay p {
+  margin-left: 12px;
+  margin-top: 4px;
+  font-size: 1.2rem;
+  color: rgb(58, 58, 58);
+  font-family: "Jost";
+}
+
+.field .carTypes {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  column-gap: 4px;
+  row-gap: 4px;
+  flex-wrap: wrap;
+}
+
+.field .carTypes li {
+  padding: 6px 12px;
+  background: white;
+  border: 2px var(--green) solid;
+  border-radius: 20px;
+  font-weight: 500;
+  user-select: none;
+  cursor: pointer;
+}
+
+.field .carTypes li.active {
+  background: var(--green);
+  color: white;
+}
+
+.inputImages {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.inputImages img {
+  height: 120px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.preview {
+  margin: 16px 12px;
+}
+
+.preview h6 {
+  margin-top: 24px;
+  font-size: 1.5rem;
+  font-family: "Iceberg";
+  color: rgb(43, 43, 43);
+}
+
+.previewCar {
+  margin-top: 12px;
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: -5px -5px 5px rgba(0, 0, 0, 0.1), 5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.previewCar .list {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: row;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.preview .sliderDots {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  width: 100%;
+  background-color: rgb(0, 141, 119);
+  height: 40px;
+  justify-content: center;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  align-items: center;
+  gap: 4px;
+  list-style-type: none;
+  transform: translateX(-50%);
+}
+
+.preview .sliderDots li {
+  width: 15px;
+  height: 15px;
+  background-color: rgba(189, 189, 189, 0.6);
+  border-radius: 24px;
+  transition: all 0.5s;
+}
+
+.preview .sliderDots li.active {
+  background-color: white;
+}
+
+.preview .sliderArrows {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  width: 97%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.preview .sliderArrows > * {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 20px;
+  color: white;
+  height: 20px;
+  padding: 10px;
+  font-size: 1.2rem;
+  border-radius: 50%;
+}
+
+.previewCar .list img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.previewCar .cost {
+  margin-top: 2px;
+  font-size: 1.2rem;
+  color: rgb(58, 58, 58);
+  font-family: "Jost";
+}
+
+.previewCar .features {
+  margin-top: 14px;
+}
+
+.previewCar .features p {
+  padding: 6px 14px;
+  border-radius: 16px;
+  background-color: rgb(0, 141, 119);
+  display: inline-block;
+  margin-bottom: 4px;
+  margin-right: 6px;
+  color: white;
+}
+
+.uploadBtn {
+  display: block;
+  border-radius: 8px;
+  padding: 12px 0;
+  background-color: white;
+  text-align: center;
+  margin: 12px;
+  margin-top: 20px;
+  border: 2px var(--green) solid;
+  box-shadow: -3px -3px 5px rgba(0, 0, 0, 0.1), 3px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.uploadStatus {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  top: 50%;
+  left: 50%;
+  width: 225px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  z-index: 5;
+  padding: 6px 12px;
+  background: white;
+  box-shadow: -5px -5px 5px rgba(0, 0, 0, 0.15), 5px 5px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+}
+
+.uploadStatus .finalStatus {
+  text-align: center;
+}
+
+.uploadStatus .finalStatus h6 {
+  font-size: 3rem;
+}
+
+.uploadStatus .finalStatus p {
+  font-weight: 500;
+  width: 90%;
+  margin: auto;
+  margin-top: 12px;
+}
+
+.uploadStatus .progressBar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 4px transparent solid;
+  border-top: 4px var(--green) solid;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.uploadStatus h6 {
+  margin-top: 24px;
+  font-size: 1.1rem;
+}
+
+.uploadStatus p {
+  margin-top: 4px;
+  text-align: center;
+}
+
+.uploadStatus p span {
+  color: #707070;
+  font-size: 1.1rem;
+  font-family: "Advent Pro";
+}

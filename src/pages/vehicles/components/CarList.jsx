@@ -1,9 +1,7 @@
 import CarCard from "./CarCard";
 import React, { useState, useEffect } from "react";
-// import { supabase } from "../config/config";
-
+import styles from "../VehiclesPage.module.css"
 import { supabase } from "../../../config/config";
-// import { SUPABASE_URL } from "../config/config";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -12,41 +10,33 @@ import { supabase } from "../../../config/config";
 // );
 
 //xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp
-function CarList({ searchQuery }) {
+function CarList({
+  vehicleType,
+  searchQuery,
+  priceSortOption,
+  dateSortOption,
+}) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // async function fetchCarImages() {
-    //   const folder = "list/2002 Land Rover";
-
-    //   const { data, error } = await supabase.storage.from("cars").list(folder);
-    //   if (error) {
-    //     console.error("Error fetching images:", error.message);
-    //     return;
-    //   }
-
-    //   console.log(`data is ${data}`);
-
-    //   const images = data.map((img) => {
-    //     return {
-    //       name: "Ford Ranger 2023",
-    //       price: 8000000,
-    //       image: `${SUPABASE_URL}/storage/v1/object/public/cars/${folder}/${img.name}`,
-    //     };
-    //   });
-
-    //   console.log(`images.length is ${images.length}`);
-    //   setCarList(images);
-    // }
-
-    // fetchCarImages();
-
     async function fetchCarImages() {
-      let request = supabase.from("cars").select();
+      let request = supabase.from(vehicleType).select();
 
       request = searchQuery
         ? request.ilike("name", `%${searchQuery}%`)
+        : request;
+
+      request = priceSortOption.order
+        ? request.order(priceSortOption.name, {
+            ascending: priceSortOption.order === "ascend",
+          })
+        : request;
+
+      request = dateSortOption.order
+        ? request.order(dateSortOption.name, {
+            ascending: dateSortOption.order === "ascend",
+          })
         : request;
 
       const { data, error } = await request;
@@ -70,44 +60,16 @@ function CarList({ searchQuery }) {
     fetchCarImages();
 
     console.log(carList.toString());
-  }, [searchQuery]);
-
-  // const toggleIsError = (event) => {
-  //     const isChecked = event.target.checked
-  //     console.log(`isChecked is ${isChecked}`);
-  //     setError(isChecked ? "true" : null)
-  // }
-
-  //   if (carList.length === 0 && searchQuery) {
-  //     <div className="no-cars-found">
-  //       <p>No Cars Found</p>
-  //     </div>;
-  //   } else if (carList.length > 0) {
-  //     <div className="car-list">
-  //       {carList.map((car, idx) => (
-  //         <CarCard
-  //           key={idx}
-  //           name={car.name}
-  //           price={car.price}
-  //           image={car.image}
-  //         />
-  //       ))}
-  //     </div>;
-  //   } else {
-  //     <div className={`error-message ${error && "active"}`}>
-  //       <p>Error occurred: {error}</p>
-  //     </div>;
-  //   }
+  }, [searchQuery, priceSortOption, dateSortOption]);
 
   let displayData;
-
   /* 
   
   
   Search has happened, no results */
   if (carList.length === 0 && searchQuery) {
     displayData = (
-      <div className="no-cars-found">
+      <div className={styles.noCarsFound}>
         <p>No Cars Found</p>
       </div>
     );
@@ -116,7 +78,7 @@ function CarList({ searchQuery }) {
     
     */
     displayData = (
-      <div className="car-list">
+      <div className={styles.carList}>
         {carList.map((car, idx) => (
           <CarCard
             key={idx}
@@ -132,32 +94,17 @@ function CarList({ searchQuery }) {
   
   */
     displayData = (
-      <div className="loading">
-        <div className="spinner"></div>
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
       </div>
     );
   }
 
-//   displayData = (
-//     <div className="loading">
-//       <div className="spinner"></div>
-//     </div>
-//   );
-
   return (
     <>
-      {/* <label htmlFor="turnError">Toggle Error</label>
-      <input
-        type="checkbox"
-        name="turnError"
-              id="turnError"
-              checked={error}
-        onChange={toggleIsError}
-          /> */}
-
       {displayData}
 
-      <div className={`error-message ${error && "active"}`}>
+      <div className={`${styles.errorMessage} ${error && styles.active}`}>
         <p>Error occurred: {error}</p>
       </div>
     </>

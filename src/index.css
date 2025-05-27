@@ -14,6 +14,11 @@
   --gold: #f6bc1c;
 }
 
+body {
+  width: 100%;
+}
+
+
 footer {
   margin-top: 32px;
   margin-bottom: 8px;
@@ -24,6 +29,7 @@ footer {
   width: 100%;
   height: 70px;
   position: fixed;
+  z-index: 5;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
@@ -86,33 +92,50 @@ footer {
   padding: 4px 14px;
   border-radius: 16px;
   margin-left: 6px;
-  background-color: rgba(127, 255, 212, 0.75);
+  background-color: var(--green);
+  color: white;
+  font-weight: 600;
 }
+
 
 nav {
   display: block;
   position: absolute;
-  right: -50%;
+  /* right: -50%; */
+  right: 0px;
   top: 0px;
-  width: 50%;
+  width: 0%;
+  overflow: hidden;
+  z-index: 10;
   background: rgba(0, 141, 119, 0.95);
   height: 100vh;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+  /* border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px; */
   transition: all 0.5s ease-in-out;
 }
 
 nav.active {
   right: 0px;
+  width: 100%;
 }
+
+#close-menu-btn {
+  position: absolute;
+  left: 6px;
+  top: 12px;
+}
+
 
 nav ul {
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
   margin-top: 32px;
-  gap: 4px;
+  gap: 10px;
+  width: 100%;
 }
 
 nav ul li {
@@ -141,143 +164,3 @@ nav ul li.active a {
   color: var(--darkGreen);
 }
 
-.cards {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 24px 16px;
-}
-
-.card {
-  border-radius: 8px;
-  overflow: hidden;
-  width: 48%;
-  justify-items: center;
-  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.05),
-    5px 5px 10px rgba(0, 0, 0, 0.05);
-}
-
-.card img {
-  width: 100px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: 0% 0%;
-}
-
-.card p.name {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.card p.bio {
-  font-family: "Open Sans";
-  color: rgb(101, 101, 101);
-  line-height: 1.1rem;
-  font-size: 0.95rem;
-  width: 85%;
-  text-align: center;
-  margin-top: 12px;
-  margin-bottom: 24px;
-}
-
-.car-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  row-gap: 16px;
-  margin: 24px 12px;
-}
-
-.car-card {
-  width: 100%;
-  margin: auto;
-  align-items: center;
-  text-align: center;
-}
-
-.car-card img {
-  width: 100%;
-  height: 280px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-.car-card p.name {
-  margin-top: 6px;
-  font-weight: 800;
-  font-size: 1.3rem;
-}
-
-.car-card p.price {
-  font-family: "Tektur";
-  color: var();
-}
-
-.no-cars-found {
-  height: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.no-cars-found p {
-  font-size: 1.3rem;
-}
-
-.loading {
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading .spinner {
-  height: 45px;
-  width: 45px;
-  border-radius: 50%;
-  z-index: 5;
-  border: 4px green solid;
-  border-top: 3px transparent solid;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.error-message {
-  position: fixed;
-  bottom: 4px;
-  left: 8px;
-  right: 8px;
-  color: rgb(248, 80, 80);
-  font-weight: 600;
-  font-size: 1.2rem;
-  width: 0px;
-  height: 50px;
-  transition: all 1s ease-in-out;
-  background: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.error-message p {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.error-message.active {
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
-  padding: 0px 10px;
-  width: 100%;
-}

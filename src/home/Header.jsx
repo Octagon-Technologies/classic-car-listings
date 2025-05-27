@@ -10,17 +10,14 @@ function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
   // const activeMenuHref = "home";
   const menuItems = [
     {
-      title: "Home",
-      href: "/",
-    },
-    {
-      title: "About",
+      title: "Who We Are",
       href: "about",
     },
     {
       title: "Classic Cars",
-      href: "classic-cars",
+      href: "/",
     },
+
     {
       title: "Modern Classics",
       href: "modern-classics",
@@ -35,7 +32,7 @@ function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
         <div
           className="top-bar-bg"
           style={{
-            background: {headerColor},
+            background: { headerColor },
           }}
         ></div>
         <div className="top-bar">
@@ -45,7 +42,7 @@ function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
             id="open-menu-btn"
             icon={faBars}
             onClick={toggleMenu}
-            style={{ fontSize: "1.3rem" }}
+            style={{ fontSize: "1.3rem", color: "black", fontWeight:"700" }}
           />
         </div>
       </div>
