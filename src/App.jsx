@@ -7,6 +7,7 @@ import VehiclesPage from "./pages/vehicles/VehiclesPage";
 import { VehicleTypes } from "./pages/vehicles/models/VehicleTypes";
 import UploadPage from "./pages/admin/upload/UploadPage";
 import AdminDisplay from "./pages/admin/display/AdminDisplay";
+import DetailsPage from "./pages/details/DetailsPage";
 
 export default function App() {
   return (
@@ -30,6 +31,12 @@ export default function App() {
                 vehicleType={VehicleTypes.ModernClassics}
               />
             }
+          />
+
+
+          <Route 
+            path="/:carType/:carSlugName"
+            element={ <DetailsPage/> }
           />
           {/* 
 

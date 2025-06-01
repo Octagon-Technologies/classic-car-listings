@@ -3,9 +3,15 @@ export function slugifyCarName(name) {
     .trim()
     .toLowerCase()
     .replace(/[^0-9a-z]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    
-    let dateString = new Date().toISOString().split("T")[0] // Example, should give me 2025-11-04 
+    .replace(/^-+|-+$/g, "");
 
-    return slugName + "-" + dateString
+  let dateString = new Date().toISOString().split("T")[0]; // Example, should give me 2025-11-04
+
+  return slugName + "-" + dateString;
 }
+
+export const toKESPrice = (priceInNumbers) =>
+  "KES " +
+  Number(priceInNumbers.toString().replace(/[^0-9]/g, "")).toLocaleString(
+    "en-KE"
+  );

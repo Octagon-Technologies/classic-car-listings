@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "Radikal";
+    src: url(./radikal_light.otf);
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Radikal";
+    src: url(./radikal.otf);
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Radikal";
+    src: url(./radikal_medium.otf);
+    font-weight: 600;
+    font-style: normal;
+}
