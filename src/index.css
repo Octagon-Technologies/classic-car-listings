@@ -27,42 +27,49 @@ footer {
   margin: 32px 12px 8px 12px;
 }
 
-.top-bar-container {
-  width: 100%;
-  height: 70px;
-  position: fixed;
-  z-index: 5;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+
+.appBarContainer {
+  position: relative;
+  padding-bottom: 90px;
 }
 
-.top-bar-bg {
-  width: 100%;
-  height: 70px;
-  position: absolute;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-}
-
-.top-bar {
+.appBar {
+  height: 80px;
   display: flex;
-  flex-direction: row;
-  position: fixed;
   align-items: center;
-  width: 100%;
-  height: 70px;
   justify-content: space-between;
-  padding: 12px 8px;
-  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
+  margin: 0px 6px;
+  border-radius: 8px;
+  padding: 12px;
+  position: fixed;
+  width: calc(100% - 12px);
+  background: white;
+  box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.2), 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
-.top-bar img {
-  width: 100px;
-  object-fit: cover;
+.appBar .logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
 }
 
-.top-bar #open-menu-btn {
-  margin-right: 8px;
+.appBar img {
+  width: 80px;
+  height: fit-content;
+}
+
+.appBar .logoName {
+  font-size: 1.1rem;
+  font-family: "Iceberg";
+  margin-left: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+
+.appBar .openMenu {
+  font-size: 1.2rem;
 }
 
 .search-bar {
@@ -102,7 +109,7 @@ footer {
 
 nav {
   display: block;
-  position: absolute;
+  position: fixed;
   /* right: -50%; */
   right: 0px;
   top: 0px;

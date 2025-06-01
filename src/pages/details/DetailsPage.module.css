@@ -20,19 +20,19 @@
   margin-right: 24px;
 }
 
-.header {
-  padding-top: 70px;
-}
-
 h3 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: var(--green);
+  font-weight: 600;
 }
 
 .header img {
-  width: 100%;
+  width: calc(100% - 12px);
+  margin: 0px 6px;
+  border-radius: 8px;
   height: 300px;
   object-fit: cover;
+  object-position: 100% 75%;
 }
 
 .body {
@@ -51,6 +51,10 @@ h3 {
   flex-direction: row;
   align-items: center;
   margin-top: 16px;
+  background: linear-gradient(rgb(0, 141, 119, 0.8), rgba(0, 0, 0, 0.85));
+  color: white;
+  padding: 16px 8px;
+  border-radius: 6px;
 }
 
 .price h6 {
@@ -66,7 +70,7 @@ h3 {
 .features {
   display: flex;
   flex-direction: column;
-  margin-top: 16px;
+  margin-top: 24px;
 }
 
 .features ul {
@@ -115,13 +119,15 @@ h3 {
   margin-top: 8px;
   padding-bottom: 80px;
   display: flex;
+  user-select: none;
   flex-direction: column;
   gap: 10px;
 }
 
 .gallery img {
   width: 100%;
-  height: 250px;
+  height: 280px;
+  user-select: none;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -155,4 +161,71 @@ h3 {
   background: white;
   color: var(--green);
   font-size: 2rem;
+}
+/* 
+
+
+
+ */
+.viewImage {
+    position: fixed;
+    z-index: 5;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+}
+
+.viewImage .topBar {
+    display: flex;
+    justify-content: space-between;
+    background: transparent;
+}
+
+.viewImage .topBar p {
+    font-weight: 500;
+    font-size: 1.15rem;
+}
+
+.viewImage .topBar .icons {
+    font-size: 1.4rem;
+    display: flex;
+    gap: 24px;
+    color: white;
+}
+
+.viewImage .actualImage  {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.viewImage .actualImage img {
+    width: 100%;
+    height: fit-content;  
+    object-fit: cover;
+    /* object-position: center;  */
+}
+
+.actualImage .navigation {
+    /* position: absolute; */
+    top: 90%;
+    /* transform: translateY(-50%); */
+    width: 100%;
+    padding: 0 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.actualImage .navigation > * {
+    width: 20px;
+    height: 20px;
+    padding: 14px 30px;
+    font-size: 1rem;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.7);
+    /* border-radius: 50%; */
+    border-radius: 8px;
 }

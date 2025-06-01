@@ -8,6 +8,7 @@ import { VehicleTypes } from "./pages/vehicles/models/VehicleTypes";
 import UploadPage from "./pages/admin/upload/UploadPage";
 import AdminDisplay from "./pages/admin/display/AdminDisplay";
 import DetailsPage from "./pages/details/DetailsPage";
+import NewVehiclePage from "./pages/vehicles/NewVehiclePage";
 
 export default function App() {
   return (
@@ -17,10 +18,11 @@ export default function App() {
           <Route
             index
             element={
-              <VehiclesPage path={"/"} vehicleType={VehicleTypes.ClassicCars} />
+              // <VehiclesPage path={"/"} vehicleType={VehicleTypes.ClassicCars} />
+              <NewVehiclePage />
             }
           />
-        
+
           <Route path="about" element={<AboutPage path={"about"} />} />
 
           <Route
@@ -33,11 +35,7 @@ export default function App() {
             }
           />
 
-
-          <Route 
-            path="/:carType/:carSlugName"
-            element={ <DetailsPage/> }
-          />
+          <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
           {/* 
 
 

@@ -3,9 +3,15 @@ import styles from "./DetailsPage.module.css";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faClose,
+  faMagnifyingGlassPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { faSquareWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import carPlaceholder from "../../assets/images/design/car-placeholder.jpg";
+import carSample from "../../assets/images/design/car-sample.webp";
 import tick from "../../assets/images/design/tick-svg.png";
 import Header from "../../home/Header.jsx";
 import { toKESPrice } from "../../utils/StringUtils.jsx";
@@ -18,43 +24,9 @@ const supabase = createClient(
 );
 
 function DetailsPage() {
+  const [car, setCar] = useState();
+  const [viewImageIndex, setViewImageIndex] = useState(null);
   const { carType, carSlugName } = useParams();
-  const [car, setCar] = useState({
-    name: "2006 Land Rover",
-    price: 12000000,
-    images: [
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/0",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/1",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/2",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/3",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/4",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/5",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/6",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/7",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/8",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/9",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/10",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/11",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/12",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/13",
-      "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/14",
-    ],
-    type: "classic-cars",
-    features: [
-      "Manual 5-Speed. ",
-      "2500cc TD5 Turbo Diesel.\n          ",
-      "Half Leather /Alcantara interior. ",
-      "️Double Sunroof (Both Working).\n          ",
-      "4 Man Rooftop Camping Tent. ",
-      "ARB Bullbar. ",
-      "New Terrafinna Shocks &\n          Coil springs. ",
-      'Brand New Tires with 2"Inch Lift Kit. ',
-      "Amazing Music\n          System. ",
-      "Travelled 186,236KMS. ",
-      "Runs & Drives Amazing. ",
-      "New Gen\n          Plate with Quick NTSA Transfer To You.",
-    ],
-  });
 
   useEffect(() => {
     async function fetchCarDetails() {
@@ -84,7 +56,7 @@ function DetailsPage() {
       });
     }
 
-    // fetchCarDetails();
+    fetchCarDetails();
   }, [carSlugName]);
 
   return (
@@ -95,10 +67,10 @@ function DetailsPage() {
         <p className={styles.title}>{car.name ? car.name : "Loading..."}</p>
       </div> */}
 
-      <Header />
+      {Number.isFinite(viewImageIndex) ? <></> : <Header />}
 
       {car ? (
-        <>
+        <div style={{background: "#fafafa"}}>
           <div className={styles.header}>
             <img src={car.images[0]} alt="" />
           </div>
@@ -125,15 +97,24 @@ function DetailsPage() {
               <h3>Gallery</h3>
 
               <ul>
-                {car.images.map((url) => (
-                  <img key={url} src={url}></img>
+                {car.images.map((url, index) => (
+                  <img
+                    key={index}
+                    src={url}
+                    onClick={() => {
+                      setViewImageIndex(index);
+                      console.log(`index is ${index}`);
+                    }}
+                  ></img>
                 ))}
               </ul>
             </div>
           </div>
 
           <a
-            href={`https://wa.me/254794940110/?text=I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`}
+            href={`https://wa.me/254794940110/?text=${encodeURIComponent(
+              `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
+            )}`}
             target="_blank"
             className={styles.contactTab}
           >
@@ -146,13 +127,50 @@ function DetailsPage() {
               icon={faSquareWhatsapp}
             />
             {/* </div> */}
-                  </a>
-                  
+          </a>
 
-                  <div>
-                      
-                  </div>
-        </>
+          {Number.isFinite(viewImageIndex) ? (
+            <div className={styles.viewImage}>
+              <div className={styles.topBar}>
+                <p>{`${viewImageIndex + 1}/${car.images.length}`}</p>
+
+                <div className={styles.icons}>
+                  {/* <FontAwesomeIcon icon={faMagnifyingGlassPlus} /> */}
+                  <FontAwesomeIcon
+                    icon={faClose}
+                    onClick={() => setViewImageIndex(null)}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.actualImage}>
+                <img src={car.images[viewImageIndex]} alt="" />
+
+                <div className={styles.navigation}>
+                  <FontAwesomeIcon
+                    icon={faChevronLeft}
+                    onClick={() =>
+                      setViewImageIndex((c) =>
+                        c === 0 ? car.images.length - 1 : c - 1
+                      )
+                    }
+                  />
+
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    onClick={() =>
+                      setViewImageIndex((c) =>
+                        c === car.images.length - 1 ? 0 : c + 1
+                      )
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       ) : (
         <div></div>
       )}
@@ -161,3 +179,40 @@ function DetailsPage() {
 }
 
 export default DetailsPage;
+
+// const [car, setCar] = useState({
+//   name: "2006 Land Rover",
+//   price: 12000000,
+//   images: [
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/0",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/1",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/2",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/3",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/4",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/5",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/6",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/7",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/8",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/9",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/10",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/11",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/12",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/13",
+//     "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002-land-rover-2025-05-27/14",
+//   ],
+//   type: "classic-cars",
+//   features: [
+//     "Manual 5-Speed. ",
+//     "2500cc TD5 Turbo Diesel.\n          ",
+//     "Half Leather /Alcantara interior. ",
+//     "️Double Sunroof (Both Working).\n          ",
+//     "4 Man Rooftop Camping Tent. ",
+//     "ARB Bullbar. ",
+//     "New Terrafinna Shocks &\n          Coil springs. ",
+//     'Brand New Tires with 2"Inch Lift Kit. ',
+//     "Amazing Music\n          System. ",
+//     "Travelled 186,236KMS. ",
+//     "Runs & Drives Amazing. ",
+//     "New Gen\n          Plate with Quick NTSA Transfer To You.",
+//   ],
+// });

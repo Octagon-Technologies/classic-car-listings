@@ -11,12 +11,14 @@ import { Link } from "react-router-dom";
 // );
 
 //xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp
-function CarList({
-  vehicleType,
-  searchQuery,
-  priceSortOption,
-  dateSortOption,
-}) {
+/**
+ *
+ * @param {any} vehicleType - An enum instance of VehicleType (ClassicCars, ModernClassics, Automobiles)
+ * @param { string } searchQuery - The search query from the user. Null means show everyhting.
+ * @param { any } sortOption - how to sort (inclusive of price and date posted)
+ * @returns
+ */
+function CarList({ vehicleType, searchQuery, sortOption }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
@@ -28,15 +30,9 @@ function CarList({
         ? request.ilike("name", `%${searchQuery}%`)
         : request;
 
-      request = priceSortOption.order
-        ? request.order(priceSortOption.name, {
-            ascending: priceSortOption.order === "ascend",
-          })
-        : request;
-
-      request = dateSortOption.order
-        ? request.order(dateSortOption.name, {
-            ascending: dateSortOption.order === "ascend",
+      request = sortOption
+        ? request.order(sortOption.name, {
+            ascending: sortOption.order === "ascend",
           })
         : request;
 
@@ -47,6 +43,7 @@ function CarList({
       }
 
       console.log(`data is ${data.length}`);
+      console.log(`sortOption is ${sortOption?.key}`);
 
       setCarList(
         data.map((car) => ({
@@ -63,7 +60,7 @@ function CarList({
     fetchCarImages();
 
     console.log(carList.toString());
-  }, [searchQuery, priceSortOption, dateSortOption]);
+  }, [searchQuery, sortOption]);
 
   let displayData;
   /* 

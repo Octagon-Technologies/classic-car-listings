@@ -1,0 +1,127 @@
+* {
+    font-family: "Radikal";
+    box-sizing: border-box;
+}
+
+.body {
+    background: whitesmoke;
+    min-height: 100vh;
+    padding-top: 4px;
+    padding-top: calc(80px + 16px);
+}
+
+
+.searchSection {
+    height: 250px;
+    background: var(--green);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px 0;
+    margin: 0px 8px;
+    border-radius: 8px;
+}
+
+.searchSection .title {
+    color: white;
+    font-family: "Quicksand";
+    width: 70%;
+    font-weight: 600;
+    margin-left: 24px;
+    font-size: 1.4rem;
+}
+
+.searchBar {
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    margin: 16px;
+    margin-top: 36px;
+    margin-bottom: 0px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 2px var(--green) solid;
+}
+
+.searchBar:focus-within {
+    border: 2px var(--darkGreen) solid;
+    background-color: white;
+    color: black;
+}
+
+.searchBar .icon {
+    font-size: 1.1rem;
+    margin-left: 4px;
+}
+
+.searchBar input {
+    border: 0px;
+    background-color: transparent;
+    flex: 1;
+    margin: auto 12px;
+    font-size: 1.1rem;
+}
+
+.searchBar input::placeholder {
+    color: antiquewhite;
+}
+
+.searchBar input:focus::placeholder {
+    color: rgb(95, 95, 95);
+}
+
+.searchBar input:focus {
+    border: 0;
+    outline: none;
+    color: black;
+}
+
+/* 
+
+
+
+*/
+.searchActions {
+    display: flex;
+    margin: 6px 16px;
+    gap: 12px;
+    font-family: "Quicksand";
+    font-weight: 500;
+}
+
+.searchActions .sort {
+    padding: 10px 10px;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+
+}
+
+
+.searchActions .sort select {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+    background: white;
+    
+    font-family: "Quicksand";
+    font-weight: 800;
+}
+
+.searchActions .search {
+    padding: 10px;
+    background: rgb(5, 60, 93);
+    border-radius: 8px;
+    color: white;
+    flex: 1;
+    font-size: 1.1rem;
+    align-items: center;
+    text-align: center;
+}
