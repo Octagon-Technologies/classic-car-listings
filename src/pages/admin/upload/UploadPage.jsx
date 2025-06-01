@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { createClient } from "@supabase/supabase-js";
-import { slugifyCarName } from "../../../utils/StringUtils";
+import { slugifyCarName, toKESPrice } from "../../../utils/StringUtils";
 import imageCompression from "browser-image-compression";
 
 const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
@@ -24,12 +24,11 @@ const VehicleTypes = [
 
 function UploadPage() {
   const [carName, setCarName] = useState("2002 Land Rover");
-  const [carPrice, setCarPrice] = useState(34000000);
+  const [carPrice, setCarPrice] = useState(3400000);
   const [formattedCarPrice, setFormattedCarPrice] = useState("KES 3,400,000");
 
   const [carType, setCarType] = useState(VehicleTypes[0].value);
-  const [carFeatures, setCarFeatures] =
-    useState("");
+  const [carFeatures, setCarFeatures] = useState("");
 
   const [formattedCarFeatures, setFormattedCarFeatures] = useState(
     carFeatures.split("✅").filter(Boolean)
@@ -41,10 +40,7 @@ function UploadPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadAction, setUploadAction] = useState("Compressing Images");
 
-  const [statusMessage, setStatusMessage] = useState({
-    isSuccess: false,
-    message: "Error occurred. Try again",
-  });
+  const [statusMessage, setStatusMessage] = useState(null);
   /*
     {
     isSuccess: true,
@@ -72,12 +68,7 @@ function UploadPage() {
     const plainPrice = e.target.value;
 
     setCarPrice(plainPrice);
-    setFormattedCarPrice(
-      "KES " +
-        Number(plainPrice.toString().replace(/[^0-9]/g, "")).toLocaleString(
-          "en-KE"
-        )
-    );
+    setFormattedCarPrice(toKESPrice(plainPrice));
   }
 
   function handleSliderDotClick(index) {
@@ -160,6 +151,10 @@ function UploadPage() {
         });
       }
 
+      setTimeout(() => {
+        setStatusMessage(null);
+      }, 4000);
+
       setIsUploading(false);
     }
   }
@@ -199,9 +194,7 @@ function UploadPage() {
           .upload(`list/${slugCarName}/${index}`, compImage);
 
         if (error) {
-          console.log(
-            `Failed to upload ${compImage}: ${error.message}`
-          );
+          console.log(`Failed to upload ${compImage}: ${error.message}`);
           return null;
         }
 
@@ -223,7 +216,9 @@ function UploadPage() {
   }
 
   return (
-    <div style={{ height: "100vh", paddingBottom: "20px", position: "relative" }}>
+    <div
+      style={{ height: "100vh", paddingBottom: "20px", position: "relative" }}
+    >
       <Header />
 
       <div>
@@ -259,7 +254,6 @@ function UploadPage() {
           <label htmlFor="carType">Vehicle Type</label>
 
           <ul className={styles.carTypes}>
-            {/* <li>Classic Car</li> */}
             {VehicleTypes.map((vehicle) => (
               <li
                 key={vehicle.value}

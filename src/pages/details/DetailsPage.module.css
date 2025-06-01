@@ -1,0 +1,158 @@
+* {
+  font-family: "Radikal";
+}
+
+.topBar {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px 16px;
+}
+
+.topBar .icon {
+  font-size: 1.25rem;
+}
+
+.topBar p.title {
+  font-size: 1.2rem;
+  margin-left: 20px;
+  margin-right: 24px;
+}
+
+.header {
+  padding-top: 70px;
+}
+
+h3 {
+  font-size: 1.4rem;
+  color: var(--green);
+}
+
+.header img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.body {
+  padding: 12px;
+}
+
+.body h2 {
+  font-family: "Advent Pro";
+  font-weight: 600;
+  font-size: 2.3rem;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.price h6 {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.price p {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+
+.features ul {
+  margin-top: 4px;
+  display: flex;
+  list-style-type: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 6px;
+  column-gap: 18px;
+}
+
+/* .features ul li {
+  font-size: 1.1rem;
+  background: white;
+  border: 1.5px var(--green) solid;
+  border-radius: 24px;
+  padding: 6px 16px;
+}
+*/
+
+.features ul li {
+  display: flex;
+  align-items: center;
+}
+
+.features ul li img {
+  width: 20px;
+  height: 16px;
+}
+
+.features ul li p {
+  margin-left: 6px;
+  align-content: center;
+  font-family: "Quicksand";
+  font-weight: 500;
+  display: block;
+  font-size: 1.05rem;
+}
+
+.gallery {
+  margin-top: 32px;
+}
+
+.gallery ul {
+  margin-top: 8px;
+  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.contactTab {
+  position: fixed;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  display: flex;
+  border-radius: 6px;
+  text-decoration: none;
+  color: black;
+  padding: 10px 12px;
+  background-color: white;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: -4px -4px 5px rgba(0, 0, 0, 0.2), 4px 4px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contactTab p {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.contactTab p span {
+  color: var(--green);
+}
+
+.contactTab .whatsappIcon {
+  background: white;
+  color: var(--green);
+  font-size: 2rem;
+}

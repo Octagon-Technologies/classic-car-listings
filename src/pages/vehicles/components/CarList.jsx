@@ -1,7 +1,8 @@
 import CarCard from "./CarCard";
 import React, { useState, useEffect } from "react";
-import styles from "../VehiclesPage.module.css"
+import styles from "../VehiclesPage.module.css";
 import { supabase } from "../../../config/config";
+import { Link } from "react-router-dom";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -51,7 +52,9 @@ function CarList({
         data.map((car) => ({
           name: car.name, //"Ford Ranger 2023",
           price: car.price,
-          image: car.car_images[0],
+          image: car.images[0],
+          slugName: car.slugName,
+          type: car.type,
           //"https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp",
         }))
       );
@@ -85,6 +88,7 @@ function CarList({
             name={car.name}
             price={car.price}
             image={car.image}
+            detailsPath={`/${car.type}/${car.slugName}`}
           />
         ))}
       </div>
