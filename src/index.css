@@ -116,7 +116,7 @@ nav {
   width: 0%;
   overflow: hidden;
   z-index: 10;
-  background: rgba(0, 141, 119, 0.95);
+  background: rgba(0, 141, 119, 0.99);
   height: 100vh;
   /* border-top-left-radius: 6px;
   border-bottom-left-radius: 6px; */
@@ -172,4 +172,5 @@ nav ul li a {
 nav ul li.active a {
   color: var(--darkGreen);
 }
+
 

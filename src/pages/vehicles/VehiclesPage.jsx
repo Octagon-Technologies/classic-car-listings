@@ -1,72 +1,92 @@
-import Header from "../../home/Header.jsx";
-import Footer from "../../home/Footer.jsx";
-
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import styles from "./VehiclePage.module.css";
+import logo from "../../assets/images/branding/cars-logo-nobg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import SortTags from "./components/SortTags.jsx";
-import CarList from "./components/CarList.jsx";
-import SortOption from "./models/SortOption.jsx";
+import {
+  faArrowUpWideShort,
+  faBars,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import CarList from "./components/car-list/CarList";
+import { VehicleTypes } from "./models/VehicleTypes";
+import SortOption from "./models/SortOption";
+import Header from "../../home/Header";
+// import wavy from "../../assets/images/design/green-v1.png";
+// import wavy from "../../assets/images/design/wavy-v3.png";
+// import wavy from "../../assets/images/design/wavy.webp";
+// import wavy from "../../assets/images/design/green-wavy.png";
 
-// import { supabase } from './config/config.jsx';
-
-function VehiclesPage({ path, vehicleType }) {
+function VehiclesPage({ vehicleType }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceSortOption, setSelectedPriceValue] = useState(
-    new SortOption("price", "ascend")
-  );
-  const [dateSortOption, setSelectedDateValue] = useState(
-    new SortOption("datePosted", "descend")
-  );
+  const [sortOption, setSortOption] = useState(null);
 
-  function updateSearchQuery(event) {
-    setSearchQuery(event.target.value);
+  function handlePriceAscend() {
+    setSortOption(new SortOption("price-ascend", "price", "ascend"));
+  }
+  function handlePriceDescend() {
+    setSortOption(new SortOption("price-descend", "price", "descend"));
+  }
+  function handleDateAscend() {
+    setSortOption(new SortOption("date-ascend", "datePosted", "ascend"));
+  }
+  function handleDateDescend() {
+    setSortOption(new SortOption("date-descend", "datePosted", "descend"));
   }
 
-  const handlePriceChange = (event) => {
-    setSelectedPriceValue(new SortOption("price", event.target.value));
-  };
-
-  const handleDateChange = (event) => {
-    setSelectedDateValue(new SortOption("datePosted", event.target.value));
-  };
-
   return (
-    <div style={{ minHeight: "100vh" }}>
-      <div style={{ flex: 1, maxWidth: "100vw", overflowX: "hidden" }}>
-        <Header activeMenuHref={path} />
+    <div>
+      <Header />
 
-        <div className="search-bar">
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            style={{ fontSize: "1.15rem" }}
-          />
+      <div className={styles.searchSection}>
+        <h3 className={styles.title}>
+          Explore a vast array of well-maintained classics
+        </h3>
+
+        <div className={styles.searchBar}>
+          <FontAwesomeIcon className={styles.icon} icon={faMagnifyingGlass} />
           <input
             type="text"
-            id="search-query"
-            placeholder="Search car here"
-            value={searchQuery}
-            onChange={updateSearchQuery}
+            placeholder="Search for your desired car"
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        <SortTags
-          selectedPriceValue={priceSortOption.order}
-          selectedDateValue={dateSortOption.order}
-          handlePriceChange={handlePriceChange}
-          handleDateChange={handleDateChange}
-        />
-
-        <CarList
-          vehicleType={vehicleType}
-          searchQuery={searchQuery}
-          priceSortOption={priceSortOption}
-          dateSortOption={dateSortOption}
-        />
+        <div className={styles.searchActions}>
+          <div className={styles.sort}>
+            <select
+              value={sortOption ? sortOption.key : ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "price-ascend") handlePriceAscend();
+                else if (value === "price-descend") handlePriceDescend();
+                else if (value === "date-ascend") handleDateAscend();
+                else if (value === "date-descend") handleDateDescend();
+                else setSortOption(null);
+              }}
+            >
+              <option value="">Sort</option>
+              <option value="price-ascend">Price: Lowest To Highest</option>
+              <option value="price-descend">Price: Highest To Lowest</option>
+              <option value="date-ascend">Earliest To Latest (Date Posted)</option>
+              <option value="date-descend">Latest To Earliest (Date Posted)</option>
+            </select>
+            <FontAwesomeIcon icon={faArrowUpWideShort} />
+          </div>
+          <div className={styles.search}>
+            <p>Search</p>
+          </div>
+        </div>
       </div>
 
-      <Footer style={{ marginTop: "auto" }} />
+      <CarList
+        vehicleType={vehicleType}
+        searchQuery={searchQuery}
+        sortOption={sortOption}
+        className={styles.carList}
+      />
+      {/* <div className={styles.carList}>
+        <div className={styles.car}></div>
+      </div> */}
     </div>
   );
 }

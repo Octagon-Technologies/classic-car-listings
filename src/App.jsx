@@ -3,12 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import OtherPage from "./pages/OtherPage";
 import NoPage from "./pages/no-page/NoPage";
 import AboutPage from "./pages/about/AboutPage";
-import VehiclesPage from "./pages/vehicles/VehiclesPage";
 import { VehicleTypes } from "./pages/vehicles/models/VehicleTypes";
 import UploadPage from "./pages/admin/upload/UploadPage";
 import AdminDisplay from "./pages/admin/display/AdminDisplay";
 import DetailsPage from "./pages/details/DetailsPage";
-import NewVehiclePage from "./pages/vehicles/NewVehiclePage";
+import VehiclesPage from "./pages/vehicles/VehiclesPage";
 
 export default function App() {
   return (
@@ -19,12 +18,10 @@ export default function App() {
             index
             element={
               // <VehiclesPage path={"/"} vehicleType={VehicleTypes.ClassicCars} />
-              <NewVehiclePage />
+              <VehiclesPage vehicleType={VehicleTypes.ClassicCars} />
             }
           />
-
           <Route path="about" element={<AboutPage path={"about"} />} />
-
           <Route
             path={VehicleTypes.ModernClassics}
             element={
@@ -34,7 +31,6 @@ export default function App() {
               />
             }
           />
-
           <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
           {/* 
 
@@ -43,7 +39,6 @@ export default function App() {
 */}
           <Route path="admin/display" element={<AdminDisplay />} />
           <Route path="admin/upload" element={<UploadPage />} />
-
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

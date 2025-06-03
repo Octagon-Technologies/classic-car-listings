@@ -23,15 +23,18 @@ const VehicleTypes = [
 ];
 
 function UploadPage() {
-  const [carName, setCarName] = useState("2002 Land Rover");
-  const [carPrice, setCarPrice] = useState(3400000);
-  const [formattedCarPrice, setFormattedCarPrice] = useState("KES 3,400,000");
+  const [carName, setCarName] = useState(); //useState("2002 Land Rover");
+  const [carPrice, setCarPrice] = useState(); //3400000
+  const [formattedCarPrice, setFormattedCarPrice] = useState(); //KES 3,400,000
 
   const [carType, setCarType] = useState(VehicleTypes[0].value);
   const [carFeatures, setCarFeatures] = useState("");
+  const [carCoverImage, setCarCoverImage] = useState(null);
+
+  let remoteCoverImage = null
 
   const [formattedCarFeatures, setFormattedCarFeatures] = useState(
-    carFeatures.split("✅").filter(Boolean)
+    carFeatures.split(/✅|✔️|↪️/).filter(Boolean)
   );
   const [localImages, setLocalImages] = useState([]);
   const [activePreviewImageIndex, setActivePreviewImageIndex] = useState(0);
@@ -118,6 +121,8 @@ function UploadPage() {
       alert(`Error: carFeatures is ${carFeatures}`);
     } else if (localImages.length === 0) {
       alert(`Error: Car Images cannot be ${localImages.length}`);
+    } else if (!carCoverImage) {
+      alert(`Select a cover image first`);
     } else {
       setIsUploading(true);
 
@@ -130,6 +135,7 @@ function UploadPage() {
         type: carType, // string
         features: formattedCarFeatures, // list<string>
         images: imageUrls, // list<string>
+        coverImage: remoteCoverImage, // string
         slugName: slugName, // string
       };
 
@@ -202,15 +208,22 @@ function UploadPage() {
           Math.round(((index + 1) / compressedImages.length) * 100)
         );
 
-        console.log(`data.fullPath is ${data.fullPath}`);
+        let remoteImage = getUrlFromFullPath(data.fullPath);
+        console.log(`remoteImage is ${remoteImage}`);
 
-        return getUrlFromFullPath(data.fullPath);
+        if (index === carCoverImage) {
+          remoteCoverImage = remoteImage
+        }
+
+        return remoteImage;
       })
     );
 
     console.log(`urlList is ${urlList.toString()}`);
     urlList = urlList.filter(Boolean);
     console.log(`urlList is ${urlList.toString()}`);
+
+    console.log(`remoteCoverImage is ${remoteCoverImage}`);
 
     return urlList;
   }
@@ -291,16 +304,49 @@ function UploadPage() {
             <ReactSortable
               list={localImages}
               setList={setLocalImages}
+              animation={200}
               direction="horizontal"
+              delayOnTouchStart={true}
+              delay={100} // More forgiving for mobile touch
+              touchStartThreshold={5} // Optional, helps sensitivity
               className={styles.inputImages}
             >
-              {localImages.map((localImage, idx) => (
+              {localImages.map((localImage, index) => (
                 <img
-                  key={idx}
+                  key={localImage.image}
                   src={localImage.image ? localImage.image : null}
+                  onClick={() => {
+                    setCarCoverImage(index);
+                    setActivePreviewImageIndex(index);
+                  }}
                 ></img>
               ))}
             </ReactSortable>
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label
+            htmlFor="carCoverImage"
+            style={{
+              textAlign: "center",
+              margin: "auto",
+              marginTop: "20px",
+              fontSize: "1.25rem",
+            }}
+          >
+            Cover Image
+          </label>
+
+          <div className={styles.coverImage}>
+            {Number.isFinite(carCoverImage) ? (
+              <img src={localImages[carCoverImage].image} alt="" />
+            ) : (
+              <p style={{}}>
+                👆🏾 <span>Click</span> on one of the images above to make it the
+                cover image 👆🏾
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -355,7 +401,6 @@ function UploadPage() {
 
       <div
         className={styles.uploadStatus}
-        // style={{ display: "flex" }}
         style={{ display: isUploading ? "flex" : "none" }}
       >
         {statusMessage ? (

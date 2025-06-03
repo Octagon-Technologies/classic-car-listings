@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../VehiclesPage.module.css";
+import styles from "../components/car-list/CarList.module.css"
 import "prop-types";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";

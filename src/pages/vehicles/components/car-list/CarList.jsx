@@ -1,8 +1,8 @@
-import CarCard from "./CarCard";
+import CarCard from "../CarCard";
 import React, { useState, useEffect } from "react";
-import styles from "../VehiclesPage.module.css";
-import { supabase } from "../../../config/config";
-import { Link } from "react-router-dom";
+import styles from "./CarList.module.css";
+import { supabase } from "../../../../config/config";
+import SortOption from "../../models/SortOption";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -22,6 +22,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
+  
   useEffect(() => {
     async function fetchCarImages() {
       let request = supabase.from(vehicleType).select();
@@ -34,7 +35,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
         ? request.order(sortOption.name, {
             ascending: sortOption.order === "ascend",
           })
-        : request;
+        : request.order("datePosted", { ascending: false });
 
       const { data, error } = await request;
 

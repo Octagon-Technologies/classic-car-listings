@@ -13,7 +13,7 @@ function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
   const menuItems = [
     {
       title: "Who We Are",
-      href: "about",
+      href: "/about",
     },
     {
       title: "Classic Cars",
@@ -22,7 +22,7 @@ function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
 
     {
       title: "Modern Classics",
-      href: "modern-classics",
+      href: "/modern-classics",
     },
   ];
 

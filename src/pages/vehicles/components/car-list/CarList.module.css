@@ -1,28 +1,10 @@
-.sortBar {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  margin: 0px 12px;
-}
-
-.sortBar .tab {
-  margin-left: 12px;
-  padding: 4px 6px;
-  border-radius: 6px;
-  width: 40%;
-  font-family: "Quicksand";
-  outline: 0px;
-  border: 1.5px black solid;
-  font-weight: 600;
-  transition: background-color 0.4s ease-in-out;
-}
-
 .carList {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   row-gap: 30px;
   margin: 24px 12px;
+  padding-bottom: 24px;
 }
 
 .carCard {

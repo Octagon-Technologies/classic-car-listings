@@ -1,4 +1,4 @@
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./DetailsPage.module.css";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
