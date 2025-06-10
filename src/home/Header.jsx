@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/images/branding/cars-logo-nobg.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
+function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // const activeMenuHref = "home";
+  const activeMenuHref = useLocation().pathname;
   const menuItems = [
     {
       title: "Who We Are",
@@ -58,37 +58,37 @@ function Header({ activeMenuHref, headerColor = "rgba(255, 255, 255, 0.2)" }) {
           </Link>
 
           <FontAwesomeIcon
-            className="openMenu"
+            id="openMenu"
             onClick={toggleMenu}
             icon={faBars}
           />
+
+          <nav className={isMenuOpen ? "active" : ""}>
+            <FontAwesomeIcon
+              id="closeMenu"
+              icon={faClose}
+              onClick={toggleMenu}
+              style={{
+                fontSize: "1.5rem",
+                marginLeft: "16px",
+                marginTop: "16px",
+                color: "white",
+              }}
+            />
+
+            <ul>
+              {menuItems.map((item) => (
+                <li
+                  key={item.href}
+                  className={item.href === activeMenuHref ? "active" : ""}
+                >
+                  <a href={item.href}>{item.title}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
-      
-      <nav className={isMenuOpen ? "active" : ""}>
-        <FontAwesomeIcon
-          id="close-menu-btn"
-          icon={faClose}
-          onClick={toggleMenu}
-          style={{
-            fontSize: "1.5rem",
-            marginLeft: "16px",
-            marginTop: "16px",
-            color: "white",
-          }}
-        />
-
-        <ul style={{}}>
-          {menuItems.map((item) => (
-            <li
-              key={item.href}
-              className={item.href === activeMenuHref ? "active" : ""}
-            >
-              <a href={item.href}>{item.title}</a>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </header>
   );
 }

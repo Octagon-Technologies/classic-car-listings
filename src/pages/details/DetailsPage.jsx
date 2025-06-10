@@ -31,8 +31,9 @@ function DetailsPage() {
   useEffect(() => {
     async function fetchCarDetails() {
       const { data, error } = await supabase
-        .from(carType)
+        .from("cars")
         .select()
+        // .eq("carType", carType)
         .eq("slugName", carSlugName)
         .single();
 
@@ -51,13 +52,27 @@ function DetailsPage() {
         name: data.name,
         price: data.price,
         images: data.images,
-        type: data.type,
+        type: data.carType,
         features: data.features,
       });
     }
 
     fetchCarDetails();
   }, [carSlugName]);
+
+  function handleLeftImagePreviewClick() {
+    setViewImageIndex((c) => (c === 0 ? car.images.length - 1 : c - 1));
+  }
+
+  function handleRightImagePreviewClick() {
+    setViewImageIndex((c) => (c === car.images.length - 1 ? 0 : c + 1));
+  }
+
+  useArrows({
+    scrollLeft: handleLeftImagePreviewClick,
+    scrollRight: handleRightImagePreviewClick,
+    onEscape: () => { setViewImageIndex(null) }
+  });
 
   return (
     <>
@@ -70,7 +85,7 @@ function DetailsPage() {
       {Number.isFinite(viewImageIndex) ? <></> : <Header />}
 
       {car ? (
-        <div style={{background: "#fafafa"}}>
+        <div style={{ background: "#fafafa" }}>
           <div className={styles.header}>
             <img src={car.images[0]} alt="" />
           </div>
@@ -110,24 +125,27 @@ function DetailsPage() {
               </ul>
             </div>
           </div>
-
-          <a
-            href={`https://wa.me/254794940110/?text=${encodeURIComponent(
-              `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
-            )}`}
-            target="_blank"
-            className={styles.contactTab}
-          >
-            {/* <div> */}
-            <p>
-              Contact on <span>Whatsapp</span>
-            </p>
-            <FontAwesomeIcon
-              className={styles.whatsappIcon}
-              icon={faSquareWhatsapp}
-            />
-            {/* </div> */}
-          </a>
+          {!Number.isFinite(viewImageIndex) ? (
+            <a
+              href={`https://wa.me/254794940110/?text=${encodeURIComponent(
+                `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
+              )}`}
+              target="_blank"
+              className={styles.contactTab}
+            >
+              {/* <div> */}
+              <p>
+                Contact on <span>Whatsapp</span>
+              </p>
+              <FontAwesomeIcon
+                className={styles.whatsappIcon}
+                icon={faSquareWhatsapp}
+              />
+              {/* </div> */}
+            </a>
+          ) : (
+            <></>
+          )}
 
           {Number.isFinite(viewImageIndex) ? (
             <div className={styles.viewImage}>
@@ -143,28 +161,22 @@ function DetailsPage() {
                 </div>
               </div>
 
-              <div className={styles.actualImage}>
-                <img src={car.images[viewImageIndex]} alt="" />
+              {/* <div className={styles.actualImage}> */}
+              <img src={car.images[viewImageIndex]} alt="" />
+              {/* </div> */}
 
-                <div className={styles.navigation}>
-                  <FontAwesomeIcon
-                    icon={faChevronLeft}
-                    onClick={() =>
-                      setViewImageIndex((c) =>
-                        c === 0 ? car.images.length - 1 : c - 1
-                      )
-                    }
-                  />
+              <div className={styles.navigation}>
+                <FontAwesomeIcon
+                  icon={faChevronLeft}
+                  onDoubleClick={null}
+                  onClick={handleLeftImagePreviewClick}
+                />
 
-                  <FontAwesomeIcon
-                    icon={faChevronRight}
-                    onClick={() =>
-                      setViewImageIndex((c) =>
-                        c === car.images.length - 1 ? 0 : c + 1
-                      )
-                    }
-                  />
-                </div>
+                <FontAwesomeIcon
+                  icon={faChevronRight}
+                  onDoubleClick={null}
+                  onClick={handleRightImagePreviewClick}
+                />
               </div>
             </div>
           ) : (
@@ -176,6 +188,28 @@ function DetailsPage() {
       )}
     </>
   );
+}
+
+function useArrows({ scrollLeft, scrollRight, onEscape }) {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      event.preventDefault();
+
+      if (event.key == "ArrowLeft" || event.key === "ArrowUp") {
+        scrollLeft?.();
+      } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        scrollRight?.();
+      } else if (event.key === "Escape") {
+        onEscape?.();
+      }
+    };
+
+    window.document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [scrollLeft, scrollRight]);
 }
 
 export default DetailsPage;

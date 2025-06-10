@@ -14,6 +14,7 @@
   --darkGreen: rgb(21, 61, 20);
   --lightBlack: #393939;
   --gold: #f6bc1c;
+  --lightRed: rgb(251, 126, 126);
 }
 
 body {
@@ -110,7 +111,6 @@ footer {
 nav {
   display: block;
   position: fixed;
-  /* right: -50%; */
   right: 0px;
   top: 0px;
   width: 0%;
@@ -118,8 +118,6 @@ nav {
   z-index: 10;
   background: rgba(0, 141, 119, 0.99);
   height: 100vh;
-  /* border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px; */
   transition: all 0.5s ease-in-out;
 }
 
@@ -128,7 +126,7 @@ nav.active {
   width: 100%;
 }
 
-#close-menu-btn {
+#closeMenu {
   position: absolute;
   left: 6px;
   top: 12px;
@@ -174,3 +172,79 @@ nav ul li.active a {
 }
 
 
+@media screen and (min-width: 850px) {
+  #openMenu {
+    display: none;
+  }
+  
+  #closeMenu {
+    display: none;
+  }
+
+  nav {
+    width: 50%;
+    position: relative;
+    height: 80px;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  nav ul {
+    margin-top: 0px;
+    height: 80px;
+    top: 50%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    padding-right: 36px;
+    gap: 24px;
+  }
+
+  nav ul li {
+    padding: 0px;
+    margin: 0px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+  }
+
+  nav ul li a {
+    font-family: "Quicksand";
+    text-transform: capitalize;
+    color: black;
+  }
+
+  nav ul li.active a {
+    color: var(--green);
+  }
+}
+
+
+.loading {
+  /* height: 100vh;
+  width: 100vw;
+  position: absolute;
+  left: 0px;
+  top: 0px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading .spinner {
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  z-index: 5;
+  border: 4.5px var(--green) solid;
+  border-top: 3.5px transparent solid;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

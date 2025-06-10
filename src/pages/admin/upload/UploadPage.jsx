@@ -8,6 +8,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { createClient } from "@supabase/supabase-js";
 import { slugifyCarName, toKESPrice } from "../../../utils/StringUtils";
 import imageCompression from "browser-image-compression";
+import { VehicleTypes } from "../../vehicles/models/VehicleTypes";
 
 const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
 const supabase = createClient(
@@ -15,19 +16,13 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
 );
 
-const VehicleTypes = [
-  { label: "Classic Cars", value: "classic-cars" },
-  { label: "Modern Classics", value: "modern-classics" },
-  { label: "Classic Bikes", value: "classic-bikes" },
-  { label: "Automobiles", value: "automobiles" },
-];
 
 function UploadPage() {
   const [carName, setCarName] = useState(); //useState("2002 Land Rover");
   const [carPrice, setCarPrice] = useState(); //3400000
   const [formattedCarPrice, setFormattedCarPrice] = useState(); //KES 3,400,000
 
-  const [carType, setCarType] = useState(VehicleTypes[0].value);
+  const [carType, setCarType] = useState(VehicleTypes.ClassicCars.value);
   const [carFeatures, setCarFeatures] = useState("");
   const [carCoverImage, setCarCoverImage] = useState(null);
 
@@ -132,7 +127,7 @@ function UploadPage() {
       const newCar = {
         name: carName, // string
         price: carPrice, // number
-        type: carType, // string
+        carType: carType, // string
         features: formattedCarFeatures, // list<string>
         images: imageUrls, // list<string>
         coverImage: remoteCoverImage, // string
@@ -140,7 +135,7 @@ function UploadPage() {
       };
 
       const { data, error } = await supabase
-        .from(carType)
+        .from("cars")
         .insert(newCar)
         .select();
 
@@ -267,7 +262,7 @@ function UploadPage() {
           <label htmlFor="carType">Vehicle Type</label>
 
           <ul className={styles.carTypes}>
-            {VehicleTypes.map((vehicle) => (
+            {Object.values(VehicleTypes).map((vehicle) => (
               <li
                 key={vehicle.value}
                 className={vehicle.value === carType ? styles.active : ""}

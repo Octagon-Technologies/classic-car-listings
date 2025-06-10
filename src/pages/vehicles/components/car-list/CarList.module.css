@@ -52,33 +52,6 @@
   font-size: 1.3rem;
 }
 
-.loading {
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading .spinner {
-  height: 45px;
-  width: 45px;
-  border-radius: 50%;
-  z-index: 5;
-  border: 4px var(--green) solid;
-  border-top: 3px transparent solid;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .errorMessage {
   position: fixed;
   bottom: 4px;
@@ -106,4 +79,26 @@
   border-radius: 6px;
   padding: 0px 10px;
   width: 100%;
+}
+
+
+
+
+
+@media screen and (min-width: 850px) {
+  .carList {
+    gap: 20px;
+    width: 80%;
+    margin: 24px 10%;
+    justify-content: center;
+  }
+
+  .carCard {
+    flex-basis: 30%;
+    margin: 0px;
+  }
+
+  .carCard img {
+    height: 300px;
+  }
 }

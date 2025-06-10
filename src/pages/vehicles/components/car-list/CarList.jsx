@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./CarList.module.css";
 import { supabase } from "../../../../config/config";
 import SortOption from "../../models/SortOption";
+import Loading from "../../../../home/Loading";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -22,10 +23,12 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
-  
   useEffect(() => {
     async function fetchCarImages() {
-      let request = supabase.from(vehicleType).select();
+      let request = supabase
+        .from("cars")
+        .select()
+        .eq("carType", vehicleType.value);
 
       request = searchQuery
         ? request.ilike("name", `%${searchQuery}%`)
@@ -50,7 +53,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
         data.map((car) => ({
           name: car.name, //"Ford Ranger 2023",
           price: car.price,
-          image: car.images[0],
+          image: car.coverImage,
           slugName: car.slugName,
           type: car.type,
           //"https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp",
@@ -64,10 +67,10 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
   }, [searchQuery, sortOption]);
 
   let displayData;
-  /* 
-  
-  
-  Search has happened, no results */
+
+  // displayData = Loading();
+
+  // Search has happened, no results */
   if (carList.length === 0 && searchQuery) {
     displayData = (
       <div className={styles.noCarsFound}>
@@ -75,8 +78,8 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
       </div>
     );
   } else if (carList.length > 0) {
-    /* Search has happened, results available 
-    
+    /* Search has happened, results available
+
     */
     displayData = (
       <div className={styles.carList}>
@@ -93,7 +96,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
     );
   } else {
     /* Initial Loading happening
-  
+
   */
     displayData = (
       <div className={styles.loading}>

@@ -23,7 +23,9 @@
 h3 {
   font-size: 1.5rem;
   color: var(--green);
+  margin: auto;
   font-weight: 600;
+  font-family: "Advent Pro";
 }
 
 .header img {
@@ -51,9 +53,9 @@ h3 {
   flex-direction: row;
   align-items: center;
   margin-top: 16px;
-  background: linear-gradient(rgb(0, 141, 119, 0.8), rgba(0, 0, 0, 0.85));
-  color: white;
-  padding: 16px 8px;
+  /* background: linear-gradient(rgb(0, 141, 119, 0.8), rgba(0, 0, 0, 0.85)); */
+  color: black;
+  padding: 16px 0px;
   border-radius: 6px;
 }
 
@@ -77,24 +79,18 @@ h3 {
   margin-top: 4px;
   display: flex;
   list-style-type: none;
-  flex-direction: row;
-  flex-wrap: wrap;
-  row-gap: 6px;
+  flex-direction: column;
+  row-gap: 5px;
   column-gap: 18px;
 }
-
-/* .features ul li {
-  font-size: 1.1rem;
-  background: white;
-  border: 1.5px var(--green) solid;
-  border-radius: 24px;
-  padding: 6px 16px;
-}
-*/
 
 .features ul li {
   display: flex;
   align-items: center;
+  padding: 12px 12px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .features ul li img {
@@ -113,6 +109,9 @@ h3 {
 
 .gallery {
   margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gallery ul {
@@ -121,6 +120,7 @@ h3 {
   display: flex;
   user-select: none;
   flex-direction: column;
+  width: 100%;
   gap: 10px;
 }
 
@@ -141,6 +141,7 @@ h3 {
   border-radius: 6px;
   text-decoration: none;
   color: black;
+  z-index: 5;
   padding: 10px 12px;
   background-color: white;
   justify-content: space-between;
@@ -168,64 +169,176 @@ h3 {
 
  */
 .viewImage {
-    position: fixed;
-    z-index: 5;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
+  position: fixed;
+  z-index: 5;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
 }
 
 .viewImage .topBar {
-    display: flex;
-    justify-content: space-between;
-    background: transparent;
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
 }
 
 .viewImage .topBar p {
-    font-weight: 500;
-    font-size: 1.15rem;
+  font-weight: 500;
+  font-size: 1.15rem;
 }
 
 .viewImage .topBar .icons {
-    font-size: 1.4rem;
-    display: flex;
-    gap: 24px;
-    color: white;
+  font-size: 1.4rem;
+  display: flex;
+  gap: 24px;
+  color: white;
 }
 
-.viewImage .actualImage  {
+.viewImage img {
+  width: 100vw;
+  height: fit-content;
+  object-fit: cover;
+}
+
+.navigation {
+  width: 100%;
+  padding: 0 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation > * {
+  width: 20px;
+  height: 20px;
+  padding: 14px 30px;
+  font-size: 1rem;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.7);
+  /* border-radius: 50%; */
+  border-radius: 8px;
+}
+
+@media screen and (min-width: 850px) {
+  .header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .header img {
+    width: 75%;
+    height: 500px;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .body h2 {
+    margin: 12px auto;
+  }
+
+  .price {
+    width: 75%;
+    margin: auto;
+  }
+
+  .features ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 8px;
+    column-gap: 12px;
+    width: 80%;
+    margin: 16px 10% 0px 10%;
+    justify-content: space-between;
+  }
+
+  .features ul li {
+    flex-basis: 49%;
+    padding: 14px 12px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .gallery ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 10%;
+  }
+
+  .gallery img {
+    width: 30%;
+    height: 350px;
+  }
+
+  .viewImage {
+    width: 90%;
+    height: 90%;
+    left: 50%;
+    top: 5%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    background: white;
+    color: black;
+  }
+
+  .viewImage .topBar .icons {
+    color: black;
+  }
+
+  .viewImage  img {
+    width: fit-content;
+    height: 85%;
+    margin-top: 7.5%;
+    border-radius: 6px;
+  }
+
+  .viewImage .topBar {
+    height: 80px;
+    align-items: center;
+    padding: 0px 24px;
+    /* background-color: aqua; */
+  }
+
+  .viewImage .topBar p {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .navigation {
     position: absolute;
+    width: 100%;
     top: 50%;
     transform: translateY(-50%);
-}
+  }
 
-.viewImage .actualImage img {
-    width: 100%;
-    height: fit-content;  
-    object-fit: cover;
-    /* object-position: center;  */
-}
-
-.actualImage .navigation {
-    /* position: absolute; */
-    top: 90%;
-    /* transform: translateY(-50%); */
-    width: 100%;
-    padding: 0 4px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.actualImage .navigation > * {
-    width: 20px;
-    height: 20px;
-    padding: 14px 30px;
-    font-size: 1rem;
+  .navigation > * {
+    padding: 40px 14px;
+    background: white;
     color: black;
-    background-color: rgba(255, 255, 255, 0.7);
-    /* border-radius: 50%; */
-    border-radius: 8px;
+    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.1), 2px 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 12px;
+    cursor: pointer;
+  }
+
+  .navigation > *:hover {
+    background-color: var(--green);
+    color: white;
+  }
 }
