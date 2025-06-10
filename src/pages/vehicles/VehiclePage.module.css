@@ -125,3 +125,20 @@
     align-items: center;
     text-align: center;
 }
+
+.filterCategory {
+    margin: 8px;
+    width: calc(100% - 16px);
+    padding: 12px;
+    outline: 0px;
+    border: 2px var(--green) solid;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1rem;
+    background: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.filterCategory {
+    font-weight: 500;
+}

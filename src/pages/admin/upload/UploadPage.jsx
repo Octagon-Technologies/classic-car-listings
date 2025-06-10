@@ -16,7 +16,6 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
 );
 
-
 function UploadPage() {
   const [carName, setCarName] = useState(); //useState("2002 Land Rover");
   const [carPrice, setCarPrice] = useState(); //3400000
@@ -26,7 +25,7 @@ function UploadPage() {
   const [carFeatures, setCarFeatures] = useState("");
   const [carCoverImage, setCarCoverImage] = useState(null);
 
-  let remoteCoverImage = null
+  let remoteCoverImage = null;
 
   const [formattedCarFeatures, setFormattedCarFeatures] = useState(
     carFeatures.split(/✅|✔️|↪️/).filter(Boolean)
@@ -45,6 +44,13 @@ function UploadPage() {
     message: "2002 Land Rover uploaded successfully"
     }
     */
+
+  const makeInputVisible = (e) => {
+    // Scroll so the input is visible
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300); // Slight delay to wait for the keyboard to appear (especially on mobile);
+  };
 
   const onFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -207,7 +213,7 @@ function UploadPage() {
         console.log(`remoteImage is ${remoteImage}`);
 
         if (index === carCoverImage) {
-          remoteCoverImage = remoteImage
+          remoteCoverImage = remoteImage;
         }
 
         return remoteImage;
@@ -239,6 +245,7 @@ function UploadPage() {
             placeholder="2002 Land Rover"
             autoFocus
             required
+            onFocus={makeInputVisible}
             value={carName}
             onChange={(e) => setCarName(e.target.value)}
           />
@@ -251,6 +258,7 @@ function UploadPage() {
               type="number"
               placeholder="2 000 000"
               required
+              onFocus={makeInputVisible}
               value={carPrice}
               onChange={handleCarPrice}
             />
@@ -279,6 +287,7 @@ function UploadPage() {
             placeholder="(Use a ✅ at the start of each feature)"
             required
             rows={10}
+            onFocus={makeInputVisible}
             value={carFeatures}
             onChange={handleCarFeatures}
           ></textarea>
@@ -292,6 +301,7 @@ function UploadPage() {
               type="file"
               accept="image/*"
               multiple
+              onFocus={makeInputVisible}
               required
               onChange={onFileChange}
             />

@@ -85,6 +85,7 @@ textarea {
   user-select: none;
   font-size: 0.9rem;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .field .carTypes li.active {

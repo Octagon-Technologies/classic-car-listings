@@ -11,6 +11,7 @@ import CarList from "./components/car-list/CarList";
 import { VehicleTypes } from "./models/VehicleTypes";
 import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
+import { VehicleStatus } from "./models/VehicleStatus";
 // import wavy from "../../assets/images/design/green-v1.png";
 // import wavy from "../../assets/images/design/wavy-v3.png";
 // import wavy from "../../assets/images/design/wavy.webp";
@@ -19,6 +20,7 @@ import Header from "../../home/Header";
 function VehiclesPage({ vehicleType }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState(null);
+  const [vehicleStatus, setVehicleStatus] = useState(VehicleStatus.Available);
 
   function handlePriceAscend() {
     setSortOption(new SortOption("price-ascend", "price", "ascend"));
@@ -31,6 +33,10 @@ function VehiclesPage({ vehicleType }) {
   }
   function handleDateDescend() {
     setSortOption(new SortOption("date-descend", "datePosted", "descend"));
+  }
+
+  function handleVehicleStatus(e) {
+    setVehicleStatus(e.target.value)
   }
 
   return (
@@ -67,8 +73,12 @@ function VehiclesPage({ vehicleType }) {
               <option value="">Sort</option>
               <option value="price-ascend">Price: Lowest To Highest</option>
               <option value="price-descend">Price: Highest To Lowest</option>
-              <option value="date-ascend">Earliest To Latest (Date Posted)</option>
-              <option value="date-descend">Latest To Earliest (Date Posted)</option>
+              <option value="date-ascend">
+                Earliest To Latest (Date Posted)
+              </option>
+              <option value="date-descend">
+                Latest To Earliest (Date Posted)
+              </option>
             </select>
             <FontAwesomeIcon icon={faArrowUpWideShort} />
           </div>
@@ -78,10 +88,27 @@ function VehiclesPage({ vehicleType }) {
         </div>
       </div>
 
+      <select
+        className={styles.filterCategory}
+        value={vehicleStatus}
+        onChange={handleVehicleStatus}
+      >
+        <option value={VehicleStatus.Available}>
+          Show {VehicleStatus.Available} {vehicleType.groupKeyword}
+        </option>
+        <option value={VehicleStatus.Sold}>
+          Show {VehicleStatus.Sold} {vehicleType.groupKeyword}
+        </option>
+        <option value={VehicleStatus.All}>
+          Show {VehicleStatus.All} {vehicleType.groupKeyword}
+        </option>
+      </select>
+
       <CarList
         vehicleType={vehicleType}
         searchQuery={searchQuery}
         sortOption={sortOption}
+        vehicleStatus={vehicleStatus}
         className={styles.carList}
       />
       {/* <div className={styles.carList}>

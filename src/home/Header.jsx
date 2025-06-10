@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profilePic from "../assets/images/branding/cars-logo-nobg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/images/branding/cars-logo-nobg.png";
 import { Link, useLocation } from "react-router-dom";
+import { supabase } from "../config/config";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const activeMenuHref = useLocation().pathname;
   const menuItems = [
@@ -24,30 +26,64 @@ function Header() {
       title: "Modern Classics",
       href: "/modern-classics",
     },
+    ...(isAdmin
+      ? [
+          {
+            title: "Admin Dashboard",
+            href: "/admin",
+          },
+        ]
+      : []),
   ];
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen);
 
+  useEffect(() => {
+    async function checkForUser() {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      console.log(user);
+      console.error(error);
+
+      if (user) {
+        setIsAdmin(true);
+      }
+    }
+
+    checkForUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => {
+      console.log(`Auth state changed`);
+      checkForUser();
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const backHandler = (e) => {
+      if (isMenuOpen) {
+        e.preventDefault()
+        setIsMenuOpen(false)
+        window.history.pushState(null, document.title)
+      }
+    }
+
+    window.addEventListener("popstate", backHandler)
+    window.history.pushState(null, document.title)
+
+    return () => {
+      window.removeEventListener("popstate", backHandler)
+    }
+  }, [isMenuOpen])
+
   return (
     <header>
-      {/* <div className="top-bar-container">
-        <div
-          className="top-bar-bg"
-          style={{
-            background: { headerColor },
-          }}
-        ></div>
-        <div className="top-bar">
-          // { <h2>Welcome to Classic Cars</h2>  }
-          <img src={profilePic} alt="Logo" />
-          <FontAwesomeIcon
-            id="open-menu-btn"
-            icon={faBars}
-            onClick={toggleMenu}
-            style={{ fontSize: "1.3rem", color: "black", fontWeight:"700" }}
-          />
-        </div>
-      </div> */}
       <div className="appBarContainer">
         <div className="appBar">
           <Link className="logo" to="/">
@@ -57,11 +93,7 @@ function Header() {
             </p>
           </Link>
 
-          <FontAwesomeIcon
-            id="openMenu"
-            onClick={toggleMenu}
-            icon={faBars}
-          />
+          <FontAwesomeIcon id="openMenu" onClick={toggleMenu} icon={faBars} />
 
           <nav className={isMenuOpen ? "active" : ""}>
             <FontAwesomeIcon

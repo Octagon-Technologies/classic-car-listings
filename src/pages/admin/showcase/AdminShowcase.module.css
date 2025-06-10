@@ -17,6 +17,7 @@
   outline: none;
   /* border: none; */
   border: 2px var(--green) solid;
+  background: white;
   border-radius: 6px;
   font-size: 1rem;
 }
@@ -50,12 +51,15 @@
 }
 
 .car .content h6 {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
 }
 
 .car .content p.price {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-family: "Advent Pro";
+  color: rgb(85, 84, 84);
+  letter-spacing: -0.25px;
+  font-weight: 500;
 }
 
 .car .sold {
@@ -94,6 +98,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 0;
   transition: 0.4s;
 }
 
@@ -125,13 +130,16 @@
     width: 100%;
     justify-content: space-between;
     margin-top: 12px;
+    margin-bottom: 12px;
     
 }
 
 .car .carDelete {
-    padding: 6px 16px;
+    padding: 6px 10px;
     border: 2px var(--lightRed) solid;
     border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
     cursor: pointer;
 }
 

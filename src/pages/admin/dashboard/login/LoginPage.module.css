@@ -24,6 +24,10 @@
   border-radius: 8px;
 }
 
+.authCard, .authCard * {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .authCard .cardBody {
     max-height: 0px;
     transition: all 1s;
@@ -94,7 +98,8 @@
     justify-content: center;
     background: var(--green);
     border-radius: 24px;
-    user-select: none;
+    user-select: none;  
+    -webkit-tap-highlight-color: transparent;
     color: white;
     cursor: pointer;
 }
@@ -112,6 +117,7 @@
     transition: all 0.5s;
     cursor: pointer;
     text-align: center;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .authCard .authenticate:hover {

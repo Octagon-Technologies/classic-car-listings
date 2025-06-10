@@ -25,6 +25,7 @@ const supabase = createClient(
 
 function DetailsPage() {
   const [car, setCar] = useState();
+  const [coverImageLoaded, setCoverImageLoaded] = useState(false);
   const [viewImageIndex, setViewImageIndex] = useState(null);
   const { carType, carSlugName } = useParams();
 
@@ -33,7 +34,6 @@ function DetailsPage() {
       const { data, error } = await supabase
         .from("cars")
         .select()
-        // .eq("carType", carType)
         .eq("slugName", carSlugName)
         .single();
 
@@ -53,6 +53,7 @@ function DetailsPage() {
         price: data.price,
         images: data.images,
         type: data.carType,
+        coverImage: data.coverImage,
         features: data.features,
       });
     }
@@ -71,124 +72,142 @@ function DetailsPage() {
   useArrows({
     scrollLeft: handleLeftImagePreviewClick,
     scrollRight: handleRightImagePreviewClick,
-    onEscape: () => { setViewImageIndex(null) }
+    onEscape: () => {
+      setViewImageIndex(null);
+    },
   });
 
   return (
-    <>
-      {/* <div className={styles.topBar}>
-        <FontAwesomeIcon icon={faChevronLeft} className={styles.icon} />
-
-        <p className={styles.title}>{car.name ? car.name : "Loading..."}</p>
-      </div> */}
-
+    <div className={styles.main}>
       {Number.isFinite(viewImageIndex) ? <></> : <Header />}
+      <div className={styles.header}>
+        <img
+          src={car?.coverImage}
+          alt=""
+          style={{
+            opacity: coverImageLoaded ? 1 : 0,
+            transition: "opacity 0.6s ease"
+          }}
+          onLoad={() => setCoverImageLoaded(true)}
+        />
+      </div>
 
-      {car ? (
-        <div style={{ background: "#fafafa" }}>
-          <div className={styles.header}>
-            <img src={car.images[0]} alt="" />
-          </div>
-          <div className={styles.body}>
-            <h2> {car.name} </h2>
+      <div
+        style={{
+          opacity: coverImageLoaded ? 1 : 0,
+          transition: "opacity 2s ease",
+          background: "#fefefe",
+        }}
+      >
+        {car ? (
+          <div>
+            <div className={styles.body}>
+              <h2> {car.name} </h2>
 
-            <div className={styles.price}>
-              <h6>List price</h6> <p>{toKESPrice(car.price)}</p>
+              <div className={styles.price}>
+                <h6>List price</h6> <p>{toKESPrice(car.price)}</p>
+              </div>
+
+              <div className={styles.features}>
+                <h3>Features</h3>
+                <ul>
+                  {car.features.map((feature, idx) => (
+                    <li key={idx}>
+                      <img src={tick} alt="" />
+                      <p> {feature}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={styles.gallery}>
+                <h3>Gallery</h3>
+
+                <ul>
+                  {car.images.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      onClick={() => {
+                        setViewImageIndex(index);
+                        console.log(`index is ${index}`);
+                      }}
+                    ></img>
+                  ))}
+                </ul>
+              </div>
             </div>
+            {!Number.isFinite(viewImageIndex) ? (
+              <a
+                href={`https://wa.me/254794940110/?text=${encodeURIComponent(
+                  `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
+                )}`}
+                target="_blank"
+                className={styles.contactTab}
+              >
+                {/* <div> */}
+                <p>
+                  Contact on <span>Whatsapp</span>
+                </p>
+                <FontAwesomeIcon
+                  className={styles.whatsappIcon}
+                  icon={faSquareWhatsapp}
+                />
+                {/* </div> */}
+              </a>
+            ) : (
+              <></>
+            )}
 
-            <div className={styles.features}>
-              <h3>Features</h3>
-              <ul>
-                {car.features.map((feature, idx) => (
-                  <li key={idx}>
-                    <img src={tick} alt="" />
-                    <p> {feature}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {Number.isFinite(viewImageIndex) ? (
+              <div className={styles.viewImage}>
+                <div className={styles.topBar}>
+                  <p>{`${viewImageIndex + 1}/${car.images.length}`}</p>
 
-            <div className={styles.gallery}>
-              <h3>Gallery</h3>
+                  <div className={styles.icons}>
+                    {/* <FontAwesomeIcon icon={faMagnifyingGlassPlus} /> */}
+                    <FontAwesomeIcon
+                      icon={faClose}
+                      onClick={() => setViewImageIndex(null)}
+                    />
+                  </div>
+                </div>
 
-              <ul>
-                {car.images.map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    onClick={() => {
-                      setViewImageIndex(index);
-                      console.log(`index is ${index}`);
-                    }}
-                  ></img>
-                ))}
-              </ul>
-            </div>
-          </div>
-          {!Number.isFinite(viewImageIndex) ? (
-            <a
-              href={`https://wa.me/254794940110/?text=${encodeURIComponent(
-                `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
-              )}`}
-              target="_blank"
-              className={styles.contactTab}
-            >
-              {/* <div> */}
-              <p>
-                Contact on <span>Whatsapp</span>
-              </p>
-              <FontAwesomeIcon
-                className={styles.whatsappIcon}
-                icon={faSquareWhatsapp}
-              />
-              {/* </div> */}
-            </a>
-          ) : (
-            <></>
-          )}
+                {/* <div className={styles.actualImage}> */}
+                <img src={car.images[viewImageIndex]} alt="" />
+                {/* </div> */}
 
-          {Number.isFinite(viewImageIndex) ? (
-            <div className={styles.viewImage}>
-              <div className={styles.topBar}>
-                <p>{`${viewImageIndex + 1}/${car.images.length}`}</p>
-
-                <div className={styles.icons}>
-                  {/* <FontAwesomeIcon icon={faMagnifyingGlassPlus} /> */}
+                <div className={styles.navigation}>
                   <FontAwesomeIcon
-                    icon={faClose}
-                    onClick={() => setViewImageIndex(null)}
+                    icon={faChevronLeft}
+                    onDoubleClick={null}
+                    onClick={handleLeftImagePreviewClick}
+                  />
+
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    onDoubleClick={null}
+                    onClick={handleRightImagePreviewClick}
                   />
                 </div>
               </div>
-
-              {/* <div className={styles.actualImage}> */}
-              <img src={car.images[viewImageIndex]} alt="" />
-              {/* </div> */}
-
-              <div className={styles.navigation}>
-                <FontAwesomeIcon
-                  icon={faChevronLeft}
-                  onDoubleClick={null}
-                  onClick={handleLeftImagePreviewClick}
-                />
-
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  onDoubleClick={null}
-                  onClick={handleRightImagePreviewClick}
-                />
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-      ) : (
-        <div></div>
-      )}
-    </>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
   );
 }
+
+// (
+  // <div className="emptyContainer">
+  //   <div className="spinner"></div>
+  // </div>
+// )
 
 function useArrows({ scrollLeft, scrollRight, onEscape }) {
   useEffect(() => {
@@ -250,3 +269,110 @@ export default DetailsPage;
 //     "New Gen\n          Plate with Quick NTSA Transfer To You.",
 //   ],
 // });
+
+// {
+//   car ? (
+// <div style={{ background: "#fefefe" }}>
+//   <div className={styles.header}>
+//     <img src={car.coverImage} alt="" />
+//   </div>
+//   <div className={styles.body}>
+//     <h2> {car.name} </h2>
+
+//     <div className={styles.price}>
+//       <h6>List price</h6> <p>{toKESPrice(car.price)}</p>
+//     </div>
+
+//     <div className={styles.features}>
+//       <h3>Features</h3>
+//       <ul>
+//         {car.features.map((feature, idx) => (
+//           <li key={idx}>
+//             <img src={tick} alt="" />
+//             <p> {feature}</p>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+
+//     <div className={styles.gallery}>
+//       <h3>Gallery</h3>
+
+//       <ul>
+//         {car.images.map((url, index) => (
+//           <img
+//             key={index}
+//             src={url}
+//             onClick={() => {
+//               setViewImageIndex(index);
+//               console.log(`index is ${index}`);
+//             }}
+//           ></img>
+//         ))}
+//       </ul>
+//     </div>
+//   </div>
+//   {!Number.isFinite(viewImageIndex) ? (
+//     <a
+//       href={`https://wa.me/254794940110/?text=${encodeURIComponent(
+//         `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
+//       )}`}
+//       target="_blank"
+//       className={styles.contactTab}
+//     >
+//       {/* <div> */}
+//       <p>
+//         Contact on <span>Whatsapp</span>
+//       </p>
+//       <FontAwesomeIcon
+//         className={styles.whatsappIcon}
+//         icon={faSquareWhatsapp}
+//       />
+//       {/* </div> */}
+//     </a>
+//   ) : (
+//     <></>
+//   )}
+
+//   {Number.isFinite(viewImageIndex) ? (
+//     <div className={styles.viewImage}>
+//       <div className={styles.topBar}>
+//         <p>{`${viewImageIndex + 1}/${car.images.length}`}</p>
+
+//         <div className={styles.icons}>
+//           {/* <FontAwesomeIcon icon={faMagnifyingGlassPlus} /> */}
+//           <FontAwesomeIcon
+//             icon={faClose}
+//             onClick={() => setViewImageIndex(null)}
+//           />
+//         </div>
+//       </div>
+
+//       {/* <div className={styles.actualImage}> */}
+//       <img src={car.images[viewImageIndex]} alt="" />
+//       {/* </div> */}
+
+//       <div className={styles.navigation}>
+//         <FontAwesomeIcon
+//           icon={faChevronLeft}
+//           onDoubleClick={null}
+//           onClick={handleLeftImagePreviewClick}
+//         />
+
+//         <FontAwesomeIcon
+//           icon={faChevronRight}
+//           onDoubleClick={null}
+//           onClick={handleRightImagePreviewClick}
+//         />
+//       </div>
+//     </div>
+//   ) : (
+//     <></>
+//   )}
+// </div>
+//   ) : (
+//     <div className={styles.emptyContainer}>
+//       <div className={styles.spinner}></div>
+//     </div>
+//   );
+// }

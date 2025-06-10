@@ -117,7 +117,7 @@ nav {
   overflow: hidden;
   z-index: 10;
   background: rgba(0, 141, 119, 0.99);
-  height: 100vh;
+  height: 100dvh;
   transition: all 0.5s ease-in-out;
 }
 
@@ -246,5 +246,30 @@ nav ul li.active a {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.emptyContainer {
+  height: calc(100dvh - 90px);
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyContainer .spinner {
+  height: 55px;
+  width: 55px;
+  transform: translateY(-100%);
+  border: 4px var(--green) solid;
+  border-top: 3px transparent solid;
+  animation: emptySpin 1s linear infinite;
+  border-radius: 50%;
+}
+
+@keyframes emptySpin {
+  to {
+    transform: translateY(-100%) rotate(360deg);
   }
 }

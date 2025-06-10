@@ -140,7 +140,7 @@ export default function LoginPage({ style }) {
       console.log(`employeeData is ${employeeData}`);
     }
 
-    navigate("/admin");
+    window.location.href = "/admin"; // Do a forced page restart
   }
 
   async function verifyCredentials() {

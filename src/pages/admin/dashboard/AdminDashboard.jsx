@@ -7,11 +7,12 @@ import LoginPage from "./login/LoginPage.jsx";
 import carUpload from "../../../assets/images/admin/car-upload.jpg";
 import carUpgrade from "../../../assets/images/admin/car-upgrade.jpg";
 import carSale from "../../../assets/images/admin/car-sale.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchUser() {
@@ -22,7 +23,7 @@ function AdminDashboard() {
         return;
       } else if (!data?.session?.user) {
         setIsLoading(false);
-        return
+        return;
       }
 
       const uuid = data.session.user.id;
@@ -44,11 +45,22 @@ function AdminDashboard() {
       console.log(`expiresAt is ${expiresAt}`);
       console.log(`currentUser is ${currentUser}`);
 
-      setIsLoading(false)
+      setIsLoading(false);
     }
 
     fetchUser();
   }, [supabase]);
+
+  async function logOut() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    window.location.href = "/admin"; // Do a forced page restart
+  }
 
   return (
     <>
@@ -78,7 +90,7 @@ function AdminDashboard() {
               <p>Update details of an existing car</p>
             </Link>
           </div>
-          <p className={styles.signOut}>Log Out</p>
+          <p className={styles.signOut} onClick={logOut}>Log Out</p>
         </div>
       )}
     </>

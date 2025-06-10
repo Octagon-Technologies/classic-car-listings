@@ -4,6 +4,7 @@ import styles from "./CarList.module.css";
 import { supabase } from "../../../../config/config";
 import SortOption from "../../models/SortOption";
 import Loading from "../../../../home/Loading";
+import { VehicleStatus } from "../../models/VehicleStatus";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -19,7 +20,7 @@ import Loading from "../../../../home/Loading";
  * @param { any } sortOption - how to sort (inclusive of price and date posted)
  * @returns
  */
-function CarList({ vehicleType, searchQuery, sortOption }) {
+function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
@@ -29,6 +30,11 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
         .from("cars")
         .select()
         .eq("carType", vehicleType.value);
+      
+      if (vehicleStatus === VehicleStatus.Available) 
+      { request = request.eq("sold", "false") }
+      else if (vehicleStatus === VehicleStatus.Sold)
+      { request = request.eq("sold", "true") }
 
       request = searchQuery
         ? request.ilike("name", `%${searchQuery}%`)
@@ -55,7 +61,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
           price: car.price,
           image: car.coverImage,
           slugName: car.slugName,
-          type: car.type,
+          carType: car.carType,
           //"https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp",
         }))
       );
@@ -64,7 +70,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
     fetchCarImages();
 
     console.log(carList.toString());
-  }, [searchQuery, sortOption]);
+  }, [searchQuery, sortOption, vehicleStatus]);
 
   let displayData;
 
@@ -89,7 +95,7 @@ function CarList({ vehicleType, searchQuery, sortOption }) {
             name={car.name}
             price={car.price}
             image={car.image}
-            detailsPath={`/${car.type}/${car.slugName}`}
+            detailsPath={`/${car.carType}/${car.slugName}`}
           />
         ))}
       </div>
