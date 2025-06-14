@@ -29,7 +29,12 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
       let request = supabase
         .from("cars")
         .select()
-        .eq("carType", vehicleType.value);
+
+      if (vehicleType) {  
+        request = request.eq("carType", vehicleType.value);
+      } else {
+        request = request.in("carType", ["classic-cars", "modern-classics"]);
+      }
       
       if (vehicleStatus === VehicleStatus.Available) 
       { request = request.eq("sold", "false") }

@@ -22,7 +22,7 @@ export default function LoginPage({ style }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const [statusMessage, setStatusMessage] = useState();
-  const navigate = useNavigate();
+
   // {
   // message: "Email is not confirmed",
   // isError: true,
@@ -157,7 +157,7 @@ export default function LoginPage({ style }) {
     let allowedEmails = data.map((entry) => entry.email);
     console.log("Allowed emails:", allowedEmails);
 
-    if (!email.endsWith("@gmail.com")) {
+    if (!(email.endsWith("@gmail.com") || email.endsWith("@yahoo.com"))) {
       setStatusMessage({
         message: "Wrong email format. Enter a valid email.",
         isError: true,
@@ -227,7 +227,7 @@ export default function LoginPage({ style }) {
               </div>
               <input
                 value={email}
-                type="text"
+                type="email"
                 onFocus={makeInputVisible}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"

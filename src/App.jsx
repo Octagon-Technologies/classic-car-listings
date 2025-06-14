@@ -34,20 +34,25 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/">
-          <Route
-            index
-            element={
-              <VehiclesPage vehicleType={VehicleTypes.ClassicCars} />
-            }
-          />
+          <Route index element={<VehiclesPage />} />
           <Route path="about" element={<AboutPage path={"about"} />} />
           <Route
+            path={VehicleTypes.ClassicCars.value}
+            element={<VehiclesPage vehicleType={VehicleTypes.ClassicCars} />}
+          />
+          <Route
             path={VehicleTypes.ModernClassics.value}
-            element={
-              <VehiclesPage
-                vehicleType={VehicleTypes.ModernClassics}
-              />
-            }
+            element={<VehiclesPage vehicleType={VehicleTypes.ModernClassics} />}
+          />
+
+          <Route
+            path={VehicleTypes.ClassicBikes.value}
+            element={<VehiclesPage vehicleType={VehicleTypes.ClassicBikes} />}
+          />
+
+          <Route
+            path={VehicleTypes.Automobiles.value}
+            element={<VehiclesPage vehicleType={VehicleTypes.Automobiles} />}
           />
           <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
           {/* 

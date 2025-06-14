@@ -75,3 +75,14 @@
     align-items: center;
     justify-content: center;
 }
+
+
+@media screen and (min-width: 1080px) {
+    .actions {
+        flex-direction: row;
+    }
+
+    .action img {
+        height: 250px;
+    }
+}

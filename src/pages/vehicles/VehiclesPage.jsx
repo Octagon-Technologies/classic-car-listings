@@ -36,84 +36,89 @@ function VehiclesPage({ vehicleType }) {
   }
 
   function handleVehicleStatus(e) {
-    setVehicleStatus(e.target.value)
+    setVehicleStatus(e.target.value);
   }
 
   return (
     <div>
       <Header />
 
-      <div className={styles.searchSection}>
-        <h3 className={styles.title}>
-          Explore a vast array of well-maintained classics
-        </h3>
+      <div className={styles.body}>
+        <div className={styles.searchSection}>
+          <h3 className={styles.title}>
+            Explore a vast array of well-maintained classics
+          </h3>
 
-        <div className={styles.searchBar}>
-          <FontAwesomeIcon className={styles.icon} icon={faMagnifyingGlass} />
-          <input
-            type="text"
-            placeholder="Search for your desired car"
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div className={styles.searchBar}>
+            <FontAwesomeIcon className={styles.icon} icon={faMagnifyingGlass} />
+            <input
+              type="text"
+              placeholder={`Search for your desired ${vehicleType ? vehicleType.keyword.toLowerCase() : "car"}`}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className={styles.searchActions}>
+            <div className={styles.sort}>
+              <select
+                value={sortOption ? sortOption.key : ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "price-ascend") handlePriceAscend();
+                  else if (value === "price-descend") handlePriceDescend();
+                  else if (value === "date-ascend") handleDateAscend();
+                  else if (value === "date-descend") handleDateDescend();
+                  else setSortOption(null);
+                }}
+              >
+                <option value="">Sort</option>
+                <option value="price-ascend">Price: Lowest To Highest</option>
+                <option value="price-descend">Price: Highest To Lowest</option>
+                <option value="date-ascend">
+                  Earliest To Latest (Date Posted)
+                </option>
+                <option value="date-descend">
+                  Latest To Earliest (Date Posted)
+                </option>
+              </select>
+              <FontAwesomeIcon icon={faArrowUpWideShort} />
+            </div>
+            <div className={styles.search}>
+              <p>Search</p>
+            </div>
+          </div>
         </div>
 
-        <div className={styles.searchActions}>
-          <div className={styles.sort}>
-            <select
-              value={sortOption ? sortOption.key : ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "price-ascend") handlePriceAscend();
-                else if (value === "price-descend") handlePriceDescend();
-                else if (value === "date-ascend") handleDateAscend();
-                else if (value === "date-descend") handleDateDescend();
-                else setSortOption(null);
-              }}
-            >
-              <option value="">Sort</option>
-              <option value="price-ascend">Price: Lowest To Highest</option>
-              <option value="price-descend">Price: Highest To Lowest</option>
-              <option value="date-ascend">
-                Earliest To Latest (Date Posted)
-              </option>
-              <option value="date-descend">
-                Latest To Earliest (Date Posted)
-              </option>
-            </select>
-            <FontAwesomeIcon icon={faArrowUpWideShort} />
-          </div>
-          <div className={styles.search}>
-            <p>Search</p>
-          </div>
-        </div>
-      </div>
+        <select
+          className={styles.filterCategory}
+          value={vehicleStatus}
+          onChange={handleVehicleStatus}
+        >
+          <option value={VehicleStatus.Available}>
+            Show {VehicleStatus.Available}{" "}
+            {vehicleType ? vehicleType.groupKeyword : "Cars"}
+          </option>
+          <option value={VehicleStatus.Sold}>
+            Show {VehicleStatus.Sold}{" "}
+            {vehicleType ? vehicleType.groupKeyword : "Cars"}
+          </option>
+          <option value={VehicleStatus.All}>
+            Show {VehicleStatus.All}{" "}
+            {vehicleType ? vehicleType.groupKeyword : "Cars"}
+          </option>
+        </select>
 
-      <select
-        className={styles.filterCategory}
-        value={vehicleStatus}
-        onChange={handleVehicleStatus}
-      >
-        <option value={VehicleStatus.Available}>
-          Show {VehicleStatus.Available} {vehicleType.groupKeyword}
-        </option>
-        <option value={VehicleStatus.Sold}>
-          Show {VehicleStatus.Sold} {vehicleType.groupKeyword}
-        </option>
-        <option value={VehicleStatus.All}>
-          Show {VehicleStatus.All} {vehicleType.groupKeyword}
-        </option>
-      </select>
-
-      <CarList
-        vehicleType={vehicleType}
-        searchQuery={searchQuery}
-        sortOption={sortOption}
-        vehicleStatus={vehicleStatus}
-        className={styles.carList}
-      />
-      {/* <div className={styles.carList}>
+        <CarList
+          vehicleType={vehicleType}
+          searchQuery={searchQuery}
+          sortOption={sortOption}
+          vehicleStatus={vehicleStatus}
+          className={styles.carList}
+        />
+        {/* <div className={styles.carList}>
         <div className={styles.car}></div>
       </div> */}
+      </div>
     </div>
   );
 }

@@ -12,8 +12,8 @@ export const VehicleTypes = Object.freeze({
     groupKeyword: "Cars",
   },
   ClassicBikes: {
-    label: "Classic Bikes",
-    value: "classic-bikes",
+    label: "Bikes",
+    value: "bikes",
     keyword: "Bike",
     groupKeyword: "Bikes",
   },

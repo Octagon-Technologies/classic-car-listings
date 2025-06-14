@@ -61,6 +61,23 @@ function DetailsPage() {
     fetchCarDetails();
   }, [carSlugName]);
 
+  useEffect(() => {
+    const backHandler = (e) => {
+      if (Number.isInteger(viewImageIndex)) {
+        e.preventDefault();
+        setViewImageIndex(null);
+        window.history.pushState(null, document.title);
+      }
+    };
+
+    window.addEventListener("popstate", backHandler);
+    window.history.pushState(null, document.title);
+
+    return () => {
+      window.removeEventListener("popstate", backHandler);
+    };
+  }, [viewImageIndex]);
+
   function handleLeftImagePreviewClick() {
     setViewImageIndex((c) => (c === 0 ? car.images.length - 1 : c - 1));
   }
@@ -86,7 +103,7 @@ function DetailsPage() {
           alt=""
           style={{
             opacity: coverImageLoaded ? 1 : 0,
-            transition: "opacity 0.6s ease"
+            transition: "opacity 0.6s ease",
           }}
           onLoad={() => setCoverImageLoaded(true)}
         />
@@ -204,9 +221,9 @@ function DetailsPage() {
 }
 
 // (
-  // <div className="emptyContainer">
-  //   <div className="spinner"></div>
-  // </div>
+// <div className="emptyContainer">
+//   <div className="spinner"></div>
+// </div>
 // )
 
 function useArrows({ scrollLeft, scrollRight, onEscape }) {

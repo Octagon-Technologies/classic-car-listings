@@ -18,13 +18,26 @@ function Header() {
       href: "/about",
     },
     {
-      title: "Classic Cars",
+      title: "Cars",
       href: "/",
+    },
+    {
+      title: "Classic Cars",
+      href: "/classic-cars",
     },
 
     {
       title: "Modern Classics",
       href: "/modern-classics",
+    },
+    {
+      title: "Bikes",
+      href: "/bikes",
+    },
+
+    {
+      title: "Automobiles",
+      href: "/automobiles",
     },
     ...(isAdmin
       ? [
@@ -39,25 +52,34 @@ function Header() {
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen);
 
   useEffect(() => {
-    async function checkForUser() {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      console.log(user);
-      console.error(error);
+    // async function checkForUser() {
+    //   const {
+    //     data: { user },
+    //     error,
+    //   } = await supabase.auth.getUser();
+    //   console.log(user);
+    //   console.error(error);
 
-      if (user) {
-        setIsAdmin(true);
+    //   if (user) {
+    //     setIsAdmin(true);
+    //   }
+    // }
+
+    // checkForUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("Auth state changed:", event);
+
+        if (session) {
+          console.log("Session is valid:", session);
+          setIsAdmin(true);
+        } else {
+          console.log("Session is null or invalid");
+          setIsAdmin(false);
+        }
       }
-    }
-
-    checkForUser();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(() => {
-      console.log(`Auth state changed`);
-      checkForUser();
-    });
+    );
 
     return () => {
       authListener?.subscription.unsubscribe();

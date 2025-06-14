@@ -126,7 +126,7 @@ textarea {
 .coverImage p {
   width: 90%;
   text-align: center;
-  margin-left: 16px
+  margin-left: 16px;
 }
 
 .coverImage p span {
@@ -160,6 +160,7 @@ textarea {
   border-radius: 5px;
   overflow: hidden;
   position: relative;
+  z-index: -1;
 }
 
 .preview .sliderDots {
@@ -276,15 +277,36 @@ textarea {
   text-align: center;
 }
 
+.uploadStatus .finalStatus .closeBtn {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 5px;
+  height: 23px;
+  width: 23px;
+}
+
 .uploadStatus .finalStatus h6 {
   font-size: 3rem;
 }
 
 .uploadStatus .finalStatus p {
   font-weight: 500;
-  width: 90%;
+  width: 95%;
   margin: auto;
   margin-top: 12px;
+}
+
+.finalStatus button {
+  padding: 5px 10px;
+  border: 2px var(--green) solid;
+  outline: 0px;
+  width: 100%;
+  font-size: 1rem;
+  background-color: white;
+  border-radius: 4px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .uploadStatus .progressBar {
@@ -316,4 +338,46 @@ textarea {
   color: #707070;
   font-size: 1.1rem;
   font-family: "Advent Pro";
+}
+
+@media screen and (min-width: 1080px) {
+  .body {
+    width: 80%;
+    margin: auto;
+    margin-top: 24px;
+  }
+
+  .field label {
+    font-size: 1.35rem;
+  }
+
+  .field input,
+  textarea {
+    font-size: 1.1rem;
+  }
+
+  .field .carTypes li {
+    font-size: 1.075rem;
+  }
+
+  .field input[type="file"] {
+    margin: auto;
+  }
+
+  .inputImages {
+    justify-content: center;
+  }
+
+  .inputImages img {
+    width: 23%;
+  }
+
+  .coverImage img {
+    width: 400px;
+    height: 400px;
+  }
+
+  .previewCar {
+    width: 60%;
+  }
 }

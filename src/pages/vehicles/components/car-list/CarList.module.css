@@ -31,14 +31,20 @@
 }
 
 .carCard p.name {
-  margin-top: 6px;
   font-weight: 800;
   font-size: 1.3rem;
+  line-height: 1.4rem;
+  font-family: "Quicksand";
+  width: 90%;
+  margin: auto;
+  margin-top: 6px;
 }
 
 .carCard p.price {
   font-family: "Tektur";
-  color: var();
+  font-size: 1.1rem;
+  margin-top: 12px;
+  color: var(--lightBlack);
 }
 
 .noCarsFound {

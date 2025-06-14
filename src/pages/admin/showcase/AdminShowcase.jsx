@@ -6,12 +6,15 @@ import { VehicleTypes } from "../../vehicles/models/VehicleTypes.jsx";
 import Loading from "../../../home/Loading.jsx";
 import { toKESPrice } from "../../../utils/StringUtils.jsx";
 import shockedPerson from "../../../assets/images/design/shocked-person.jpg";
+import { useRequireAuth } from "../../../utils/AuthUtils.jsx"
 
 export default function AdminShowcase() {
   const [carType, setCarType] = useState("");
   const [cars, setCars] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(null); // instance of Car
+
+  useRequireAuth()
 
   useEffect(() => {
     fetchCars();
