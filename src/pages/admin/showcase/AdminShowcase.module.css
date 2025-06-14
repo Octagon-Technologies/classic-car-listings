@@ -1,0 +1,233 @@
+.filterCar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 12px 8px;
+}
+
+.filterCar p {
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.filterCar select {
+  width: calc(100% - 24px);
+  margin-left: 12px;
+  padding: 10px 8px;
+  outline: none;
+  /* border: none; */
+  border: 2px var(--green) solid;
+  background: white;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.cars {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.car {
+  display: flex;
+  margin: 0px 12px;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.car img {
+  width: 220px;
+  height: 125px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.car .content {
+  margin-top: 12px;
+  width: 80%;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.car .content h6 {
+  font-size: 1.25rem;
+}
+
+.car .content p.price {
+  font-size: 1.15rem;
+  font-family: "Advent Pro";
+  color: rgb(85, 84, 84);
+  letter-spacing: -0.25px;
+  font-weight: 500;
+}
+
+.car .sold {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.car .sold p {
+  font-size: 1.1rem;
+  height: auto;
+}
+
+.switch {
+  margin-left: 12px;
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+/* Hide the default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  transition: 0.4s;
+}
+
+/* Slider circle */
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+/* When checked, move the circle and change color */
+.switch input:checked + .slider {
+  background-color: var(--green);
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+.car .bottomBar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    
+}
+
+.car .carDelete {
+    padding: 6px 10px;
+    border: 2px var(--lightRed) solid;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.car .carDelete:hover {
+    background-color: var(--lightRed);
+    color: white;
+    font-weight: 500;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  box-shadow: 
+  -2px -2px 5px rgba(0, 0, 0, 0.2), 
+  2px 2px 5px rgba(0, 0, 0, 0.2);
+  width: 220px;
+  min-height: 200px;
+  border-radius: 6px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup.active {
+    display: flex;
+}
+
+.updating .spinner {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 4px var(--green) solid;
+  border-top: 3px transparent solid;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.updating p {
+  margin-top: 20px;
+  font-weight: 500;
+  font-family: "Quicksand";
+  font-size: 1.1rem;
+}
+
+.deleting {
+    padding: 12px 0px;
+    width: 250px;
+    height: 270px;
+}
+
+.deleting img {
+    height: 120px;
+}
+
+.deleting p {
+    width: 80%;
+    margin-top: 12px;
+    font-size: 1.025rem;
+    text-align: center;
+}
+
+.deleting .actions {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+    width: calc(100% - 16px);
+    gap: 12px;
+}
+
+.deleting .actions p {
+    flex-basis: 50%;
+    border: 2px var(--green) solid;
+    border-radius: 4px;
+    padding: 8px 0px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.deleting .actions p:last-child {
+    border-color: rgb(254, 94, 94);
+    font-weight: 800;
+}

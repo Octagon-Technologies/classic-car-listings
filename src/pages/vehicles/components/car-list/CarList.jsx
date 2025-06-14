@@ -1,8 +1,10 @@
-import CarCard from "./CarCard";
+import CarCard from "../CarCard";
 import React, { useState, useEffect } from "react";
-import styles from "../VehiclesPage.module.css";
-import { supabase } from "../../../config/config";
-import { Link } from "react-router-dom";
+import styles from "./CarList.module.css";
+import { supabase } from "../../../../config/config";
+import SortOption from "../../models/SortOption";
+import Loading from "../../../../home/Loading";
+import { VehicleStatus } from "../../models/VehicleStatus";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -11,34 +13,43 @@ import { Link } from "react-router-dom";
 // );
 
 //xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp
-function CarList({
-  vehicleType,
-  searchQuery,
-  priceSortOption,
-  dateSortOption,
-}) {
+/**
+ *
+ * @param {any} vehicleType - An enum instance of VehicleType (ClassicCars, ModernClassics, Automobiles)
+ * @param { string } searchQuery - The search query from the user. Null means show everyhting.
+ * @param { any } sortOption - how to sort (inclusive of price and date posted)
+ * @returns
+ */
+function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchCarImages() {
-      let request = supabase.from(vehicleType).select();
+      let request = supabase
+        .from("cars")
+        .select()
+
+      if (vehicleType) {  
+        request = request.eq("carType", vehicleType.value);
+      } else {
+        request = request.in("carType", ["classic-cars", "modern-classics"]);
+      }
+      
+      if (vehicleStatus === VehicleStatus.Available) 
+      { request = request.eq("sold", "false") }
+      else if (vehicleStatus === VehicleStatus.Sold)
+      { request = request.eq("sold", "true") }
 
       request = searchQuery
         ? request.ilike("name", `%${searchQuery}%`)
         : request;
 
-      request = priceSortOption.order
-        ? request.order(priceSortOption.name, {
-            ascending: priceSortOption.order === "ascend",
+      request = sortOption
+        ? request.order(sortOption.name, {
+            ascending: sortOption.order === "ascend",
           })
-        : request;
-
-      request = dateSortOption.order
-        ? request.order(dateSortOption.name, {
-            ascending: dateSortOption.order === "ascend",
-          })
-        : request;
+        : request.order("datePosted", { ascending: false });
 
       const { data, error } = await request;
 
@@ -47,14 +58,15 @@ function CarList({
       }
 
       console.log(`data is ${data.length}`);
+      console.log(`sortOption is ${sortOption?.key}`);
 
       setCarList(
         data.map((car) => ({
           name: car.name, //"Ford Ranger 2023",
           price: car.price,
-          image: car.images[0],
+          image: car.coverImage,
           slugName: car.slugName,
-          type: car.type,
+          carType: car.carType,
           //"https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp",
         }))
       );
@@ -63,13 +75,13 @@ function CarList({
     fetchCarImages();
 
     console.log(carList.toString());
-  }, [searchQuery, priceSortOption, dateSortOption]);
+  }, [searchQuery, sortOption, vehicleStatus]);
 
   let displayData;
-  /* 
-  
-  
-  Search has happened, no results */
+
+  // displayData = Loading();
+
+  // Search has happened, no results */
   if (carList.length === 0 && searchQuery) {
     displayData = (
       <div className={styles.noCarsFound}>
@@ -77,8 +89,8 @@ function CarList({
       </div>
     );
   } else if (carList.length > 0) {
-    /* Search has happened, results available 
-    
+    /* Search has happened, results available
+
     */
     displayData = (
       <div className={styles.carList}>
@@ -88,14 +100,14 @@ function CarList({
             name={car.name}
             price={car.price}
             image={car.image}
-            detailsPath={`/${car.type}/${car.slugName}`}
+            detailsPath={`/${car.carType}/${car.slugName}`}
           />
         ))}
       </div>
     );
   } else {
     /* Initial Loading happening
-  
+
   */
     displayData = (
       <div className={styles.loading}>
