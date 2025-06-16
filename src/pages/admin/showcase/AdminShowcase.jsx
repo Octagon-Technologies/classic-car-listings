@@ -6,7 +6,7 @@ import { VehicleTypes } from "../../vehicles/models/VehicleTypes.jsx";
 import Loading from "../../../home/Loading.jsx";
 import { toKESPrice } from "../../../utils/StringUtils.jsx";
 import shockedPerson from "../../../assets/images/design/shocked-person.jpg";
-import { useRequireAuth } from "../../../utils/AuthUtils.jsx"
+import { useRequireAuth } from "../../../utils/AuthUtils.jsx";
 
 export default function AdminShowcase() {
   const [carType, setCarType] = useState("");
@@ -14,7 +14,7 @@ export default function AdminShowcase() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(null); // instance of Car
 
-  useRequireAuth()
+  useRequireAuth();
 
   useEffect(() => {
     fetchCars();
@@ -92,85 +92,87 @@ export default function AdminShowcase() {
     <>
       <Header />
 
-      <div className={styles.filterCar}>
-        <p>Filter vehicles to</p>
-        <select
-          value={carType}
-          onChange={handleCarType}
-          className={styles.carTypeSelect}
-        >
-          <option value="">All Vehicles</option>
+      <div className={styles.body}>
+        <div className={styles.filterCar}>
+          <p>Filter vehicles to</p>
+          <select
+            value={carType}
+            onChange={handleCarType}
+            className={styles.carTypeSelect}
+          >
+            <option value="">All Vehicles</option>
 
-          {Object.values(VehicleTypes).map((vehicle) => (
-            <option key={vehicle.value} value={vehicle.value}>
-              {vehicle.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {!cars && <Loading />}
-      {cars && (
-        <div>
-          <ul className={styles.cars}>
-            {cars.map((car) => (
-              <li className={styles.car} key={car.slugName}>
-                <img src={car.coverImage} alt="" />
-                <div className={styles.content}>
-                  <h6>{car.name}</h6>
-                  <p className={styles.price}> {toKESPrice(car.price)}</p>
-
-                  <div className={styles.bottomBar}>
-                    <div className={styles.sold}>
-                      <p htmlFor="sold">Sold</p>
-
-                      <label className={styles.switch}>
-                        <input
-                          type="checkbox"
-                          checked={car.sold}
-                          onChange={(e) => handleCarSold(car, e)}
-                          id={styles.toggleSwitch}
-                        />
-                        <span className={styles.slider}></span>
-                      </label>
-                    </div>
-
-                    <p
-                      className={styles.carDelete}
-                      onClick={() => setIsDeleting(car)}
-                    >
-                      Delete
-                    </p>
-                  </div>
-                </div>
-              </li>
+            {Object.values(VehicleTypes).map((vehicle) => (
+              <option key={vehicle.value} value={vehicle.value}>
+                {vehicle.label}
+              </option>
             ))}
-          </ul>
+          </select>
+        </div>
 
-          <div
-            className={`${styles.popup} ${styles.updating} ${
-              isUpdating ? styles.active : ""
-            }`}
-          >
-            <div className={styles.spinner}></div>
-            <p>Updating Database</p>
-          </div>
+        {!cars && <Loading />}
+        {cars && (
+          <div>
+            <ul className={styles.cars}>
+              {cars.map((car) => (
+                <li className={styles.car} key={car.slugName}>
+                  <img src={car.coverImage} alt="" />
+                  <div className={styles.content}>
+                    <h6>{car.name}</h6>
+                    <p className={styles.price}> {toKESPrice(car.price)}</p>
 
-          <div
-            className={`${styles.popup} ${styles.deleting} ${
-              isDeleting ? styles.active : ""
-            }`}
-          >
-            <img src={shockedPerson} alt="" />
-            <p>Are you sure you want to delete this car?</p>
+                    <div className={styles.bottomBar}>
+                      <div className={styles.sold}>
+                        <p htmlFor="sold">Sold</p>
 
-            <div className={styles.actions}>
-              <p onClick={() => setIsDeleting(null)}>Cancel</p>
-              <p onClick={handleCarDelete}>Delete</p>
+                        <label className={styles.switch}>
+                          <input
+                            type="checkbox"
+                            checked={car.sold}
+                            onChange={(e) => handleCarSold(car, e)}
+                            id={styles.toggleSwitch}
+                          />
+                          <span className={styles.slider}></span>
+                        </label>
+                      </div>
+
+                      <p
+                        className={styles.carDelete}
+                        onClick={() => setIsDeleting(car)}
+                      >
+                        Delete
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div
+              className={`${styles.popup} ${styles.updating} ${
+                isUpdating ? styles.active : ""
+              }`}
+            >
+              <div className={styles.spinner}></div>
+              <p>Updating Database</p>
+            </div>
+
+            <div
+              className={`${styles.popup} ${styles.deleting} ${
+                isDeleting ? styles.active : ""
+              }`}
+            >
+              <img src={shockedPerson} alt="" />
+              <p>Are you sure you want to delete this car?</p>
+
+              <div className={styles.actions}>
+                <p onClick={() => setIsDeleting(null)}>Cancel</p>
+                <p onClick={handleCarDelete}>Delete</p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

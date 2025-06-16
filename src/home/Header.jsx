@@ -1,35 +1,48 @@
 import React, { useEffect, useState } from "react";
 import profilePic from "../assets/images/branding/cars-logo-nobg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDown,
+  faBars,
+  faChevronDown,
+  faChevronUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/images/branding/cars-logo-nobg.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "../config/config";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+
+  const [expandedMenuItem, setExpandedMenuItem] = useState();
 
   const activeMenuHref = useLocation().pathname;
   const menuItems = [
     {
-      title: "Who We Are",
+      title: "About Us",
       href: "/about",
     },
     {
       title: "Cars",
-      href: "/",
-    },
-    {
-      title: "Classic Cars",
-      href: "/classic-cars",
+      subMenu: [
+        {
+          title: "All Cars",
+          href: "/",
+        },
+        {
+          title: "Classic Cars",
+          href: "/classic-cars",
+        },
+        {
+          title: "Modern Classics",
+          href: "/modern-classics",
+        },
+      ],
     },
 
-    {
-      title: "Modern Classics",
-      href: "/modern-classics",
-    },
     {
       title: "Bikes",
       href: "/bikes",
@@ -50,6 +63,31 @@ function Header() {
   ];
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen);
+
+  useEffect(() => {
+    const isNormalMenuItem = menuItems.find(
+      (item) => item?.href === activeMenuHref
+    );
+
+    if (!isNormalMenuItem) {
+      menuItems.forEach((item) => {
+        if (item.subMenu) {
+          item.subMenu.forEach((subMenuItem) => {
+            console.log(
+              `subMenuItem is ${
+                subMenuItem.title
+              }. subMenuItem.href === activeMenuHref is ${
+                subMenuItem.href === activeMenuHref
+              }`
+            );
+            if (subMenuItem.href === activeMenuHref) {
+              setExpandedMenuItem(subMenuItem);
+            }
+          });
+        }
+      });
+    }
+  }, [activeMenuHref]);
 
   useEffect(() => {
     // async function checkForUser() {
@@ -86,23 +124,45 @@ function Header() {
     };
   }, []);
 
-
   useEffect(() => {
     const backHandler = (e) => {
       if (isMenuOpen) {
-        e.preventDefault()
-        setIsMenuOpen(false)
-        window.history.pushState(null, document.title)
+        e.preventDefault();
+        setIsMenuOpen(false);
+        window.history.pushState(null, document.title);
       }
-    }
+    };
 
-    window.addEventListener("popstate", backHandler)
-    window.history.pushState(null, document.title)
+    window.addEventListener("popstate", backHandler);
+    window.history.pushState(null, document.title);
 
     return () => {
-      window.removeEventListener("popstate", backHandler)
+      window.removeEventListener("popstate", backHandler);
+    };
+  }, [isMenuOpen]);
+
+  function handleMenuItemClick(menuItem) {
+    if (menuItem.subMenu) {
+      console.log(
+        `menuItem === expandedMenuItem is ${
+          menuItem.title === expandedMenuItem?.title
+        }`
+      );
+      if (menuItem.title === expandedMenuItem?.title) {
+        // If the menu being clicked is already expanded, collapse it
+        setExpandedMenuItem(null);
+      } else if (menuItem != expandedMenuItem) {
+        // No current expanded menu
+        setExpandedMenuItem(menuItem);
+      }
+    } else {
+      navigate(menuItem.href);
     }
-  }, [isMenuOpen])
+  }
+
+  useEffect(() => {
+    console.log(`expandedMenuItem is ${expandedMenuItem}`);
+  }, [expandedMenuItem]);
 
   return (
     <header>
@@ -133,10 +193,54 @@ function Header() {
             <ul>
               {menuItems.map((item) => (
                 <li
-                  key={item.href}
-                  className={item.href === activeMenuHref ? "active" : ""}
+                  key={item.title}
+                  className={item?.href === activeMenuHref ? "active" : ""}
+                  onClick={() => handleMenuItemClick(item)}
+                  onMouseEnter={() => setExpandedMenuItem(item)}
+                  onMouseLeave={() => setExpandedMenuItem(null)}
                 >
-                  <a href={item.href}>{item.title}</a>
+                  <div>
+                    {item.subMenu ? (
+                      <p className="menuItem">{item.title}</p>
+                    ) : (
+                      <a className="menuItem" href={item?.href}>
+                        {item.title}
+                      </a>
+                    )}
+
+                    {item.subMenu ? (
+                      <FontAwesomeIcon
+                        icon={
+                          item.title === expandedMenuItem?.title
+                            ? faChevronUp
+                            : faChevronDown
+                        }
+                        className="subMenuArrow"
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  {item.subMenu ? (
+                    <div
+                      className={`subMenu ${
+                        item.title === expandedMenuItem?.title ? "active" : ""
+                      }`}
+                    >
+                      {item.subMenu.map((subMenuItem) => (
+                        <a
+                          href={subMenuItem.href}
+                          className={
+                            subMenuItem.href === activeMenuHref ? "active" : ""
+                          }
+                        >
+                          {subMenuItem.title}
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </li>
               ))}
             </ul>

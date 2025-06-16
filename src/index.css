@@ -21,13 +21,11 @@ body {
   width: 100%;
 }
 
-
 footer {
   margin-top: 32px;
   margin-bottom: 8px;
   margin: 32px 12px 8px 12px;
 }
-
 
 .appBarContainer {
   position: relative;
@@ -68,7 +66,6 @@ footer {
   text-transform: uppercase;
 }
 
-
 .appBar .openMenu {
   font-size: 1.2rem;
 }
@@ -107,7 +104,6 @@ footer {
   font-weight: 600;
 }
 
-
 nav {
   display: block;
   position: fixed;
@@ -116,7 +112,7 @@ nav {
   width: 0%;
   overflow: hidden;
   z-index: 10;
-  background: rgba(0, 141, 119, 0.99);
+  background: var(--green);
   height: 100dvh;
   transition: all 0.5s ease-in-out;
 }
@@ -132,23 +128,27 @@ nav.active {
   top: 12px;
 }
 
-
 nav ul {
   list-style-type: none;
   display: flex;
   flex-direction: column;
   position: absolute;
   top: 40%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   margin-top: 32px;
-  gap: 10px;
-  width: 100%;
+  padding: 50px 0px;
+  gap: 6px;
+  width: 90%;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
 }
 
 nav ul li {
   padding: 12px;
   width: 90%;
   margin: auto;
+  background: rgba(255, 255, 255, 0.1);
   text-align: center;
   border-radius: 6px;
 }
@@ -157,26 +157,61 @@ nav ul li.active {
   background-color: white;
 }
 
-nav ul li a {
+nav ul li .menuItem {
   color: white;
-  font-family: monospace;
-  text-transform: uppercase;
-  font-family: "Orbitron";
-  font-size: 1.15rem;
+  display: inline-block;
+  /* text-transform: uppercase; */
+  font-family: "Quicksand";
+  font-size: 1.2rem;
   text-decoration: none;
   font-weight: 600;
 }
 
-nav ul li.active a {
-  color: var(--darkGreen);
+nav ul li .subMenu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  gap: 2px;
+  max-height: 0px;
+  transition: all 0.75s ease-in-out;
+  overflow: hidden;
 }
 
+nav ul li .subMenu.active {
+  max-height: 150px;
+}
+
+nav ul li .subMenu a {
+  padding: 12px 0px;
+  text-decoration: none;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.278);
+  border-radius: 6px;
+  color: white;
+  font-family: "Quicksand";
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+nav ul li .subMenu a.active {
+  color: black;
+  background: white;
+}
+
+nav ul li .subMenuArrow {
+  margin-left: 8px;
+  color: white;
+}
+
+nav ul li.active .menuItem {
+  color: var(--darkGreen);
+}
 
 @media screen and (min-width: 850px) {
   #openMenu {
     display: none;
   }
-  
+
   #closeMenu {
     display: none;
   }
@@ -186,6 +221,7 @@ nav ul li.active a {
     position: relative;
     height: 80px;
     border-radius: 8px;
+    overflow: visible;
     background: transparent;
   }
 
@@ -196,31 +232,72 @@ nav ul li.active a {
     flex-direction: row;
     align-items: center;
     justify-content: end;
+    background: white;
     padding-right: 36px;
-    gap: 24px;
+    overflow: visible;
+    gap: 6px;
   }
 
   nav ul li {
-    padding: 0px;
+    padding: 0px 24px;
     margin: 0px;
     height: 80px;
     display: flex;
+    position: relative;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: fit-content;
   }
 
-  nav ul li a {
+  nav ul li .menuItem {
     font-family: "Quicksand";
     text-transform: capitalize;
     color: black;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s;
   }
 
-  nav ul li.active a {
+  nav ul li .menuItem:hover {
+    color: var(--gold);
+  }
+
+  nav ul li .subMenu {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 4px;
+    border-radius: 6px;
+    z-index: 10;
+    background: white;
+    width: 130%;
+  }
+
+  nav ul li .subMenu a {
+    background: white;
+    color: black;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  nav ul li .subMenu a.active {
+    background: var(--green);
+    color: white;
+    font-weight: 600;
+  }
+
+  nav ul li .subMenu a:hover {
+    color: var(--green);
+    background: rgba(4, 239, 204, 0.15);
+    font-weight: 600;
+  }
+
+  nav ul li.active .menuItem {
     color: var(--green);
   }
 }
-
 
 .loading {
   /* height: 100vh;

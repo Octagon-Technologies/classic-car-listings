@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import Header from "../../home/Header";
 import styles from "./AboutPage.module.css";
-import carSlide1 from "../../assets/images/slider/car-slide-1.jpg";
-import carSlide2 from "../../assets/images/slider/car-slide-2.jpg";
-import carSlide3 from "../../assets/images/slider/car-slide-3.jpg";
 import classicCar from "../../assets/images/design/classic-car.png";
 import quote from "../../assets/images/design/quote.svg";
 import kenyanManA from "../../assets/images/design/testimonials/kenyan-man.jpg";
@@ -15,7 +12,6 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import AnimatedNumber from "../../home/AnimatedNumber";
 import { div } from "framer-motion/client";
 
-const slides = [carSlide1, carSlide2, carSlide3];
 const testimonials = [
   {
     name: "Peter",

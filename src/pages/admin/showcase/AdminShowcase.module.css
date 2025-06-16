@@ -231,3 +231,30 @@
     border-color: rgb(254, 94, 94);
     font-weight: 800;
 }
+
+
+
+
+@media screen and (min-width: 1080px) {
+  .body {
+    width: 85%;
+    margin: auto;
+  }
+
+  .filterCar {
+    width: 100%;
+    margin: auto;
+  }
+
+  .cars {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: auto;
+    margin-top: 32px;
+  }
+
+  .car {
+    width: 45%;
+  }
+}
