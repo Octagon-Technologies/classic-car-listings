@@ -260,7 +260,7 @@ nav ul li.active .menuItem {
   }
 
   nav ul li .menuItem:hover {
-    color: var(--gold);
+    color: var(--green);
   }
 
   nav ul li .subMenu {
@@ -275,20 +275,20 @@ nav ul li.active .menuItem {
     width: 130%;
   }
 
-  nav ul li .subMenu a {
+  nav ul li .subMenu .subMenuItem {
     background: white;
     color: black;
     font-weight: 500;
     font-size: 1rem;
   }
 
-  nav ul li .subMenu a.active {
+  nav ul li .subMenu .subMenuItem.active {
     background: var(--green);
     color: white;
     font-weight: 600;
   }
 
-  nav ul li .subMenu a:hover {
+  nav ul li .subMenu .subMenuItem:hover {
     color: var(--green);
     background: rgba(4, 239, 204, 0.15);
     font-weight: 600;

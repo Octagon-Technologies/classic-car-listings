@@ -11,15 +11,25 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/images/branding/cars-logo-nobg.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "../config/config";
+import { useMediaQuery } from "react-responsive";
+
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery({ minWidth: 1080 });
 
   const [expandedMenuItem, setExpandedMenuItem] = useState();
 
   const activeMenuHref = useLocation().pathname;
+
+
+  useEffect(() => {
+    console.log("Effect. activeMenuHref is ", activeMenuHref);
+    setIsMenuOpen(false)
+  }, [activeMenuHref]);
+
   const menuItems = [
     {
       title: "About Us",
@@ -143,11 +153,6 @@ function Header() {
 
   function handleMenuItemClick(menuItem) {
     if (menuItem.subMenu) {
-      console.log(
-        `menuItem === expandedMenuItem is ${
-          menuItem.title === expandedMenuItem?.title
-        }`
-      );
       if (menuItem.title === expandedMenuItem?.title) {
         // If the menu being clicked is already expanded, collapse it
         setExpandedMenuItem(null);
@@ -159,10 +164,6 @@ function Header() {
       navigate(menuItem.href);
     }
   }
-
-  useEffect(() => {
-    console.log(`expandedMenuItem is ${expandedMenuItem}`);
-  }, [expandedMenuItem]);
 
   return (
     <header>
@@ -196,16 +197,24 @@ function Header() {
                   key={item.title}
                   className={item?.href === activeMenuHref ? "active" : ""}
                   onClick={() => handleMenuItemClick(item)}
-                  onMouseEnter={() => setExpandedMenuItem(item)}
-                  onMouseLeave={() => setExpandedMenuItem(null)}
+                  onMouseEnter={() =>
+                    isDesktop ? setExpandedMenuItem(item) : ""
+                  }
+                  onMouseLeave={() =>
+                    isDesktop ? setExpandedMenuItem(null) : ""
+                  }
                 >
                   <div>
                     {item.subMenu ? (
                       <p className="menuItem">{item.title}</p>
                     ) : (
-                      <a className="menuItem" href={item?.href}>
+                      <Link
+                        className="menuItem"
+                        to={item?.href}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         {item.title}
-                      </a>
+                      </Link>
                     )}
 
                     {item.subMenu ? (
@@ -228,14 +237,15 @@ function Header() {
                       }`}
                     >
                       {item.subMenu.map((subMenuItem) => (
-                        <a
-                          href={subMenuItem.href}
-                          className={
+                        <Link
+                          to={subMenuItem.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`subMenuItem ${
                             subMenuItem.href === activeMenuHref ? "active" : ""
-                          }
+                          }`}
                         >
                           {subMenuItem.title}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   ) : (

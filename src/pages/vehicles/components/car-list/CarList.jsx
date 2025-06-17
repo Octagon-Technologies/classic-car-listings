@@ -24,22 +24,23 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
+  useEffect(() => {setCarList([])}, [vehicleType]);
+
   useEffect(() => {
     async function fetchCarImages() {
-      let request = supabase
-        .from("cars")
-        .select()
+      let request = supabase.from("cars").select();
 
-      if (vehicleType) {  
+      if (vehicleType) {
         request = request.eq("carType", vehicleType.value);
       } else {
         request = request.in("carType", ["classic-cars", "modern-classics"]);
       }
-      
-      if (vehicleStatus === VehicleStatus.Available) 
-      { request = request.eq("sold", "false") }
-      else if (vehicleStatus === VehicleStatus.Sold)
-      { request = request.eq("sold", "true") }
+
+      if (vehicleStatus === VehicleStatus.Available) {
+        request = request.eq("sold", "false");
+      } else if (vehicleStatus === VehicleStatus.Sold) {
+        request = request.eq("sold", "true");
+      }
 
       request = searchQuery
         ? request.ilike("name", `%${searchQuery}%`)
@@ -75,7 +76,7 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
     fetchCarImages();
 
     console.log(carList.toString());
-  }, [searchQuery, sortOption, vehicleStatus]);
+  }, [searchQuery, sortOption, vehicleStatus, vehicleType]);
 
   let displayData;
 
