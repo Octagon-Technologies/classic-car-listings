@@ -257,6 +257,7 @@ nav ul li.active .menuItem {
     position: relative;
     cursor: pointer;
     transition: all 0.3s;
+    white-space: nowrap;
   }
 
   nav ul li .menuItem:hover {

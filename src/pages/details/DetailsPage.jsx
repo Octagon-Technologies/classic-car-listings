@@ -66,13 +66,14 @@ function DetailsPage() {
       if (Number.isInteger(viewImageIndex)) {
         e.preventDefault();
         setViewImageIndex(null);
-        window.history.pushState(null, document.title);
       }
     };
 
-    window.addEventListener("popstate", backHandler);
-    window.history.pushState(null, document.title);
-
+    if (Number.isInteger(viewImageIndex)) {
+      window.addEventListener("popstate", backHandler);
+      window.history.pushState(null, document.title);
+    }
+      
     return () => {
       window.removeEventListener("popstate", backHandler);
     };

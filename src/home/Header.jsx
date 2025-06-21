@@ -13,7 +13,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "../config/config";
 import { useMediaQuery } from "react-responsive";
 
-
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -24,10 +23,9 @@ function Header() {
 
   const activeMenuHref = useLocation().pathname;
 
-
   useEffect(() => {
     console.log("Effect. activeMenuHref is ", activeMenuHref);
-    setIsMenuOpen(false)
+    setIsMenuOpen(false);
   }, [activeMenuHref]);
 
   const menuItems = [
@@ -139,12 +137,13 @@ function Header() {
       if (isMenuOpen) {
         e.preventDefault();
         setIsMenuOpen(false);
-        window.history.pushState(null, document.title);
       }
     };
 
-    window.addEventListener("popstate", backHandler);
-    window.history.pushState(null, document.title);
+    if (isMenuOpen) {
+      window.addEventListener("popstate", backHandler);
+      window.history.pushState(null, document.title);
+    }
 
     return () => {
       window.removeEventListener("popstate", backHandler);
@@ -204,7 +203,13 @@ function Header() {
                     isDesktop ? setExpandedMenuItem(null) : ""
                   }
                 >
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center"
+                    }}
+                  >
                     {item.subMenu ? (
                       <p className="menuItem">{item.title}</p>
                     ) : (
@@ -225,6 +230,9 @@ function Header() {
                             : faChevronDown
                         }
                         className="subMenuArrow"
+                        style={{
+                          color: isDesktop ? "black" : "white" 
+                        }}
                       />
                     ) : (
                       <></>

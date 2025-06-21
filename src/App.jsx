@@ -33,43 +33,34 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/">
-          <Route index element={<VehiclesPage />} />
-          <Route path="about" element={<AboutPage path={"about"} />} />
-          <Route
-            path={VehicleTypes.ClassicCars.value}
-            element={<VehiclesPage vehicleType={VehicleTypes.ClassicCars} />}
-          />
-          <Route
-            path={VehicleTypes.ModernClassics.value}
-            element={<VehiclesPage vehicleType={VehicleTypes.ModernClassics} />}
-          />
+        {/* Public pages */}
+        <Route path="/" element={<VehiclesPage />} />
+        <Route path="/about" element={<AboutPage path={"about"} />} />
+        <Route
+          path={`/${VehicleTypes.ClassicCars.value}`}
+          element={<VehiclesPage vehicleType={VehicleTypes.ClassicCars} />}
+        />
+        <Route
+          path={`/${VehicleTypes.ModernClassics.value}`}
+          element={<VehiclesPage vehicleType={VehicleTypes.ModernClassics} />}
+        />
+        <Route
+          path={`/${VehicleTypes.ClassicBikes.value}`}
+          element={<VehiclesPage vehicleType={VehicleTypes.ClassicBikes} />}
+        />
+        <Route
+          path={`/${VehicleTypes.Automobiles.value}`}
+          element={<VehiclesPage vehicleType={VehicleTypes.Automobiles} />}
+        />
+        <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
 
-          <Route
-            path={VehicleTypes.ClassicBikes.value}
-            element={<VehiclesPage vehicleType={VehicleTypes.ClassicBikes} />}
-          />
+        {/* Admin section */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/upload" element={<UploadPage />} />
+        <Route path="/admin/showcase" element={<AdminShowcase />} />
 
-          <Route
-            path={VehicleTypes.Automobiles.value}
-            element={<VehiclesPage vehicleType={VehicleTypes.Automobiles} />}
-          />
-          <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
-          {/* 
-
-
-
-*/}
-          <Route path="admin">
-            <Route index element={<AdminDashboard />} />
-            <Route path="upload" element={<UploadPage />} />
-            <Route path="showcase" element={<AdminShowcase />} />
-            {/* <Route path="login" element={<LoginPage />} /> */}
-            <Route path="*" element={<NoPage />} />
-          </Route>
-
-          <Route path="*" element={<NoPage />} />
-        </Route>
+        {/* Global fallback */}
+        <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
   );

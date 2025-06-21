@@ -49,7 +49,7 @@ function AdminDashboard() {
     }
 
     fetchUser();
-  }, [supabase]);
+  }, []);
 
   async function logOut() {
     const { error } = await supabase.auth.signOut();
