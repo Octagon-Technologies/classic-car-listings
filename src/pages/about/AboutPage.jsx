@@ -1,39 +1,118 @@
 import React, { useState } from "react";
 import Header from "../../home/Header";
 import styles from "./AboutPage.module.css";
-import classicCar from "../../assets/images/design/classic-car.png";
+import classicCar from "../../assets/images/branding/about-us-car.jpg";
 import quote from "../../assets/images/design/quote.svg";
-import kenyanManA from "../../assets/images/design/testimonials/kenyan-man.jpg";
-import woman from "../../assets/images/design/testimonials/sa-woman.jpg";
-import kenyanManB from "../../assets/images/design/testimonials/kenyan-man-B.jpg";
+import studGuy from "../../assets/images/design/testimonials/guy-with-studs.jpg";
+import luoWoman from "../../assets/images/design/testimonials/luo-woman.jpg";
+import whiteWoman from "../../assets/images/design/testimonials/white-woman.jpg";
+import blackLondonGuy from "../../assets/images/design/testimonials/black-london-guy.jpg";
+import bikeGuy from "../../assets/images/design/testimonials/bike-guy.jpeg";
+import showroom1 from "../../assets/images/design/showroom/showroom-1.jpg";
+import showroom2 from "../../assets/images/design/showroom/showroom-2.jpg";
+import showroom3 from "../../assets/images/design/showroom/showroom-3.jpg";
+import showroom4 from "../../assets/images/design/showroom/showroom-4.jpg";
+import showroom5 from "../../assets/images/design/showroom/showroom-5.jpg";
+import showroom6 from "../../assets/images/design/showroom/showroom-6.jpg";
+import showroom7 from "../../assets/images/design/showroom/showroom-7.jpg";
+import indianCouple from "../../assets/images/design/testimonials/indian-couple.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import AnimatedNumber from "../../home/AnimatedNumber";
 import { div } from "framer-motion/client";
 
+const workingHours = [
+  {
+    day: "Monday",
+    time: "10am - 6pm",
+  },
+  {
+    day: "Tuesday - Friday",
+    time: "9am - 6pm",
+  },
+  {
+    day: "Saturday",
+    time: "11am - 5pm",
+  },
+  {
+    day: "Sunday",
+    time: "Closed",
+  },
+  {
+    day: "Public Holidays",
+    time: "Call to Confirm",
+  },
+];
+
 const testimonials = [
   {
-    name: "Peter",
-    location: "Mombasa, Kenya",
-    image: kenyanManA,
-    message: `I listed my classic Mercedes on a Tuesday and by Friday, it was sold to a fellow enthusiast. The team handled everything—from photos to viewings—with real care. It’s rare to find people who treat your car like it’s their own.`,
-  },
-  {
-    name: "Andre",
-    location: "London, United Kingdom",
-    image: kenyanManB,
-    message: `Private, professional, and genuinely passionate about cars. I flew in from the UK and found exactly what I’d been searching for. The appointment-only setup gave me the time and space to make the right choice without pressure.`,
-  },
-  {
-    name: "Mumbi",
+    name: "Kabir Patel & Aarya Patel",
     location: "Nairobi, Kenya",
-    image: woman,
-    message: ` Finally, a platform that gets classic cars—and the people who love them. The service felt more like joining a community than dealing with a dealership. I’ll definitely be back when it’s time to expand my collection.`,
+    image: indianCouple,
+    message: `We were looking for an older, clean 4-wheel drive for visiting the national park and traveling around Kenya. Most of the cars we came across were either poorly maintained or overpriced. We stumbled upon Classic through their Facebook page, where we’d seen a Land Cruiser. For the first time, what we saw online was exactly what we found in person. When we reached the showroom, we immediately got the sense that these guys were honest and transparent. They allowed us to do a pre-purchase inspection with our own mechanic, and we sealed the deal. Out of all the cars we’ve ever bought, dealing with Classic was by far the easiest. We’d highly recommend them.`,
+  },
+  {
+    name: "Imogen Scott",
+    location: "Nanyuki, Kenya",
+    image: whiteWoman,
+    message: `I had been renting a car for almost six months while based in Laikipia doing research in conservation. I got tired of paying exorbitant car hire fees and asked a couple of friends in Nanyuki to recommend a reputable dealer selling older, clean cars. Classic Car Listings came up every single time. I checked them out online—they seemed legit. We spoke on DM, and I booked an appointment to see an old Pajero. When I actually visited, they advised me against that car based on my needs and recommended a Land Rover instead. I truly appreciate that, as the car has served me incredibly well. It’s rare to find a dealership that takes the time to understand their clients and advise them accordingly. I’m extremely happy with my purchase.`,
+  },
+  {
+    name: "Mark Kibet",
+    location: "Eldoret, Kenya",
+    image: bikeGuy,
+    message: `I had been riding a 250cc bike, my very first, but wanted to upgrade to something bigger for commuting and cross-country travel. As an avid follower of their page, I spotted a stunning BMW GS1200. The moment I saw it in person, I knew I had to have it. The team at Classic was incredibly gracious—they let me test the bike three times without ever doubting my intention to buy. When I finally did, they surprised me with a full tank of fuel and a gift voucher for new bike gear. Since then, I’ve ridden through four countries across East Africa with my GS, and every time someone asks where I got it, I proudly point them to the Classic page.`,
+  },
+  {
+    name: "Peter Njoroge",
+    location: "Thika, Kenya",
+    image: studGuy,
+    message: `I inherited an old Mercedes from my dad and was looking for a place to do long-term storage since I didn’t use it much. I then stumbled across Classic Car Listings online. I visited them and was impressed with their storage facility. The car stayed for 3 months, but afterwards, I felt like it needed a new home. Initially, I was quite skeptical that they would manage to find somebody. Surprisingly, in a week, I saw a notification that the car had been sold to a fellow enthusiast. Their process was straightforward, honest, and they handled everything. It’s rare to find people who treat your car like it’s their own.`,
+  },
+  {
+    name: "Andre Aneke",
+    location: "Nairobi / London",
+    image: blackLondonGuy,
+    message: `I flew in from the UK, new to Kenya after getting a long-term contract here, and started looking for a car. Their site popped up on Instagram. Interestingly, when I asked my colleagues for recommendations, they all referred me to Classic—and they had exactly what I was looking for. Coming from the diaspora, I’d heard a lot of horror stories about dealing with Kenyan car dealers, but I genuinely enjoyed my experience with Classic Car Listings.`,
+  },
+  {
+    name: "Rispa Atieno",
+    location: "Kisumu, Kenya",
+    image: luoWoman,
+    message: `I wanted my first car to be a classic—and a manual. I didn’t want the typical Vitz or Demio, and honestly, I had no idea where to start. I found Classic online, gave them a call, booked an appointment, and visited over the weekend. I met a bright, lovely team that walked me through all the cars they had. I actually ended up picking an older manual 4-wheel drive, which I absolutely love. The service felt less like dealing with a dealership and more like joining a community.`,
   },
 ];
 
 function AboutPage({ path }) {
+  const showroomImages = [
+    {
+      image: showroom3,
+      bio: "Not a showroom - an automotive gallery.",
+    },
+    {
+      image: showroom2,
+      bio: "A hidden gem where passion meets precision.",
+    },
+    {
+      image: showroom4,
+      bio: "You don’t just view cars here. You connect with them.",
+    },
+    {
+      image: showroom5,
+      bio: "Carefully curated. Impeccably kept.",
+    },
+    {
+      image: showroom1,
+      bio: "No crowds. No pressure.",
+    },
+    {
+      image: showroom7,
+      bio: "Private. Polished. Personal—just how buying a classic should feel.",
+    },
+  ];
+  const [activeShowroom, setActiveShowroom] = useState(showroomImages[2]);
+
   return (
     <div>
       <Header activeMenuHref={path} />
@@ -56,6 +135,19 @@ function AboutPage({ path }) {
               Whether you’re buying or selling, we connect real enthusiasts with
               the cars they love.
             </p>
+
+            <div className={styles.workingHours}>
+              <h3>Working Hours</h3>
+
+              <div className={styles.content}>
+                {workingHours.map((period) => (
+                  <div className={styles.period}>
+                    <p className={styles.day}>{period.day}</p>
+                    <p className={styles.time}>{period.time}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <img
@@ -74,14 +166,14 @@ function AboutPage({ path }) {
           <div className={styles.content}>
             <div className={styles.stat}>
               <p className={styles.value}>
-                <AnimatedNumber value={500} duration={1} />+
+                <AnimatedNumber value={458} duration={1} />+
               </p>
               <p className={styles.label}>Cars sold to passionate new owners</p>
             </div>
 
             <div className={styles.stat}>
               <p className={styles.value}>
-                <AnimatedNumber value={6} duration={1} />
+                <AnimatedNumber value={16} duration={1} />
               </p>
               <p className={styles.label}>
                 Countries represented by buyers & sellers we’ve worked with
@@ -90,15 +182,35 @@ function AboutPage({ path }) {
 
             <div className={styles.stat}>
               <p className={styles.value}>
-                <AnimatedNumber value={13} duration={1} />
+                <AnimatedNumber value={27} duration={1} />
               </p>
               <p className={styles.label}>
                 Collector vehicles currently in long-term storage & fleet care
               </p>
             </div>
           </div>
+        </div>
 
-          <span className={styles.divider}></span>
+        <div className={styles.showroom}>
+          <h1>Our Showroom</h1>
+          <p className={styles.instructions}>(Tap image to expand it)</p>
+
+          <div className={styles.gallery}>
+            {showroomImages.map((showroom, index) => (
+              <div
+                className={`${styles.image} ${
+                  activeShowroom.image === showroom.image ? styles.active : ""
+                  }`}
+                onClick={() => setActiveShowroom(showroom)}
+              >
+                <img src={showroom.image} alt="" />
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.details}>
+            <p>{ activeShowroom.bio }</p>
+          </div>
         </div>
 
         <div className={styles.story}>
@@ -119,12 +231,11 @@ function AboutPage({ path }) {
             dealership, but to create a trusted hub for people who see cars as
             more than just machines.
             <br></br>
-            <br></br> From our discreet location in Karen, Nairobi, we began
-            operating on an appointment-only basis, giving each customer a
-            personalised, relaxed experience. No crowds. No pressure. Just the
-            chance to view and connect with unique vehicles, from vintage
-            Volkswagen and Land Rovers to rare high-end marques and restored
-            motorcycles. Over time, our “on behalf” sales model gained
+            <br></br> From our location in Karen, Nairobi, we began operating on
+            an appointment-only basis, giving each customer a personalised,
+            relaxed experience. No crowds. No pressure. Just the chance to view
+            and connect with unique vehicles, from classic motorcycles to
+            high-end marques. Over time, our “on behalf” sales model gained
             popularity—offering collectors a secure and professional way to sell
             their cherished cars without stress, while giving buyers access to
             authentic, well-documented listings.<br></br>

@@ -10,7 +10,7 @@ function NoPage() {
       <h6>Uh Oh. That page doesn't exist.</h6>
       <p>
         The page you're looking for is not available.<br></br>
-        Wanna go back to our <Link href="/">Home</Link> page
+        Wanna go back to our <Link to="/">Home</Link> page
       </p>
     </div>
   );

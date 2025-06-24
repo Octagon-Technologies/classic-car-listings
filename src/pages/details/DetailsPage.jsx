@@ -62,20 +62,26 @@ function DetailsPage() {
   }, [carSlugName]);
 
   useEffect(() => {
+    if (!Number.isInteger(viewImageIndex)) return;
+
+    // Only push a new history state once when opening the image viewer
+    const isFirstImageView = window.history.state?.modal !== true;
+    if (isFirstImageView) {
+      window.history.pushState({ modal: true }, "");
+      console.log("History state pushed");
+    }
+
     const backHandler = (e) => {
-      if (Number.isInteger(viewImageIndex)) {
-        e.preventDefault();
-        setViewImageIndex(null);
-      }
+      console.log(`viewImageIndex is ${viewImageIndex}`);
+      setViewImageIndex(null);
     };
 
-    if (Number.isInteger(viewImageIndex)) {
-      window.addEventListener("popstate", backHandler);
-      window.history.pushState(null, document.title);
-    }
-      
+    window.addEventListener("popstate", backHandler);
+    console.log("Listener added");
+
     return () => {
       window.removeEventListener("popstate", backHandler);
+      console.log("Listener removed");
     };
   }, [viewImageIndex]);
 
@@ -157,7 +163,7 @@ function DetailsPage() {
             </div>
             {!Number.isFinite(viewImageIndex) ? (
               <a
-                href={`https://wa.me/254794940110/?text=${encodeURIComponent(
+                href={`https://wa.me/254748883598/?text=${encodeURIComponent(
                   `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
                 )}`}
                 target="_blank"

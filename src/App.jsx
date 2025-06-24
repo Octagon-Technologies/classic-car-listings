@@ -8,6 +8,7 @@ import UploadPage from "./pages/admin/upload/UploadPage";
 import AdminDisplay from "./pages/admin/dashboard/AdminDashboard";
 import DetailsPage from "./pages/details/DetailsPage";
 import VehiclesPage from "./pages/vehicles/VehiclesPage";
+import FaqPage from "./pages/faq/FaqPage";
 import AdminDashboard from "./pages/admin/dashboard/AdminDashboard";
 import AdminShowcase from "./pages/admin/showcase/AdminShowcase";
 
@@ -53,6 +54,8 @@ export default function App() {
           element={<VehiclesPage vehicleType={VehicleTypes.Automobiles} />}
         />
         <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
+
+        <Route path="/how-to-sell-with-us" element={<FaqPage/>}/>
 
         {/* Admin section */}
         <Route path="/admin" element={<AdminDashboard />} />

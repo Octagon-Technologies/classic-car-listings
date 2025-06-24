@@ -12,6 +12,7 @@ import { VehicleTypes } from "./models/VehicleTypes";
 import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
 import { VehicleStatus } from "./models/VehicleStatus";
+import { useEffect } from "react";
 // import wavy from "../../assets/images/design/green-v1.png";
 // import wavy from "../../assets/images/design/wavy-v3.png";
 // import wavy from "../../assets/images/design/wavy.webp";
@@ -39,6 +40,30 @@ function VehiclesPage({ vehicleType }) {
     setVehicleStatus(e.target.value);
   }
 
+  useEffect(() => {
+    if (searchQuery === "") return;
+
+    // Only push a new history state once when opening the image viewer
+    const isFirstSearchQuery = window.history.state?.modal !== true;
+    if (isFirstSearchQuery) {
+      window.history.pushState({ modal: true }, "");
+      console.log("History state pushed");
+    }
+
+    const backHandler = (_) => {
+      console.log(`searchQuery is ${searchQuery}`);
+      setSearchQuery("");
+    };
+
+    window.addEventListener("popstate", backHandler);
+    console.log("Listener added");
+
+    return () => {
+      window.removeEventListener("popstate", backHandler);
+      console.log("Listener removed");
+    };
+  }, [searchQuery]);
+
   return (
     <div>
       <Header />
@@ -53,7 +78,10 @@ function VehiclesPage({ vehicleType }) {
             <FontAwesomeIcon className={styles.icon} icon={faMagnifyingGlass} />
             <input
               type="text"
-              placeholder={`Search for your desired ${vehicleType ? vehicleType.keyword.toLowerCase() : "car"}`}
+              placeholder={`Search for your desired ${
+                vehicleType ? vehicleType.keyword.toLowerCase() : "car"
+                }`}
+              value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
@@ -100,10 +128,6 @@ function VehiclesPage({ vehicleType }) {
           </option>
           <option value={VehicleStatus.Sold}>
             Show {VehicleStatus.Sold}{" "}
-            {vehicleType ? vehicleType.groupKeyword : "Cars"}
-          </option>
-          <option value={VehicleStatus.All}>
-            Show {VehicleStatus.All}{" "}
             {vehicleType ? vehicleType.groupKeyword : "Cars"}
           </option>
         </select>

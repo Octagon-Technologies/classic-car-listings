@@ -57,8 +57,12 @@ function Header() {
     },
 
     {
-      title: "Automobiles",
+      title: "Boats/Buggies/ATVs",
       href: "/automobiles",
+    },
+    {
+      title: "How to Sell with Us",
+      href: "/how-to-sell-with-us",
     },
     ...(isAdmin
       ? [
@@ -170,9 +174,10 @@ function Header() {
         <div className="appBar">
           <Link className="logo" to="/">
             <img src={logo} alt="" />
-            <p className="logoName">
-              Classic Car<br></br>Listings
-            </p>
+            <div className="content">
+              <p className="logoName">Classic Car Listings KE</p>
+              <p className="slogan">It's just not a car, but an investment</p>
+            </div>
           </Link>
 
           <FontAwesomeIcon id="openMenu" onClick={toggleMenu} icon={faBars} />
@@ -207,7 +212,7 @@ function Header() {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center"
+                      alignItems: "center",
                     }}
                   >
                     {item.subMenu ? (
@@ -231,7 +236,7 @@ function Header() {
                         }
                         className="subMenuArrow"
                         style={{
-                          color: isDesktop ? "black" : "white" 
+                          color: isDesktop ? "black" : "white",
                         }}
                       />
                     ) : (

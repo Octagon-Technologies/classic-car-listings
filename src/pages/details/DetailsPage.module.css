@@ -47,7 +47,6 @@ h3 {
   font-size: 2.15rem;
 }
 
-
 .price {
   display: flex;
   justify-content: space-between;
@@ -156,12 +155,12 @@ h3 {
 }
 
 .contactTab p span {
-  color: var(--green);
+  color: var(--darkGreen);
 }
 
 .contactTab .whatsappIcon {
   background: white;
-  color: var(--green);
+  color: var(--darkGreen);
   font-size: 2rem;
 }
 /* 
@@ -286,24 +285,32 @@ h3 {
   }
 
   .viewImage {
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 100%;
     left: 50%;
-    top: 5%;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 6px;
+    border-radius: 8px;
     background: white;
+    border: 2px var(--darkGreen) solid;
     color: black;
+  }
+
+  .viewImage .topBar {
+    background: var(--darkGreen);
+  }
+
+  .viewImage .topBar p {
+    color: white;
   }
 
   .viewImage .topBar .icons {
-    color: black;
+    color: white;
   }
 
-  .viewImage  img {
+  .viewImage img {
     width: fit-content;
     height: 85%;
     margin-top: 7.5%;

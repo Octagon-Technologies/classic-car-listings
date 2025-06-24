@@ -11,9 +11,12 @@
 
 :root {
   --green: rgb(0, 141, 119);
-  --darkGreen: rgb(21, 61, 20);
+  /* --darkGreen: rgb(21, 89, 61); */
+  --darkGreen: rgb(31, 99, 71);
   --lightBlack: #393939;
   --gold: #f6bc1c;
+  --clay: rgb(204, 85, 51);
+  --teal: rgb(0, 153, 153);
   --lightRed: rgb(251, 126, 126);
 }
 
@@ -54,16 +57,23 @@ footer {
 }
 
 .appBar img {
-  width: 80px;
+  width: 70px;
   height: fit-content;
 }
 
 .appBar .logoName {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-family: "Iceberg";
   margin-left: 16px;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.appBar .slogan {
+  font-size: 0.7rem;
+  color: #6f6f6f;
+  font-style: italic;
+  margin-left: 16px;
 }
 
 .appBar .openMenu {
@@ -112,7 +122,7 @@ nav {
   width: 0%;
   overflow: hidden;
   z-index: 10;
-  background: var(--green);
+  background: var(--darkGreen);
   height: 100dvh;
   transition: all 0.5s ease-in-out;
 }
@@ -185,7 +195,7 @@ nav ul li .subMenu a {
   padding: 12px 0px;
   text-decoration: none;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.278);
+  background-color: rgba(0, 0, 0, 0.25);
   border-radius: 6px;
   color: white;
   font-family: "Quicksand";
@@ -208,6 +218,19 @@ nav ul li.active .menuItem {
 }
 
 @media screen and (min-width: 850px) {
+  .appBar img {
+    width: 95px;
+  }
+
+  .appBar .logoName  {
+    font-size: 1.2rem;
+  }
+
+  .appBar .slogan {
+    font-size: 0.9rem;
+    margin-top: 2px;
+  }
+
   #openMenu {
     display: none;
   }
@@ -233,13 +256,12 @@ nav ul li.active .menuItem {
     align-items: center;
     justify-content: end;
     background: white;
-    padding-right: 36px;
+    padding-right: 6px;
     overflow: visible;
     gap: 6px;
   }
 
   nav ul li {
-    padding: 0px 24px;
     margin: 0px;
     height: 80px;
     display: flex;
@@ -251,9 +273,10 @@ nav ul li.active .menuItem {
   }
 
   nav ul li .menuItem {
+    padding: 0px 14px;
+    color: black;
     font-family: "Quicksand";
     text-transform: capitalize;
-    color: black;
     position: relative;
     cursor: pointer;
     transition: all 0.3s;
@@ -261,7 +284,7 @@ nav ul li.active .menuItem {
   }
 
   nav ul li .menuItem:hover {
-    color: var(--green);
+    color: var(--clay);
   }
 
   nav ul li .subMenu {
@@ -284,13 +307,13 @@ nav ul li.active .menuItem {
   }
 
   nav ul li .subMenu .subMenuItem.active {
-    background: var(--green);
+    background: var(--darkGreen);
     color: white;
     font-weight: 600;
   }
 
-  nav ul li .subMenu .subMenuItem:hover {
-    color: var(--green);
+  nav ul li .subMenu .subMenuItem:hover:not(.active) {
+    color: var(--clay);
     background: rgba(4, 239, 204, 0.15);
     font-weight: 600;
   }

@@ -1,7 +1,6 @@
 
 :root {
   --green: rgb(0, 141, 119);
-  --darkGreen: rgb(21, 61, 20);
   --lightBlack: #393939;
   --gold: #f6bc1c;
 }
@@ -17,6 +16,7 @@
 
 .noPage img {
     width: 70%;
+    max-width: 500px;
 }
 
 .noPage h6 {
@@ -29,11 +29,11 @@
   width: 80%;
   margin-top: 10px;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
 }
 
 .noPage p a {
-    text-decoration: underline;
-    color: var(--green);
+    text-decoration: none;
+    color: var(--clay);
     font-weight: 600;
 }
