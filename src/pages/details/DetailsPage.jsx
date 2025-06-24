@@ -129,7 +129,10 @@ function DetailsPage() {
               <h2> {car.name} </h2>
 
               <div className={styles.price}>
-                <h6>List price</h6> <p>{toKESPrice(car.price)}</p>
+                <h6>List price</h6>{" "}
+                <p>
+                  {toKESPrice(car.price)} <span>(Neg)</span>
+                </p>
               </div>
 
               <div className={styles.features}>

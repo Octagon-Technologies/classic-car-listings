@@ -69,6 +69,13 @@ h3 {
   font-weight: 500;
 }
 
+.price p span {
+  color: var(--green);
+  font-family: "Advent Pro";
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
 .features {
   display: flex;
   flex-direction: column;
