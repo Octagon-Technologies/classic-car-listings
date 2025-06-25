@@ -52,92 +52,101 @@ disclose to buyers for a seamless transaction.`,
     <>
       <Header />
 
-      <div className={styles.sellingContainer}>
-        <h1>How to Sell With Us</h1>
+      <div className={styles.body}>
+        <div className={styles.sellingContainer}>
+          <h1>How to Sell With Us</h1>
 
-        <div className={styles.steps}>
-          <div className={styles.step}>
-            <p className={styles.title}>Step 1</p>
-            <p className={styles.content}>
-              Send photos & details of the car or bike{" "}
-              <a
-                href={`https://wa.me/254748883598/?text=${encodeURIComponent(
-                  `Hey Classic Car Listings. I was interested in selling my car/bike. Lemme send you the details of the car/bike as well as some pictures too`
-                )}`}
-              >
-                via Whatsapp
-              </a>
-            </p>
-          </div>
-          <div className={styles.step}>
-            <p className={styles.title}>Step 2</p>
-            <p className={styles.content}>
-              We will assess the car and see if we have market for it
-            </p>
-          </div>
-          <div className={styles.step}>
-            <p className={styles.title}>Step 3</p>
-            <p className={styles.content}>
-              Bring the car/bike to our showroom in Karen, Nairobi
-            </p>
-          </div>
-          <div className={styles.step}>
-            <p className={styles.title}>Step 4</p>
-            <p className={styles.content}>
-              Sign Sale Consent and agree on the price and commission
-            </p>
+          <div className={styles.steps}>
+            <div className={styles.step}>
+              <p className={styles.title}>Step 1</p>
+              <p className={styles.content}>
+                Send photos & details of the car or bike{" "}
+                <a
+                  href={`https://wa.me/254748883598/?text=${encodeURIComponent(
+                    `Hey Classic Car Listings. I was interested in selling my car/bike. Lemme send you the details of the car/bike as well as some pictures too`
+                  )}`}
+                >
+                  via Whatsapp
+                </a>
+              </p>
+            </div>
+            <div className={styles.step}>
+              <p className={styles.title}>Step 2</p>
+              <p className={styles.content}>
+                We will assess the car and see if we have market for it
+              </p>
+            </div>
+            <div className={styles.step}>
+              <p className={styles.title}>Step 3</p>
+              <p className={styles.content}>
+                Bring the car/bike to our showroom in Karen, Nairobi
+              </p>
+            </div>
+            <div className={styles.step}>
+              <p className={styles.title}>Step 4</p>
+              <p className={styles.content}>
+                Sign Sale Consent and agree on the price and commission
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.faqContainer}>
-        <h1>FAQ</h1>
+        <div className={styles.faqContainer}>
+          <h1>FAQ</h1>
 
-        <div className={styles.faqContent}>
-          {faqs.map((faq, faqIndex) => {
-            return (
-              <div
-                key={faq.question}
-                className={`${styles.faq}  ${
-                  activeFaq === faqIndex ? styles.active : ""
-                }`}
-                onClick={(e) => {
-                  setActiveFaq(faqIndex);
-                  setTimeout(() => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const fullyVisible =
-                      rect.top >= 0 &&
-                      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+          <div className={styles.faqContent}>
+            {faqs.map((faq, faqIndex) => {
+              return (
+                <div
+                  key={faq.question}
+                  className={`${styles.faq}  ${
+                    activeFaq === faqIndex ? styles.active : ""
+                  }`}
+                  onClick={(e) => {
+                    setActiveFaq(faqIndex);
+                    setTimeout(() => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const fullyVisible =
+                        rect.top >= 0 &&
+                        rect.bottom <=
+                          (window.innerHeight ||
+                            document.documentElement.clientHeight);
 
-                    if (!fullyVisible) {
-                      e.currentTarget.scrollIntoView({
-                        behavior: "smooth",
-                        block: "nearest",
-                        inline: "nearest",
-                      });
-                    }
-                  }, 150); // Slight delay to wait for the keyboard to appear (especially on mobile);
-                  console.log(
-                    `faqIndex is ${faqIndex} and activeFaq is ${activeFaq}`
-                  );
-                }}
-              >
-                <div className={styles.question}>
-                  <p>{faq.question}</p>
-                  <FontAwesomeIcon
-                    icon={activeFaq === faqIndex ? faChevronUp : faChevronDown}
-                    style={{
-                      fontSize: "1.15rem",
-                      marginRight: "6px",
-                      color: activeFaq === faqIndex ? "rgb(34, 154, 104)" : "black",
-                    }}
-                  />
+                      if (!fullyVisible) {
+                        e.currentTarget.scrollIntoView({
+                          behavior: "smooth",
+                          block: "nearest",
+                          inline: "nearest",
+                        });
+                      }
+                    }, 150); // Slight delay to wait for the keyboard to appear (especially on mobile);
+                    console.log(
+                      `faqIndex is ${faqIndex} and activeFaq is ${activeFaq}`
+                    );
+                  }}
+                >
+                  <div className={styles.question}>
+                    <p>{faq.question}</p>
+                    <FontAwesomeIcon
+                      icon={
+                        activeFaq === faqIndex ? faChevronUp : faChevronDown
+                      }
+                      style={{
+                        fontSize: "1.15rem",
+                        marginRight: "6px",
+                        color:
+                          activeFaq === faqIndex
+                            ? "rgb(34, 154, 104)"
+                            : "black",
+                      }}
+                    />
+                  </div>
+
+                  <p className={`${styles.answer}`}>{faq.answer}</p>
                 </div>
-
-                <p className={`${styles.answer}`}>{faq.answer}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </>

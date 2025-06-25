@@ -125,28 +125,27 @@
 }
 
 .car .bottomBar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    margin-top: 12px;
-    margin-bottom: 12px;
-    
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .car .carDelete {
-    padding: 6px 10px;
-    border: 2px var(--lightRed) solid;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
+  padding: 6px 10px;
+  border: 2px var(--lightRed) solid;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .car .carDelete:hover {
-    background-color: var(--lightRed);
-    color: white;
-    font-weight: 500;
+  background-color: var(--lightRed);
+  color: white;
+  font-weight: 500;
 }
 
 .popup {
@@ -155,9 +154,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  box-shadow: 
-  -2px -2px 5px rgba(0, 0, 0, 0.2), 
-  2px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2), 2px 2px 5px rgba(0, 0, 0, 0.2);
   width: 220px;
   min-height: 200px;
   border-radius: 6px;
@@ -168,7 +165,7 @@
 }
 
 .popup.active {
-    display: flex;
+  display: flex;
 }
 
 .updating .spinner {
@@ -194,48 +191,45 @@
 }
 
 .deleting {
-    padding: 12px 0px;
-    width: 250px;
-    height: 270px;
+  padding: 12px 0px;
+  width: 250px;
+  height: 270px;
 }
 
 .deleting img {
-    height: 120px;
+  height: 120px;
 }
 
 .deleting p {
-    width: 80%;
-    margin-top: 12px;
-    font-size: 1.025rem;
-    text-align: center;
+  width: 80%;
+  margin-top: 12px;
+  font-size: 1.025rem;
+  text-align: center;
 }
 
 .deleting .actions {
-    display: flex;
-    flex-direction: row;
-    margin-top: 4px;
-    width: calc(100% - 16px);
-    gap: 12px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+  width: calc(100% - 16px);
+  gap: 12px;
 }
 
 .deleting .actions p {
-    flex-basis: 50%;
-    border: 2px var(--green) solid;
-    border-radius: 4px;
-    padding: 8px 0px;
-    font-weight: 500;
-    cursor: pointer;
+  flex-basis: 50%;
+  border: 2px var(--green) solid;
+  border-radius: 4px;
+  padding: 8px 0px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .deleting .actions p:last-child {
-    border-color: rgb(254, 94, 94);
-    font-weight: 800;
+  border-color: rgb(254, 94, 94);
+  font-weight: 800;
 }
 
-
-
-
-@media screen and (min-width: 1080px) {
+@media screen and (min-width: 1024px) {
   .body {
     width: 85%;
     margin: auto;

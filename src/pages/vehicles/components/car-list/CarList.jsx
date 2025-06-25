@@ -24,7 +24,9 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
   const [carList, setCarList] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {setCarList([])}, [vehicleType]);
+  useEffect(() => {
+    setCarList([]);
+  }, [vehicleType]);
 
   useEffect(() => {
     async function fetchCarImages() {
@@ -82,6 +84,9 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
 
   // displayData = Loading();
 
+  /* Initial Loading happening
+
+  */
   // Search has happened, no results */
   if (carList.length === 0 && searchQuery) {
     displayData = (
@@ -107,12 +112,9 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
       </div>
     );
   } else {
-    /* Initial Loading happening
-
-  */
     displayData = (
-      <div className={styles.loading}>
-        <div className={styles.spinner}></div>
+      <div className="loading" style={{ marginTop: "12vh" }}>
+        <div className="spinner"></div>
       </div>
     );
   }
@@ -129,3 +131,7 @@ function CarList({ vehicleType, searchQuery, sortOption, vehicleStatus }) {
 }
 
 export default CarList;
+
+
+
+

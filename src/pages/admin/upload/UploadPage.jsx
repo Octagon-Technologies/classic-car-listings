@@ -25,7 +25,7 @@ const supabase = createClient(
 
 function UploadPage() {
   const navigate = useNavigate();
-  const isDesktop = useMediaQuery({ query: "(min-width: 1080px)" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const carSlugName = useRef();
 

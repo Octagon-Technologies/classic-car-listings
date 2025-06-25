@@ -335,7 +335,7 @@ img.carDisplay {
   height: 16px;
 }
 
-@media screen and (min-width: 1080px) {
+@media screen and (min-width: 1024px) {
   .body {
     width: 85%;
     margin: auto;
