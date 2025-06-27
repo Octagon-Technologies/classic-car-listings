@@ -601,7 +601,7 @@ function UploadPage() {
     >
       <Header />
 
-      {carSlugName ? (existingCar.current ? displayData : Loading()) : displayData}
+      {carSlugName.current ? (existingCar.current ? displayData : Loading()) : displayData}
 
       <div
         className={`${styles.uploadStatusContainer}`}
