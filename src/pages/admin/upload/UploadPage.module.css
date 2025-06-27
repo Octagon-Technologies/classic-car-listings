@@ -471,10 +471,10 @@ textarea {
   }
 
   .inputImages {
-    justify-content: center;
+    justify-content: flex-start;
   }
 
-  .inputImages img {
+  .inputImages div {
     width: 23%;
   }
 
@@ -484,6 +484,17 @@ textarea {
   }
 
   .previewCar {
-    width: 60%;
+    margin: auto;
+    width: 75%;
+  }
+
+  .previewCar .list img {
+    height: 400px;
+  }
+
+  .keyActionBtn {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
