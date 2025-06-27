@@ -2,6 +2,9 @@
 
 @import url(./assets/fonts/radikal/radikal.css);
 
+
+/* -webkit-tap-highlight-color: transparent; */
+
 * {
   margin: 0;
   padding: 0;

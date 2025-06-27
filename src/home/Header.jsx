@@ -119,10 +119,10 @@ function Header() {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log("Auth state changed:", event);
+        // console.log("Auth state changed:", event);
 
         if (session) {
-          console.log("Session is valid:", session);
+          // console.log("Session is valid:", session);
           setIsAdmin(true);
         } else {
           console.log("Session is null or invalid");
@@ -252,6 +252,7 @@ function Header() {
                       {item.subMenu.map((subMenuItem) => (
                         <Link
                           to={subMenuItem.href}
+                          key={subMenuItem.href}
                           onClick={() => setIsMenuOpen(false)}
                           className={`subMenuItem ${
                             subMenuItem.href === activeMenuHref ? "active" : ""

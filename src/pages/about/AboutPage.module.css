@@ -434,6 +434,23 @@ img.carDisplay {
     font-size: 1.25rem;
   }
 
+  .showroom .gallery {
+    height: 60vh;
+  }
+
+  .showroom .image {
+    width: 15vw;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .showroom .image > * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .showroom .details p {
+    font-size: 1.1rem;
+  }
+
   .testimonials {
     margin: 36px 0px;
     margin-top: 120px;

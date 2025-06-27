@@ -14,6 +14,7 @@ import AdminShowcase from "./pages/admin/showcase/AdminShowcase";
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { useEffect } from "react";
+import EditVehiclePage from "./pages/admin/edit-vehicle/EditVehiclePage";
 
 const supabase = createClient(
   "https://xxsbhmnnstzhatmoivxp.supabase.co",
@@ -25,7 +26,7 @@ export default function App() {
     async function fetchCurrentUser() {
       const { data, error } = await supabase.auth.getSession();
 
-      console.log(data);
+      // console.log(data);
     }
 
     fetchCurrentUser();
@@ -55,12 +56,13 @@ export default function App() {
         />
         <Route path="/:carType/:carSlugName" element={<DetailsPage />} />
 
-        <Route path="/how-to-sell-with-us" element={<FaqPage/>}/>
+        <Route path="/how-to-sell-with-us" element={<FaqPage />} />
 
         {/* Admin section */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/upload" element={<UploadPage />} />
         <Route path="/admin/showcase" element={<AdminShowcase />} />
+        <Route path="/admin/edit-vehicle/:carSlugName" element={<EditVehiclePage />} />
 
         {/* Global fallback */}
         <Route path="*" element={<NoPage />} />

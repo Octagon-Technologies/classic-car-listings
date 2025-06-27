@@ -133,16 +133,17 @@
   margin-bottom: 12px;
 }
 
-.car .carDelete {
+.car .carEdit {
   padding: 6px 10px;
   border: 2px var(--lightRed) solid;
   border-radius: 6px;
   font-size: 0.9rem;
+  background: white;
   font-weight: 500;
   cursor: pointer;
 }
 
-.car .carDelete:hover {
+.car .carEdit:hover {
   background-color: var(--lightRed);
   color: white;
   font-weight: 500;

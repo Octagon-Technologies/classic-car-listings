@@ -1,0 +1,141 @@
+.form {
+  margin: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+}
+
+.form .field {
+  background: white;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  padding: 6px 10px;
+}
+
+.field .label {
+  color: var(--green);
+  font-family: "Advent Pro";
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.field .value {
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 2px black solid;
+  outline: none;
+  width: 100%;
+  padding: 8px 6px;
+  font-size: 1rem;
+}
+
+.field textarea {
+  width: 100%;
+}
+
+
+
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2), 2px 2px 5px rgba(0, 0, 0, 0.2);
+  width: 220px;
+  min-height: 200px;
+  border-radius: 6px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup.active {
+  display: flex;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2), 2px 2px 5px rgba(0, 0, 0, 0.2);
+  width: 220px;
+  min-height: 200px;
+  border-radius: 6px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup.active {
+  display: flex;
+}
+
+.updating .spinner {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 4px var(--green) solid;
+  border-top: 3px transparent solid;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.updating p {
+  margin-top: 20px;
+  font-weight: 500;
+  font-family: "Quicksand";
+  font-size: 1.1rem;
+}
+
+.deleting {
+  padding: 12px 0px;
+  width: 250px;
+  height: 270px;
+}
+
+.deleting img {
+  height: 120px;
+}
+
+.deleting p {
+  width: 80%;
+  margin-top: 12px;
+  font-size: 1.025rem;
+  text-align: center;
+}
+
+.deleting .actions {
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+  width: calc(100% - 16px);
+  gap: 12px;
+}
+
+.deleting .actions p {
+  flex-basis: 50%;
+  border: 2px var(--green) solid;
+  border-radius: 4px;
+  padding: 8px 0px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.deleting .actions p:last-child {
+  border-color: rgb(254, 94, 94);
+  font-weight: 800;
+}
+/* 
+@media screen and (min-width: 1024px) {
+
+} */
