@@ -31,7 +31,7 @@ function Header() {
   const menuItems = [
     {
       title: "About Us",
-      href: "/about",
+      href: "/about-us",
     },
     {
       title: "Cars",

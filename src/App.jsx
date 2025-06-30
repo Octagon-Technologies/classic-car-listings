@@ -37,7 +37,7 @@ export default function App() {
       <Routes>
         {/* Public pages */}
         <Route path="/" element={<VehiclesPage />} />
-        <Route path="/about" element={<AboutPage path={"about"} />} />
+        <Route path="/about-us" element={<AboutPage path={"about-us"} />} />
         <Route
           path={`/${VehicleTypes.ClassicCars.value}`}
           element={<VehiclesPage vehicleType={VehicleTypes.ClassicCars} />}

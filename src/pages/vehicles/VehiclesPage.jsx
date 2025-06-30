@@ -1,4 +1,5 @@
 import styles from "./VehiclePage.module.css";
+import { Helmet } from "react-helmet";
 import logo from "../../assets/images/branding/cars-logo-nobg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +14,7 @@ import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
 import { VehicleStatus } from "./models/VehicleStatus";
 import { useEffect } from "react";
+import ogImage from "../../assets/images/design/og-image.png";
 // import wavy from "../../assets/images/design/green-v1.png";
 // import wavy from "../../assets/images/design/wavy-v3.png";
 // import wavy from "../../assets/images/design/wavy.webp";
@@ -66,21 +68,64 @@ function VehiclesPage({ vehicleType }) {
 
   return (
     <div>
+      <Helmet>
+        <title>
+          {`Buy a ${vehicleType?.keyword ?? "Car"} | Classic Car Listings`}
+        </title>
+        <meta
+          name="description"
+          content="Find, buy, and sell classic cars across Kenya. ClassicCarListings.co.ke is Kenya's top platform for vintage and rare vehicles."
+        />
+        <meta
+          name="keywords"
+          content="classic cars Kenya, buy classic cars Kenya, cars for sale Kenya, cars for sale, classic car listings, classic cars for sale Kenya, modern classics Kenya, modern classics for sale Kenya, bikes for sale Kenya, buy bikes Kenya, vespas Kenya, vespas for sale Kenya"
+        />
+        <link rel="canonical" href="https://classiccarlistings.co.ke/" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Classic Car Listings Kenya" />
+        <meta
+          property="og:description"
+          content="Buy and sell classic cars in Kenya."
+        />
+        <meta
+          property="og:image"
+          content="https://classiccarlistings.co.ke/assets/og-image.png"
+        />
+        <meta property="og:url" content="https://classiccarlistings.co.ke/" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Classic Car Listings Kenya" />
+        <meta
+          name="twitter:description"
+          content="Kenya’s leading platform for classic cars."
+        />
+        <meta
+          name="twitter:image"
+          content="https://classiccarlistings.co.ke/assets/og-image.png"
+        />
+      </Helmet>
+
       <Header />
 
       <div className={styles.body}>
         <div className={styles.searchSection}>
-          <h3 className={styles.title}>
-            Explore a vast array of well-maintained classics
-          </h3>
+          <h1 className={styles.title}>
+            {/* Explore a vast array of well-maintained classics */}
+            {`Explore our vast collection of well-maintained classic ${
+              vehicleType?.groupKeyword?.toLowerCase() ?? "cars"
+            }`}
+          </h1>
 
           <div className={styles.searchBar}>
             <FontAwesomeIcon className={styles.icon} icon={faMagnifyingGlass} />
             <input
               type="text"
               placeholder={`Search for your desired ${
-                vehicleType ? vehicleType.keyword.toLowerCase() : "car"
-                }`}
+                vehicleType?.keyword?.toLowerCase() ?? "car"
+              }`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

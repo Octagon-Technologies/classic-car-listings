@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../../home/Header";
 import styles from "./AboutPage.module.css";
 import classicCar from "../../assets/images/branding/about-us-car.jpg";
+import ogImage from "../../assets/images/design/og-image.png";
 import quote from "../../assets/images/design/quote.svg";
 import studGuy from "../../assets/images/design/testimonials/guy-with-studs.jpg";
 import luoWoman from "../../assets/images/design/testimonials/luo-woman.jpg";
@@ -21,6 +22,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import AnimatedNumber from "../../home/AnimatedNumber";
 import { div } from "framer-motion/client";
+import { Helmet } from "react-helmet";
 
 const workingHours = [
   {
@@ -115,6 +117,46 @@ function AboutPage({ path }) {
 
   return (
     <div>
+      <Helmet>
+        <title>About Us | Classic Car Listings</title>
+        <meta
+          name="description"
+          content="Discover how Classic Car Listings Kenya helps enthusiasts buy, sell, and store classic cars and motorcycles. Based in Karen, Nairobi, we provide private viewings and professional services."
+        />
+        <meta
+          name="keywords"
+          content="classic car dealership Kenya, classic motorcycles Kenya, car storage Karen Nairobi, sell classic cars Nairobi, classic cars Kenya, buy classic cars Kenya, cars for sale Kenya, cars for sale, classic car listings, classic cars for sale Kenya"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:title" content="About Us | Classic Car Listings" />
+        <meta
+          property="og:description"
+          content="Learn more about Classic Car Listings Kenya — the go-to platform for classic car sales, classic motorcycle listings, and secure vehicle storage services in Karen, Nairobi."
+        />
+        <meta
+          property="og:image"
+          content="https://classiccarlistings.co.ke/assets/og-image.png"
+        />
+        <meta
+          property="og:url"
+          content="https://classiccarlistings.co.ke/about"
+        />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Us | Classic Car Listings" />
+        <meta
+          name="twitter:description"
+          content="Buy, sell, and store classic vehicles with Kenya’s most trusted vintage car dealership, Classic Car Listings — based in Karen, Nairobi."
+        />
+        <meta
+          name="twitter:image"
+          content="https://classiccarlistings.co.ke/assets/og-image.png"
+        />
+      </Helmet>
+
       <Header activeMenuHref={path} />
 
       <div className={styles.body}>
@@ -141,7 +183,7 @@ function AboutPage({ path }) {
 
               <div className={styles.content}>
                 {workingHours.map((period) => (
-                  <div className={styles.period}>
+                  <div className={styles.period} key={period.day}>
                     <p className={styles.day}>{period.day}</p>
                     <p className={styles.time}>{period.time}</p>
                   </div>
@@ -161,7 +203,7 @@ function AboutPage({ path }) {
         <div className={styles.stats}>
           <span className={styles.divider}></span>
 
-          <h2 className={styles.pageTitle}>Our Stats</h2>
+          <h1 className={styles.pageTitle}>Our Stats</h1>
 
           <div className={styles.content}>
             <div className={styles.stat}>
@@ -192,15 +234,16 @@ function AboutPage({ path }) {
         </div>
 
         <div className={styles.showroom}>
-          <h1>Our Showroom</h1>
+          <h1 className={styles.pageTitle}>Our Showroom</h1>
           <p className={styles.instructions}>(Tap image to expand it)</p>
 
           <div className={styles.gallery}>
             {showroomImages.map((showroom, index) => (
               <div
+                key={index}
                 className={`${styles.image} ${
                   activeShowroom.image === showroom.image ? styles.active : ""
-                  }`}
+                }`}
                 onClick={() => setActiveShowroom(showroom)}
               >
                 <img src={showroom.image} alt="" />
@@ -209,7 +252,7 @@ function AboutPage({ path }) {
           </div>
 
           <div className={styles.details}>
-            <p>{ activeShowroom.bio }</p>
+            <p>{activeShowroom.bio}</p>
           </div>
         </div>
 
@@ -253,22 +296,22 @@ function AboutPage({ path }) {
         </div>
 
         <div className={styles.testimonials}>
-          <h2 class={styles.pageTitle}>Testimonials</h2>
-          <p class={styles.miniHeader}>What customers say about us</p>
+          <h1 className={styles.pageTitle}>Testimonials</h1>
+          <p className={styles.miniHeader}>What customers say about us</p>
 
-          <div class={styles.testiContainer}>
-            {testimonials.map((testi) => (
-              <div class={styles.testi}>
+          <div className={styles.testiContainer}>
+            {testimonials.map((testi, index) => (
+              <div className={styles.testi} key={index}>
                 <img
-                  class={styles.profilePic}
+                  className={styles.profilePic}
                   loading="lazy"
                   src={testi.image}
                   alt=""
                 />
-                <p class={styles.name}>{testi.name}</p>
-                <p class={styles.origin}>{testi.location}</p>
-                <p class={styles.message}>{testi.message}</p>
-                <img class={styles.quote} src={quote} alt="" />
+                <p className={styles.name}>{testi.name}</p>
+                <p className={styles.origin}>{testi.location}</p>
+                <p className={styles.message}>{testi.message}</p>
+                <img className={styles.quote} src={quote} alt="" />
               </div>
             ))}
           </div>

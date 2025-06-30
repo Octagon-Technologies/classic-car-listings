@@ -64,11 +64,12 @@ function UploadPage() {
     {
     isSuccess: true,
     message: "2002 Land Rover uploaded successfully"
+    slugName: "volvo-2006"
     }
     */
 
   const existingCar = useRef();
-  const isEditing = () => existingCar != null;
+  const isEditing = () => existingCar.current != null;
   const [isDeleting, setIsDeleting] = useState(null); // instance of Car
 
   useEffect(() => {
@@ -201,22 +202,29 @@ function UploadPage() {
         carSlugName.current = slugifyCarName(carName);
       }
 
-      const imageUrls = await uploadImages();
-      const fullImageList = [
-        ...(existingCar.current?.images ?? []),
-        ...imageUrls,
-      ];
+      const slugName = carSlugName.current;
 
+      console.log("SLUGNAME is ", slugName);
+
+      const imageUrls = await uploadImages(slugName);
+
+      console.log(
+        "Before insert — carSlugName.current is",
+        carSlugName.current
+      );
+      console.log("Before insert — slugName is", slugName);
       const newCar = {
         name: carName, // string
         price: carPrice, // number
         carType: carType, // string
         features: formattedCarFeatures, // list<string>
-        images: fullImageList, // list<string>
-        coverImage: fullImageList[carCoverImage], // string
-        slugName: carSlugName.current, // string
-        sold: existingCar.current.sold ?? false, // string
+        images: imageUrls, // list<string>
+        coverImage: imageUrls[carCoverImage], // string
+        slugName: slugName, // string
+        sold: existingCar.current?.sold ?? false, // string
       };
+
+      console.log("After insert — slugName is", slugName);
 
       // Prevents duplicates in DB
       const { data: deleteStale, error: deleteStaleError } = await supabase
@@ -231,6 +239,9 @@ function UploadPage() {
 
       console.log("deleteStale is", deleteStale);
 
+      console.log("slugName before insert:", slugName);
+      console.log("car.slugName before insert:", newCar.slugName);
+      console.log("carSlugName.current before insert:", carSlugName.current);
       const { data, error } = await supabase
         .from("cars")
         .insert(newCar)
@@ -242,17 +253,19 @@ function UploadPage() {
         setStatusMessage({
           isSuccess: false,
           message: "Error occurred. Try again",
+          slugName: null,
         });
       } else {
         setStatusMessage({
           isSuccess: true,
           message: `${carName} uploaded successfully`,
+          slugName: newCar.slugName,
         });
 
         resetPage();
       }
 
-      if (isEditing) {
+      if (isEditing()) {
         window.history.back();
       }
 
@@ -263,12 +276,12 @@ function UploadPage() {
   }
 
   function resetPage() {
-    setCarName(null);
-    setCarPrice(null);
-    setFormattedCarPrice(null);
+    setCarName("");
+    setCarPrice("");
+    setFormattedCarPrice("");
     setCarType(null);
-    setCarFeatures(null);
-    setFormattedCarFeatures(null);
+    setCarFeatures("");
+    setFormattedCarFeatures([]);
     setLocalImages([]);
     setActivePreviewImageIndex(null);
     remoteCoverImage.current = null;
@@ -287,82 +300,86 @@ function UploadPage() {
   // Check if photos exist first (due to an upload error)
   // If yes, get the images instead
   // If not, upload them
-  async function uploadImages() {
+  async function uploadImages(slugName) {
     setUploadAction("Checking for existing images");
 
-    const folderPath = `list/${carSlugName.current}`;
+    const folderPath = `list/${slugName}`;
+    console.log("folderPath is", folderPath);
+
     let existingFiles = [];
 
-    if (!isEditing) {
-      console.log("folderPath is", folderPath);
-      const { data: listData, error: listError } = await supabase.storage
-        .from("cars")
-        .list(folderPath);
+    console.log("isEditing() is ", isEditing());
 
-      if (listError) {
-        console.error("Error fetching existing files", listError);
-      }
+    const { data: listData, error: listError } = await supabase.storage
+      .from("cars")
+      .list(folderPath);
 
-      console.log("list Data is", listData);
-
-      // Images exist and are the exact number
-      if (listData && listData.length === localImages.length) {
-        existingFiles = listData.map((file) =>
-          getUrlFromFullPath(`cars/${folderPath}/${file.name}`)
-        );
-        remoteCoverImage.current = existingFiles[carCoverImage];
-
-        return existingFiles;
-      }
-      // Not all images uploaded. Delete then re-upload
-      else if (listData && listData.length !== localImages.length) {
-        const deletePaths = listData.map(
-          (file) => `list/${carSlugName.current}/${file.name}`
-        );
-        console.log("deletePaths is", deletePaths);
-
-        if (deletePaths > 0) {
-          const { error: deleteError } = await supabase.storage
-            .from("cars")
-            .remove(deletePaths);
-
-          console.error("Error deleting images: ", deleteError);
-        }
-      }
+    if (listError) {
+      console.error("Error fetching existing files", listError);
     }
 
+    console.log("list Data is", listData);
+
+    // Images exist and are the exact number
+    if (listData && listData.length === localImages.length) {
+      existingFiles = listData.map((file) =>
+        getUrlFromFullPath(`cars/${folderPath}/${file.name}`)
+      );2
+      remoteCoverImage.current = existingFiles[carCoverImage];
+
+      return existingFiles;
+    }
+    // Not all images uploaded. Delete then re-upload
+    else if (listData && listData.length !== localImages.length) {
+      const deletePaths = listData.map((file) => `${folderPath}/${file.name}`);
+      console.log("deletePaths is", deletePaths);
+
+      const { data: deleteData, error: deleteError } = await supabase.storage
+        .from("cars")
+        .remove(deletePaths);
+
+      console.log("deleteData is ", deleteData);
+      console.error("Error deleting images: ", deleteError);
+    }
+    // }
+
+    const actualLocalImages = localImages.filter(
+      (localImage) => localImage.fileName !== null
+    );
+    console.log("actualLocalImages is ", actualLocalImages);
     // Since some of the localImages (during editing) are remote - have no fileName
     // filter them out so that you can compress any newly added image
-    const promises = localImages
-      .filter((localImage) => localImage.fileName != null)
-      .map(async (localImageFile, index) => {
-        const compressedFile = await imageCompression(
-          dataURLtoFile(localImageFile.image, localImageFile.fileName),
-          options
-        );
-        console.log(`compressedFile size ${compressedFile.size / 1024} KB`);
-        console.log(`localImageFile size ${localImageFile.size / 1024} Kb`);
+    const promises = actualLocalImages.map(async (localImageFile, index) => {
+      const compressedFile = await imageCompression(
+        dataURLtoFile(localImageFile.image, localImageFile.fileName),
+        options
+      );
 
-        setUploadProgress(Math.round(((index + 1) / localImages.length) * 100));
-        return compressedFile;
-      });
+      setUploadProgress(
+        Math.round(((index + 1) / actualLocalImages.length) * 100)
+      );
+      return compressedFile;
+    });
 
     let compressedImages = await Promise.all(promises);
+
+    console.log("Before filter: compressedImages is ", compressedImages);
     compressedImages = compressedImages.filter(Boolean);
+    console.log("After filter: compressedImages is ", compressedImages);
 
     setUploadAction("Uploading photos");
 
     // If we are in Edit mode, uploading a new image should give it an index of
     // 12 instead of 0 (if we already have 11 images in the DB)
     // This ensures no duplicates
-    const imageOffset = isEditing ? localImages.length : 0;
+    const imageOffset = isEditing() ? localImages.length : 0;
 
     let urlList = await Promise.all(
       compressedImages.map(async (compImage, index) => {
         const grandIndex = imageOffset + index; // Index in the grand full image list
         const { data, error } = await supabase.storage
           .from("cars")
-          .upload(`list/${carSlugName.current}/${grandIndex}`, compImage);
+          .upload(`list/${slugName}/${grandIndex}`, compImage);
 
         if (error) {
           console.log(`Failed to upload ${compImage}: ${error.message}`);
@@ -384,18 +401,29 @@ function UploadPage() {
       })
     );
 
+    console.log(`Before filter: urlList is`, urlList);
     urlList = urlList.filter(Boolean);
-    console.log(`urlList is ${urlList.toString()}`);
+    console.log(`After filter: urlList is`, urlList);
 
     console.log(`remoteCoverImage.current is ${remoteCoverImage.current}`);
 
-    return urlList;
+    const fullList = [
+      ...localImages
+        .filter((value) => value.fileName === null)
+        .map((localImage) => localImage.image),
+      ...urlList,
+    ];
+    console.log("fullList is ", fullList);
+
+    return fullList;
   }
 
   const displayData = (
     <div className={styles.body}>
       <div>
-        <h1 className={styles.title}>{isEditing ? "Update Car" : "New Car"}</h1>
+        <h1 className={styles.title}>
+          {isEditing() ? "Update Car" : "New Car"}
+        </h1>
 
         <div className={styles.field}>
           <label htmlFor="carName">Car Name</label>
@@ -582,7 +610,7 @@ function UploadPage() {
         style={{
           border: "2px rgb(246, 70, 70) solid",
           marginBottom: "40px",
-          display: isEditing ? "block" : "none",
+          display: isEditing() ? "block" : "none",
         }}
       >
         Delete
@@ -601,7 +629,11 @@ function UploadPage() {
     >
       <Header />
 
-      {carSlugName.current ? (existingCar.current ? displayData : Loading()) : displayData}
+      {carSlugName.current
+        ? existingCar.current
+          ? displayData
+          : Loading()
+        : displayData}
 
       <div
         className={`${styles.uploadStatusContainer}`}
@@ -633,9 +665,9 @@ function UploadPage() {
               <button
                 onClick={() => {
                   console.log(
-                    `Opening url: /${carType}/${carSlugName.current}`
+                    `Opening url: /${carType}/${statusMessage.slugName}`
                   );
-                  navigate(`/${carType}/${carSlugName.current}`);
+                  navigate(`/${carType}/${statusMessage.slugName}`);
                 }}
               >
                 View Vehicle

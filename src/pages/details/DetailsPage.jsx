@@ -16,6 +16,7 @@ import tick from "../../assets/images/design/tick-svg.png";
 import Header from "../../home/Header.jsx";
 import { toKESPrice } from "../../utils/StringUtils.jsx";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
 const supabase = createClient(
@@ -125,18 +126,55 @@ function DetailsPage() {
       >
         {car ? (
           <div>
+            <Helmet>
+              <title>{`${car.name} for Sale | Classic Car Listings`}</title>
+              <meta
+                name="description"
+                content={`Explore details, features, and images of the ${car.name}: a well-maintained ${car.type} available for purchase in Kenya.`}
+              />
+              <meta
+                name="keywords"
+                content={`classic cars, ${car.name}, buy ${car.name} Kenya, ${car.name} for sale Kenya, ${car.name} for sale, ${car.type}s in kenya, buy ${car.name} Nairobi`}
+              />
+
+              {/* Open Graph / Facebook */}
+              <meta
+                property="og:title"
+                content={`${car.name} | Classic Car Listings`}
+              />
+              <meta
+                property="og:description"
+                content={`Well-maintained ${car.name} now available. View full specs, features, and images.`}
+              />
+              <meta property="og:image" content={car.coverImage} />
+              <meta property="og:url" content={window.location.href} />
+              <meta property="og:type" content="website" />
+
+              {/* Twitter */}
+              <meta name="twitter:card" content="summary_large_image" />
+              <meta
+                name="twitter:title"
+                content={`${car.name} | Classic Car Listings`}
+              />
+              <meta
+                name="twitter:description"
+                content={`Check out the ${car.name} on Classic Car Listings Kenya.`}
+              />
+              <meta name="twitter:image" content={car.coverImage} />
+            </Helmet>
+
             <div className={styles.body}>
-              <h2> {car.name} </h2>
+              <h1> {car.name} </h1>
 
               <div className={styles.price}>
-                <h6>List price</h6>{" "}
+                <h3>List price</h3>{" "}
                 <p>
                   {toKESPrice(car.price)} <span>(Neg)</span>
                 </p>
               </div>
 
               <div className={styles.features}>
-                <h3>Features</h3>
+                <h2>Features</h2>
                 <ul>
                   {car.features.map((feature, idx) => (
                     <li key={idx}>
@@ -148,7 +186,7 @@ function DetailsPage() {
               </div>
 
               <div className={styles.gallery}>
-                <h3>Gallery</h3>
+                <h2>Gallery</h2>
 
                 <ul>
                   {car.images.map((url, index) => (

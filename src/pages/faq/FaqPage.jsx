@@ -1,5 +1,6 @@
 import styles from "./FaqPage.module.css";
 import Header from "../../home/Header";
+import { Helmet } from "react-helmet-async";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -47,6 +48,48 @@ disclose to buyers for a seamless transaction.`,
 
   const [activeFaq, setActiveFaq] = useState(0);
 
+  <Helmet>
+    <title>How to Sell Classic Cars | Classic Car Listings</title>
+    <meta
+      name="description"
+      content="Learn how to sell your classic car or motorcycle in Kenya with Classic Car Listings. Read our simple 4-step selling process and get answers to frequently asked questions."
+    />
+    <meta
+      name="keywords"
+      content="sell classic car Kenya, how to sell my car Nairobi, car commission fee Kenya, classic cars Kenya, car selling in Kenya FAQ, car dealership Karen"
+    />
+
+    {/* Open Graph / Facebook */}
+    <meta
+      property="og:title"
+      content="How to Sell Classic Cars in Kenya | FAQ & Selling Guide"
+    />
+    <meta
+      property="og:description"
+      content="Everything you need to know about selling your classic car or bike in Kenya. Simple steps, clear commissions, and fast turnarounds with Classic Car Listings."
+    />
+    <meta
+      property="og:image"
+      content="https://classiccarlistings.co.ke/og-image.jpg"
+    />
+    <meta property="og:url" content="https://classiccarlistings.co.ke/faq" />
+    <meta property="og:type" content="website" />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="How to Sell Classic Cars in Kenya | FAQ & Selling Guide"
+    />
+    <meta
+      name="twitter:description"
+      content="Explore our selling process and answers to common questions about listing your classic car or motorcycle in Kenya."
+    />
+    <meta
+      name="twitter:image"
+      content="https://classiccarlistings.co.ke/og-image.jpg"
+    />
+  </Helmet>;
 
   return (
     <>
@@ -54,7 +97,7 @@ disclose to buyers for a seamless transaction.`,
 
       <div className={styles.body}>
         <div className={styles.sellingContainer}>
-          <h1>How to Sell With Us</h1>
+          <h1 className={styles.faqH1}>How to Sell With Us</h1>
 
           <div className={styles.steps}>
             <div className={styles.step}>
@@ -92,7 +135,7 @@ disclose to buyers for a seamless transaction.`,
         </div>
 
         <div className={styles.faqContainer}>
-          <h1>FAQ</h1>
+          <h1 className={styles.faqH1}>FAQ</h1>
 
           <div className={styles.faqContent}>
             {faqs.map((faq, faqIndex) => {

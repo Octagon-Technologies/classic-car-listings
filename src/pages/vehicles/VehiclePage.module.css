@@ -14,10 +14,10 @@
   border-radius: 8px;
 }
 
-.searchSection .title {
+.searchSection h1.title {
   color: white;
   font-family: "Quicksand";
-  width: 70%;
+  width: 85%;
   font-weight: 600;
   margin-left: 24px;
   font-size: 1.4rem;
