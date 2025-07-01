@@ -1,11 +1,8 @@
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, data } from "react-router-dom";
-import OtherPage from "./pages/OtherPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NoPage from "./pages/no-page/NoPage";
 import AboutPage from "./pages/about/AboutPage";
 import { VehicleTypes } from "./pages/vehicles/models/VehicleTypes";
 import UploadPage from "./pages/admin/upload/UploadPage";
-import AdminDisplay from "./pages/admin/dashboard/AdminDashboard";
 import DetailsPage from "./pages/details/DetailsPage";
 import VehiclesPage from "./pages/vehicles/VehiclesPage";
 import FaqPage from "./pages/faq/FaqPage";
@@ -14,7 +11,6 @@ import AdminShowcase from "./pages/admin/showcase/AdminShowcase";
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { useEffect } from "react";
-import EditVehiclePage from "./pages/admin/edit-vehicle/EditVehiclePage";
 
 const supabase = createClient(
   "https://xxsbhmnnstzhatmoivxp.supabase.co",
@@ -62,7 +58,6 @@ export default function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/upload" element={<UploadPage />} />
         <Route path="/admin/showcase" element={<AdminShowcase />} />
-        <Route path="/admin/edit-vehicle/:carSlugName" element={<EditVehiclePage />} />
 
         {/* Global fallback */}
         <Route path="*" element={<NoPage />} />

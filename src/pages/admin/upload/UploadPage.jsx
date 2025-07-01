@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../home/Header";
 import styles from "./UploadPage.module.css";
 import { dataURLtoFile } from "../../../utils/FileUtils";
@@ -10,7 +10,6 @@ import {
   faChevronRight,
   faClose,
   faMinus,
-  faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { createClient } from "@supabase/supabase-js";
 import { slugifyCarName, toKESPrice } from "../../../utils/StringUtils";
@@ -23,12 +22,7 @@ import shockedPerson from "../../../assets/images/design/shocked-person.jpg";
 import { makeInputVisible } from "../../../utils/HtmlUtils";
 import Loading from "../../../home/Loading";
 import { deleteVehicle } from "../../../repo/VehiclesRepo";
-
-const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
-const supabase = createClient(
-  "https://xxsbhmnnstzhatmoivxp.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
-);
+import { supabase } from "../../../config/config";
 
 function UploadPage() {
   const navigate = useNavigate();

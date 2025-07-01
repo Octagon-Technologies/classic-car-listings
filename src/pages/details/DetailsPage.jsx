@@ -7,22 +7,13 @@ import {
   faChevronLeft,
   faChevronRight,
   faClose,
-  faMagnifyingGlassPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import carPlaceholder from "../../assets/images/design/car-placeholder.jpg";
-import carSample from "../../assets/images/design/car-sample.webp";
 import tick from "../../assets/images/design/tick-svg.png";
 import Header from "../../home/Header.jsx";
 import { toKESPrice } from "../../utils/StringUtils.jsx";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-
-const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
-const supabase = createClient(
-  "https://xxsbhmnnstzhatmoivxp.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
-);
+import { supabase } from "../../config/config.jsx";
 
 function DetailsPage() {
   const [car, setCar] = useState();

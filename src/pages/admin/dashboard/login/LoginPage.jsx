@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { supabase } from "../../../config/config";
 import Header from "../../../../home/Header";
 import styles from "./LoginPage.module.css";
 import { useEffect, useState } from "react";
@@ -8,11 +7,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { useNavigate } from "react-router-dom";
-
-const supabase = createClient(
-  "https://xxsbhmnnstzhatmoivxp.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
-);
+import { supabase } from "../../../../config/config";
 
 export default function LoginPage({ style }) {
   const [name, setName] = useState("");
