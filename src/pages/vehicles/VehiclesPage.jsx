@@ -149,9 +149,12 @@ function VehiclesPage({ vehicleType }) {
         />
         <meta
           name="keywords"
-          content="classic cars Kenya, buy classic cars Kenya, cars for sale Kenya, cars for sale, classic car listings, classic cars for sale Kenya, modern classics Kenya, modern classics for sale Kenya, bikes for sale Kenya, buy bikes Kenya, vespas Kenya, vespas for sale Kenya"
+          content="classic cars Kenya, cheap cars in Kenya, cars for sale Kenya, cars for sale, classic car listings, classic cars for sale Kenya, modern classics Kenya, modern classics for sale Kenya, bikes for sale Kenya, buy bikes Kenya, vespas Kenya, vespas for sale Kenya"
         />
-        <link rel="canonical" href="https://classiccarlistings.co.ke/" />
+        <link
+          rel="canonical"
+          href={`https://classiccarlistings.co.ke/${vehicleType.value ?? ""}`}
+        />
 
         {/* Open Graph */}
         <meta property="og:title" content="Classic Car Listings Kenya" />
@@ -163,7 +166,12 @@ function VehiclesPage({ vehicleType }) {
           property="og:image"
           content="https://classiccarlistings.co.ke/og-image.png"
         />
-        <meta property="og:url" content="https://classiccarlistings.co.ke/" />
+        <meta
+          property="og:url"
+          content={`https://classiccarlistings.co.ke/${
+            vehicleType.value ?? ""
+          }`}
+        />
         <meta property="og:type" content="website" />
 
         {/* Twitter */}
