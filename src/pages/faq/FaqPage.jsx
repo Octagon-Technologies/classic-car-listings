@@ -74,7 +74,7 @@ disclose to buyers for a seamless transaction.`,
     />
     <meta
       property="og:image"
-      content="https://classiccarlistings.co.ke/og-image.jpg"
+      content="https://classiccarlistings.co.ke/og-image.png"
     />
     <meta property="og:url" content="https://classiccarlistings.co.ke/faq" />
     <meta property="og:type" content="website" />
@@ -91,7 +91,7 @@ disclose to buyers for a seamless transaction.`,
     />
     <meta
       name="twitter:image"
-      content="https://classiccarlistings.co.ke/og-image.jpg"
+      content="https://classiccarlistings.co.ke/og-image.png"
     />
 
     <script type="application/ld+json">
