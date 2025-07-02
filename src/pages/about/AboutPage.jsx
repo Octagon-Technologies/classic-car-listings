@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Header from "../../home/Header";
 import styles from "./AboutPage.module.css";
 import classicCar from "../../assets/images/branding/about-us-car.jpg";
-import ogImage from "../../assets/images/design/og-image.png";
 import quote from "../../assets/images/design/quote.svg";
 import studGuy from "../../assets/images/design/testimonials/guy-with-studs.jpg";
 import luoWoman from "../../assets/images/design/testimonials/luo-woman.jpg";
@@ -14,14 +13,9 @@ import showroom2 from "../../assets/images/design/showroom/showroom-2.jpg";
 import showroom3 from "../../assets/images/design/showroom/showroom-3.jpg";
 import showroom4 from "../../assets/images/design/showroom/showroom-4.jpg";
 import showroom5 from "../../assets/images/design/showroom/showroom-5.jpg";
-import showroom6 from "../../assets/images/design/showroom/showroom-6.jpg";
 import showroom7 from "../../assets/images/design/showroom/showroom-7.jpg";
 import indianCouple from "../../assets/images/design/testimonials/indian-couple.jpg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import AnimatedNumber from "../../home/AnimatedNumber";
-import { div } from "framer-motion/client";
 import { Helmet } from "react-helmet";
 
 const workingHours = [
@@ -127,6 +121,10 @@ function AboutPage({ path }) {
           name="keywords"
           content="classic car dealership Kenya, classic motorcycles Kenya, car storage Karen Nairobi, sell classic cars Nairobi, classic cars Kenya, buy classic cars Kenya, cars for sale Kenya, cars for sale, classic car listings, classic cars for sale Kenya"
         />
+        <link
+          rel="canonical"
+          href={`https://classiccarlistings.co.ke/about-us`}
+        />
 
         {/* Open Graph / Facebook */}
         <meta property="og:title" content="About Us | Classic Car Listings" />
@@ -136,7 +134,7 @@ function AboutPage({ path }) {
         />
         <meta
           property="og:image"
-          content="https://classiccarlistings.co.ke/assets/og-image.png"
+          content="https://classiccarlistings.co.ke/og-image.png"
         />
         <meta
           property="og:url"
@@ -153,8 +151,32 @@ function AboutPage({ path }) {
         />
         <meta
           name="twitter:image"
-          content="https://classiccarlistings.co.ke/assets/og-image.png"
+          content="https://classiccarlistings.co.ke/og-image.png"
         />
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Classic Car Listings Kenya",
+            url: "https://classiccarlistings.co.ke",
+            logo: "https://classiccarlistings.co.ke/web-app-manifest-192x192.png",
+            contactPoint: {
+              "@type": "ContactPoint",
+              telephone: "+254748883598",
+              contactType: "Customer Service",
+            },
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "Karen, Nairobi",
+              addressCountry: "KE",
+            },
+            sameAs: [
+              "https://www.facebook.com/ClassicCarListingsKE",
+              "https://www.instagram.com/classiccarlistingskenya",
+            ],
+          })}
+        </script>
       </Helmet>
 
       <Header activeMenuHref={path} />

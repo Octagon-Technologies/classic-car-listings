@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import styles from "./DetailsPage.module.css";
-import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -127,6 +126,10 @@ function DetailsPage() {
                 name="keywords"
                 content={`classic cars, ${car.name}, buy ${car.name} Kenya, ${car.name} for sale Kenya, ${car.name} for sale, ${car.type}s in kenya, buy ${car.name} Nairobi`}
               />
+              <link
+                rel="canonical"
+                href={`https://classiccarlistings.co.ke/${carType}/${carSlugName}`}
+              />
 
               {/* Open Graph / Facebook */}
               <meta
@@ -152,6 +155,23 @@ function DetailsPage() {
                 content={`Check out the ${car.name} on Classic Car Listings Kenya.`}
               />
               <meta name="twitter:image" content={car.coverImage} />
+
+              <script type="application/ld+json">
+                {JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "Product",
+                  name: car.name,
+                  image: car.coverImage,
+                  description: `Well-maintained, affordable ${car.name} in Karen Nairobi.`,
+                  // brand: "Mercedes-Benz",
+                  offers: {
+                    "@type": "Offer",
+                    priceCurrency: "KES",
+                    price: car.price,
+                    availability: "https://schema.org/InStock",
+                  },
+                })}
+              </script>
             </Helmet>
 
             <div className={styles.body}>

@@ -58,6 +58,10 @@ disclose to buyers for a seamless transaction.`,
       name="keywords"
       content="sell classic car Kenya, how to sell my car Nairobi, car commission fee Kenya, classic cars Kenya, car selling in Kenya FAQ, car dealership Karen"
     />
+    <link
+      rel="canonical"
+      href={`https://classiccarlistings.co.ke/how-to-sell-with-us`}
+    />
 
     {/* Open Graph / Facebook */}
     <meta
@@ -89,6 +93,21 @@ disclose to buyers for a seamless transaction.`,
       name="twitter:image"
       content="https://classiccarlistings.co.ke/og-image.jpg"
     />
+
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        }))
+      })}
+    </script>
   </Helmet>;
 
   return (

@@ -1,29 +1,24 @@
 import styles from "./VehiclePage.module.css";
 import { Helmet } from "react-helmet";
-import logo from "../../assets/images/branding/cars-logo-nobg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpWideShort,
-  faBars,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import CarList from "./components/car-list/CarList";
-import { VehicleTypes } from "./models/VehicleTypes";
 import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
 import { VehicleStatus } from "./models/VehicleStatus";
 import { useEffect } from "react";
-import ogImage from "../../assets/images/design/og-image.png";
-// import wavy from "../../assets/images/design/green-v1.png";
-// import wavy from "../../assets/images/design/wavy-v3.png";
-// import wavy from "../../assets/images/design/wavy.webp";
-// import wavy from "../../assets/images/design/green-wavy.png";
+import { supabase } from "../../config/config";
 
 function VehiclesPage({ vehicleType }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState(null);
   const [vehicleStatus, setVehicleStatus] = useState(VehicleStatus.Available);
+  const [carList, setCarList] = useState([]);
+  const [error, setError] = useState(null);
 
   function handlePriceAscend() {
     setSortOption(new SortOption("price-ascend", "price", "ascend"));
@@ -66,6 +61,80 @@ function VehiclesPage({ vehicleType }) {
     };
   }, [searchQuery]);
 
+  useEffect(() => {
+    setCarList([]);
+  }, [vehicleType]);
+
+  useEffect(() => {
+    async function fetchCarImages() {
+      let request = supabase.from("cars").select();
+
+      if (vehicleType) {
+        request = request.eq("carType", vehicleType.value);
+      } else {
+        request = request.in("carType", ["classic-cars", "modern-classics"]);
+      }
+
+      if (vehicleStatus === VehicleStatus.Available) {
+        request = request.eq("sold", "false");
+      } else if (vehicleStatus === VehicleStatus.Sold) {
+        request = request.eq("sold", "true");
+      }
+
+      request = searchQuery
+        ? request.ilike("name", `%${searchQuery}%`)
+        : request;
+
+      request = sortOption
+        ? request.order(sortOption.name, {
+            ascending: sortOption.order === "ascend",
+          })
+        : request.order("datePosted", { ascending: false });
+
+      const { data: carsData, error: carsError } = await request;
+
+      if (carsError) {
+        setError(carsError.message);
+      }
+
+      console.log(`carsData is ${carsData.length}`);
+      console.log(`sortOption is ${sortOption?.key}`);
+
+      setCarList(carsData);
+      // setCarList(
+      //   data.map((car) => ({
+      //     name: car.name, //"Ford Ranger 2023",
+      //     price: car.price,
+      //     image: car.coverImage,
+      //     slugName: car.slugName,
+      //     carType: car.carType,
+      //     //"https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp",
+      //   }))
+      // );
+    }
+
+    fetchCarImages();
+
+    console.log(carList.toString());
+  }, [searchQuery, sortOption, vehicleStatus, vehicleType]);
+
+  const hasPartSchema = carList.map((car) => ({
+    "@type": "Product",
+    name: `${car.name}`,
+    image: car.coverImage, // full URL(s)
+    description: `At a price of KES ${car.price}, get yourself a well-maintained ${car.name}`,
+    sku: car.slugName,
+    // brand: { "@type": "Brand", name: car.make },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "KES",
+      price: car.price,
+      availability: "https://schema.org/InStock",
+      url: `https://classiccarlistings.co.ke/${car.carType}/${car.slugName}`,
+    },
+    itemCondition: "https://schema.org/UsedCondition",
+  }));
+
   return (
     <div>
       <Helmet>
@@ -74,7 +143,9 @@ function VehiclesPage({ vehicleType }) {
         </title>
         <meta
           name="description"
-          content="Find, buy, and sell classic cars across Kenya. ClassicCarListings.co.ke is Kenya's top platform for vintage and rare vehicles."
+          content={`Find, buy, and sell well-maintained classic ${
+            vehicleType?.groupKeyword.toLowerCase() ?? "cars"
+          } on Kenya's leading car dealership`}
         />
         <meta
           name="keywords"
@@ -90,7 +161,7 @@ function VehiclesPage({ vehicleType }) {
         />
         <meta
           property="og:image"
-          content="https://classiccarlistings.co.ke/assets/og-image.png"
+          content="https://classiccarlistings.co.ke/og-image.png"
         />
         <meta property="og:url" content="https://classiccarlistings.co.ke/" />
         <meta property="og:type" content="website" />
@@ -104,8 +175,21 @@ function VehiclesPage({ vehicleType }) {
         />
         <meta
           name="twitter:image"
-          content="https://classiccarlistings.co.ke/assets/og-image.png"
+          content="https://classiccarlistings.co.ke/og-image.png"
         />
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: `Classic ${vehicleType?.groupKeyword ?? "Cars"} for Sale`,
+            description: `Find a wide selection of classic well-maintained ${
+              vehicleType?.groupKeyword?.toLowerCase() ?? "cars"
+            } available for purchase in Kenya. Trusted listings. Quality vehicles.`,
+            url: `https://classiccarlistings.co.ke/${vehicleType?.value ?? ""}`,
+            hasPart: hasPartSchema,
+          })}
+        </script>
       </Helmet>
 
       <Header />
@@ -178,10 +262,9 @@ function VehiclesPage({ vehicleType }) {
         </select>
 
         <CarList
-          vehicleType={vehicleType}
           searchQuery={searchQuery}
-          sortOption={sortOption}
-          vehicleStatus={vehicleStatus}
+          carList={carList}
+          error={error}
           className={styles.carList}
         />
         {/* <div className={styles.carList}>

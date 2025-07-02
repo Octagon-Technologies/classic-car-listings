@@ -8,14 +8,9 @@ import VehiclesPage from "./pages/vehicles/VehiclesPage";
 import FaqPage from "./pages/faq/FaqPage";
 import AdminDashboard from "./pages/admin/dashboard/AdminDashboard";
 import AdminShowcase from "./pages/admin/showcase/AdminShowcase";
-
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { useEffect } from "react";
+import { supabase } from "./config/config";
 
-const supabase = createClient(
-  "https://xxsbhmnnstzhatmoivxp.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
-);
 
 export default function App() {
   useEffect(() => {
