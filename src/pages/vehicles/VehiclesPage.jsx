@@ -125,6 +125,11 @@ function VehiclesPage({ vehicleType }) {
     // console.log(`sortOption is ${sortOption?.key}`);
 
     // TEMPORARY FIX TO THE DOUBLE CAR FETCH
+    /** 
+     * For some reason, the second call to this function resets the carList value to []. Why? Not sure.
+     * However, the searchQuery is empty when the inital call is made (according to the logs)
+     * So it can't be a situation of wrong search... Debug this later
+     */
     if (searchQuery === "" || carsData.length > 0) {
       setCarList(carsData);
     }
