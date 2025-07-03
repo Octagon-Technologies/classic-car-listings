@@ -5,7 +5,7 @@ import {
   faArrowUpWideShort,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CarList from "./components/car-list/CarList";
 import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
@@ -61,62 +61,74 @@ function VehiclesPage({ vehicleType }) {
     };
   }, [searchQuery]);
 
-  useEffect(() => {
-    setCarList([]);
-  }, [vehicleType]);
+  // When vehicleType changes → reset some filters & fetch
 
   useEffect(() => {
-    async function fetchCarImages() {
-      let request = supabase.from("cars").select();
+    console.log("Cars are ", carList.length);
+  }, [carList])
 
-      if (vehicleType) {
-        request = request.eq("carType", vehicleType.value);
-      } else {
-        request = request.in("carType", ["classic-cars", "modern-classics"]);
-      }
+  useEffect(() => {
+    console.log("Before: setSearchQuery(``)");
+    setSearchQuery(""); // triggers the searchQuery effect below
+    console.log("After: setSearchQuery(``)");
+    setVehicleStatus(VehicleStatus.Available);
+  }, [vehicleType])
 
-      if (vehicleStatus === VehicleStatus.Available) {
-        request = request.eq("sold", "false");
-      } else if (vehicleStatus === VehicleStatus.Sold) {
-        request = request.eq("sold", "true");
-      }
+  useEffect(() => {
+    console.log(
+      "Before: default fetchCarImages() call. Query is ", searchQuery
+    );
+    fetchCarImages();
+    console.log("After: default fetchCarImages() call. Query is ", searchQuery);
+  }, [searchQuery, sortOption, vehicleStatus]);
 
-      request = searchQuery
-        ? request.ilike("name", `%${searchQuery}%`)
-        : request;
-
-      request = sortOption
-        ? request.order(sortOption.name, {
-            ascending: sortOption.order === "ascend",
-          })
-        : request.order("datePosted", { ascending: false });
-
-      const { data: carsData, error: carsError } = await request;
-
-      if (carsError) {
-        setError(carsError.message);
-      }
-
-      console.log(`carsData is ${carsData.length}`);
-      console.log(`sortOption is ${sortOption?.key}`);
-
-      setCarList(carsData);
-      // setCarList(
-      //   data.map((car) => ({
-      //     name: car.name, //"Ford Ranger 2023",
-      //     price: car.price,
-      //     image: car.coverImage,
-      //     slugName: car.slugName,
-      //     carType: car.carType,
-      //     //"https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2002%20Land%20Rover/classiccarlistingskenya_1747414281_3633896832938317844_42066713148.webp",
-      //   }))
-      // );
+  useEffect(() => {
+    // Inital load already done
+    if (carList.at(0)?.carType === vehicleType || vehicleType == null) {
+      return
     }
 
     fetchCarImages();
+    console.log("After: fetchCarImages() call");
+  }, [vehicleType]);
 
-    console.log(carList.toString());
-  }, [searchQuery, sortOption, vehicleStatus, vehicleType]);
+  async function fetchCarImages() {
+    let request = supabase.from("cars").select();
+
+    if (vehicleType) {
+      request = request.eq("carType", vehicleType.value);
+    } else {
+      request = request.in("carType", ["classic-cars", "modern-classics"]);
+    }
+
+    if (vehicleStatus === VehicleStatus.Available) {
+      request = request.eq("sold", "false");
+    } else if (vehicleStatus === VehicleStatus.Sold) {
+      request = request.eq("sold", "true");
+    }
+
+    request = searchQuery ? request.ilike("name", `%${searchQuery}%`) : request;
+
+    request = sortOption
+      ? request.order(sortOption.name, {
+          ascending: sortOption.order === "ascend",
+        })
+      : request.order("datePosted", { ascending: false });
+
+    const { data: carsData, error: carsError } = await request;
+
+    if (carsError) {
+      setError(carsError.message);
+    }
+
+    // console.log(`carsData is ${carsData.length}`);
+    // console.log(`sortOption is ${sortOption?.key}`);
+
+    // TEMPORARY FIX TO THE DOUBLE CAR FETCH
+    if (searchQuery === "" || carsData.length > 0) {
+      setCarList(carsData);
+    }
+  }
 
   const hasPartSchema = carList.map((car) => ({
     "@type": "Product",
@@ -153,7 +165,7 @@ function VehiclesPage({ vehicleType }) {
         />
         <link
           rel="canonical"
-          href={`https://classiccarlistings.co.ke/${vehicleType.value ?? ""}`}
+          href={`https://classiccarlistings.co.ke/${vehicleType?.value ?? ""}`}
         />
 
         {/* Open Graph */}
@@ -169,7 +181,7 @@ function VehiclesPage({ vehicleType }) {
         <meta
           property="og:url"
           content={`https://classiccarlistings.co.ke/${
-            vehicleType.value ?? ""
+            vehicleType?.value ?? ""
           }`}
         />
         <meta property="og:type" content="website" />
@@ -272,6 +284,7 @@ function VehiclesPage({ vehicleType }) {
         <CarList
           searchQuery={searchQuery}
           carList={carList}
+          correctVehicleType={vehicleType}
           error={error}
           className={styles.carList}
         />

@@ -123,7 +123,7 @@ function AboutPage({ path }) {
         />
         <link
           rel="canonical"
-          href={`https://classiccarlistings.co.ke/about-us`}
+          href="https://classiccarlistings.co.ke/about-us"
         />
 
         {/* Open Graph / Facebook */}
@@ -138,7 +138,7 @@ function AboutPage({ path }) {
         />
         <meta
           property="og:url"
-          content="https://classiccarlistings.co.ke/about"
+          content="https://classiccarlistings.co.ke/about-us"
         />
         <meta property="og:type" content="website" />
 
@@ -154,6 +154,7 @@ function AboutPage({ path }) {
           content="https://classiccarlistings.co.ke/og-image.png"
         />
 
+        {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -177,12 +178,45 @@ function AboutPage({ path }) {
             ],
           })}
         </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "About Us",
+            url: "https://classiccarlistings.co.ke/about-us",
+            description:
+              "Learn about Classic Car Listings Kenya, the go-to platform for buying, selling, and storing classic cars and motorcycles in Karen, Nairobi.",
+            image: "https://classiccarlistings.co.ke/og-image.png",
+            inLanguage: "en",
+            publisher: {
+              "@type": "Organization",
+              name: "Classic Car Listings Kenya",
+            },
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://classiccarlistings.co.ke/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "About Us",
+                  item: "https://classiccarlistings.co.ke/about-us",
+                },
+              ],
+            },
+          })}
+        </script>
       </Helmet>
 
       <Header activeMenuHref={path} />
 
       <div className={styles.body}>
-        <h1 className={styles.pageTitle}>About Us</h1>
+        <h1 className="pageTitleInBlock">About Us</h1>
 
         <div className={styles.intro}>
           <div>
@@ -225,7 +259,7 @@ function AboutPage({ path }) {
         <div className={styles.stats}>
           <span className={styles.divider}></span>
 
-          <h1 className={styles.pageTitle}>Our Stats</h1>
+          <h1 className="pageTitleInBlock">Our Stats</h1>
 
           <div className={styles.content}>
             <div className={styles.stat}>
@@ -256,7 +290,7 @@ function AboutPage({ path }) {
         </div>
 
         <div className={styles.showroom}>
-          <h1 className={styles.pageTitle}>Our Showroom</h1>
+          <h1 className="pageTitleInBlock">Our Showroom</h1>
           <p className={styles.instructions}>(Tap image to expand it)</p>
 
           <div className={styles.gallery}>
@@ -279,7 +313,7 @@ function AboutPage({ path }) {
         </div>
 
         <div className={styles.story}>
-          <h1 className={styles.pageTitle}>Our Story</h1>
+          <h1 className="pageTitleInBlock">Our Story</h1>
 
           <p>
             Classic Car Listings Kenya was born out of a deep love for timeless
@@ -318,7 +352,7 @@ function AboutPage({ path }) {
         </div>
 
         <div className={styles.testimonials}>
-          <h1 className={styles.pageTitle}>Testimonials</h1>
+          <h1 className="pageTitleInBlock">Testimonials</h1>
           <p className={styles.miniHeader}>What customers say about us</p>
 
           <div className={styles.testiContainer}>

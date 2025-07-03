@@ -24,6 +24,8 @@ import Loading from "../../../home/Loading";
 import { deleteVehicle } from "../../../repo/VehiclesRepo";
 import { supabase } from "../../../config/config";
 
+export const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
+
 function UploadPage() {
   const navigate = useNavigate();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -273,7 +275,6 @@ function UploadPage() {
     setCarName("");
     setCarPrice("");
     setFormattedCarPrice("");
-    setCarType(null);
     setCarFeatures("");
     setFormattedCarFeatures([]);
     setLocalImages([]);
@@ -415,7 +416,7 @@ function UploadPage() {
   const displayData = (
     <div className={styles.body}>
       <div>
-        <h1 className={styles.title}>
+        <h1 className="pageTitleInBlock">
           {isEditing() ? "Update Car" : "New Car"}
         </h1>
 
@@ -549,7 +550,7 @@ function UploadPage() {
         </div>
       </div>
       <div className={styles.preview}>
-        <h1>Preview</h1>
+        <h1 className="pageTitleInBlock">Preview</h1>
 
         <div className={styles.previewCar}>
           <div className={styles.list}>

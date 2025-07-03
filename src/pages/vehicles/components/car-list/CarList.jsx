@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CarCard from "../CarCard";
 import styles from "./CarList.module.css";
 // import { createClient } from "@supabase/supabase-js";
@@ -15,8 +16,12 @@ import styles from "./CarList.module.css";
  * @param { any } sortOption - how to sort (inclusive of price and date posted)
  * @returns
  */
-function CarList({ searchQuery, carList, error }) {
+function CarList({ searchQuery, carList, error, correctVehicleType }) {
 
+  useEffect(() => {
+    console.log(`carList.at(0)?.carType is`, carList.at(0)?.carType);
+    console.log(`correctVehicleType is `, correctVehicleType);
+  }, [correctVehicleType, carList]);
 
 
   let displayData;
@@ -33,7 +38,7 @@ function CarList({ searchQuery, carList, error }) {
         <p>No Cars Found</p>
       </div>
     );
-  } else if (carList.length > 0) {
+  } else if (carList.length > 0 && (carList.at(0)?.carType === correctVehicleType?.value || correctVehicleType == null)) {
     /* Search has happened, results available
 
     */

@@ -6,16 +6,6 @@
   padding-bottom: 40px;
 }
 
-.pageTitle {
-  text-align: center;
-  font-family: "Iceberg";
-  font-weight: 500;
-  margin-top: 40px;
-  color: var(--darkGreen);
-  font-size: 1.25rem;
-  text-transform: uppercase;
-}
-
 .intro {
   width: calc(100% - 12px);
   margin: auto;
@@ -339,10 +329,6 @@ img.carDisplay {
   .body {
     width: 85%;
     margin: auto;
-  }
-
-  .pageTitle {
-    font-size: 1.5rem;
   }
 
   .intro {
