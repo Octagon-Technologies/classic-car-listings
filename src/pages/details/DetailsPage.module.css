@@ -369,6 +369,15 @@ h2 {
     object-position: 50% 25%;
   }
 
+  .gallery ul {
+    width: 80%;
+    column-gap: 1%;
+  }
+
+  .gallery img {
+    width: 32%;
+  }
+
   .price {
     width: 75%;
   }
