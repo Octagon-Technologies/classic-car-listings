@@ -28,7 +28,7 @@ export const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
 
 function UploadPage() {
   const navigate = useNavigate();
-  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1025px)" });
 
   const carSlugName = useRef();
   const { search } = useLocation();
@@ -319,7 +319,8 @@ function UploadPage() {
     if (listData && listData.length === localImages.length) {
       existingFiles = listData.map((file) =>
         getUrlFromFullPath(`cars/${folderPath}/${file.name}`)
-      );2
+      );
+      2;
       remoteCoverImage.current = existingFiles[carCoverImage];
 
       return existingFiles;

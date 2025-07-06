@@ -3,8 +3,8 @@ import Header from "../../home/Header";
 import styles from "./AboutPage.module.css";
 import classicCar from "../../assets/images/branding/about-us-car.jpg";
 import quote from "../../assets/images/design/quote.svg";
-import studGuy from "../../assets/images/design/testimonials/guy-with-studs.jpg";
 import luoWoman from "../../assets/images/design/testimonials/luo-woman.jpg";
+import kenyanMan from "../../assets/images/design/testimonials/kenyan-man.jpeg";
 import whiteWoman from "../../assets/images/design/testimonials/white-woman.jpg";
 import blackLondonGuy from "../../assets/images/design/testimonials/black-london-guy.jpg";
 import bikeGuy from "../../assets/images/design/testimonials/bike-guy.jpeg";
@@ -13,7 +13,7 @@ import showroom2 from "../../assets/images/design/showroom/showroom-2.jpg";
 import showroom3 from "../../assets/images/design/showroom/showroom-3.jpg";
 import showroom4 from "../../assets/images/design/showroom/showroom-4.jpg";
 import showroom5 from "../../assets/images/design/showroom/showroom-5.jpg";
-import showroom7 from "../../assets/images/design/showroom/showroom-7.jpg";
+import showroom6 from "../../assets/images/design/showroom/showroom-6.jpg";
 import indianCouple from "../../assets/images/design/testimonials/indian-couple.jpg";
 import AnimatedNumber from "../../home/AnimatedNumber";
 import { Helmet } from "react-helmet";
@@ -52,7 +52,7 @@ const testimonials = [
     name: "Imogen Scott",
     location: "Nanyuki, Kenya",
     image: whiteWoman,
-    message: `I had been renting a car for almost six months while based in Laikipia doing research in conservation. I got tired of paying exorbitant car hire fees and asked a couple of friends in Nanyuki to recommend a reputable dealer selling older, clean cars. Classic Car Listings came up every single time. I checked them out online—they seemed legit. We spoke on DM, and I booked an appointment to see an old Pajero. When I actually visited, they advised me against that car based on my needs and recommended a Land Rover instead. I truly appreciate that, as the car has served me incredibly well. It’s rare to find a dealership that takes the time to understand their clients and advise them accordingly. I’m extremely happy with my purchase.`,
+    message: `I had been renting a car for almost six months while based in Laikipia doing research in conservation. I got tired of paying exorbitant car hire fees and asked a couple of friends in Nanyuki to recommend a reputable dealer selling older, clean cars. Classic Car Listings came up every single time. I checked them out online—they seemed legit. We spoke on DM, and I booked an appointment to see an old Isuzu. When I actually visited, they advised me against that car based on my needs and recommended a Land Rover instead. I truly appreciate that, as the car has served me incredibly well. It’s rare to find a dealership that takes the time to understand their clients and advise them accordingly. I’m extremely happy with my purchase.`,
   },
   {
     name: "Mark Kibet",
@@ -63,7 +63,7 @@ const testimonials = [
   {
     name: "Peter Njoroge",
     location: "Thika, Kenya",
-    image: studGuy,
+    image: kenyanMan,
     message: `I inherited an old Mercedes from my dad and was looking for a place to do long-term storage since I didn’t use it much. I then stumbled across Classic Car Listings online. I visited them and was impressed with their storage facility. The car stayed for 3 months, but afterwards, I felt like it needed a new home. Initially, I was quite skeptical that they would manage to find somebody. Surprisingly, in a week, I saw a notification that the car had been sold to a fellow enthusiast. Their process was straightforward, honest, and they handled everything. It’s rare to find people who treat your car like it’s their own.`,
   },
   {
@@ -103,7 +103,7 @@ function AboutPage({ path }) {
       bio: "No crowds. No pressure.",
     },
     {
-      image: showroom7,
+      image: showroom6,
       bio: "Private. Polished. Personal—just how buying a classic should feel.",
     },
   ];

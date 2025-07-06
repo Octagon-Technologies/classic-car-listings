@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NoPage from "./pages/no-page/NoPage";
 import AboutPage from "./pages/about/AboutPage";
-import { VehicleTypes } from "./pages/vehicles/models/VehicleTypes";
+import { OtherTypes, VehicleTypes } from "./pages/vehicles/models/VehicleTypes";
 import UploadPage from "./pages/admin/upload/UploadPage";
 import DetailsPage from "./pages/details/DetailsPage";
 import VehiclesPage from "./pages/vehicles/VehiclesPage";
@@ -16,8 +16,6 @@ export default function App() {
   useEffect(() => {
     async function fetchCurrentUser() {
       const { data, error } = await supabase.auth.getSession();
-
-      // console.log(data);
     }
 
     fetchCurrentUser();
@@ -27,8 +25,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         {/* Public pages */}
-        <Route path="/" element={<VehiclesPage />} />
+        <Route path="/" element={<VehiclesPage otherType={OtherTypes.Everything} />} />
         <Route path="/about-us" element={<AboutPage path={"about-us"} />} />
+        <Route path="/all-cars" element={<VehiclesPage otherType={OtherTypes.AllCars} />} />
         <Route
           path={`/${VehicleTypes.ClassicCars.value}`}
           element={<VehiclesPage vehicleType={VehicleTypes.ClassicCars} />}

@@ -24,7 +24,6 @@ function Header() {
   const activeMenuHref = useLocation().pathname;
 
   useEffect(() => {
-    console.log("Effect. activeMenuHref is ", activeMenuHref);
     setIsMenuOpen(false);
   }, [activeMenuHref]);
 
@@ -38,7 +37,7 @@ function Header() {
       subMenu: [
         {
           title: "All Cars",
-          href: "/",
+          href: "/all-cars",
         },
         {
           title: "Classic Cars",
@@ -85,13 +84,6 @@ function Header() {
       menuItems.forEach((item) => {
         if (item.subMenu) {
           item.subMenu.forEach((subMenuItem) => {
-            console.log(
-              `subMenuItem is ${
-                subMenuItem.title
-              }. subMenuItem.href === activeMenuHref is ${
-                subMenuItem.href === activeMenuHref
-              }`
-            );
             if (subMenuItem.href === activeMenuHref) {
               setExpandedMenuItem(subMenuItem);
             }

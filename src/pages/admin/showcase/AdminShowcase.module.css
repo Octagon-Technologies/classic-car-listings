@@ -230,7 +230,7 @@
   font-weight: 800;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1025px) {
   .body {
     width: 85%;
     margin: auto;

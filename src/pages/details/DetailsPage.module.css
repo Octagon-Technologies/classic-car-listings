@@ -2,6 +2,12 @@
   font-family: "Radikal";
 }
 
+.body {
+  width: 100vw;
+  overflow: hidden;
+  padding: 12px;
+}
+
 .topBar {
   background-color: white;
   display: flex;
@@ -35,10 +41,6 @@ h2 {
   height: 300px;
   object-fit: cover;
   object-position: 100% 75%;
-}
-
-.body {
-  padding: 12px;
 }
 
 .body h1 {
@@ -235,7 +237,7 @@ h2 {
   border-radius: 8px;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 768px) {
   .header {
     display: flex;
     align-items: center;
@@ -243,10 +245,10 @@ h2 {
   }
 
   .header img {
-    width: 75%;
-    height: 500px;
+    width: calc(100% - 16px);
+    height: 400px;
     object-fit: cover;
-    object-position: 50% 25%;
+    object-position: center;
   }
 
   .body {
@@ -259,7 +261,7 @@ h2 {
   }
 
   .price {
-    width: 75%;
+    width: 100%;
     margin: auto;
   }
 
@@ -268,8 +270,8 @@ h2 {
     flex-wrap: wrap;
     row-gap: 8px;
     column-gap: 12px;
-    width: 80%;
-    margin: 16px 10% 0px 10%;
+    width: calc(100%);
+    margin-top: 16px;
     justify-content: space-between;
   }
 
@@ -285,11 +287,11 @@ h2 {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    margin-left: 10%;
+    margin: 16px 24px;
   }
 
   .gallery img {
-    width: 30%;
+    width: 31%;
     height: 350px;
   }
 
@@ -357,5 +359,22 @@ h2 {
   .navigation > *:hover {
     background-color: var(--green);
     color: white;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .header img {
+    width: 75%;
+    height: 500px;
+    object-position: 50% 25%;
+  }
+
+  .price {
+    width: 75%;
+  }
+
+  .features ul {
+    width: 80%;
+    margin: 16px 10% 0px 10%;
   }
 }

@@ -76,7 +76,7 @@
   justify-content: center;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1025px) {
   .actions {
     flex-direction: row;
   }

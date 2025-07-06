@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import CarCard from "../CarCard";
 import styles from "./CarList.module.css";
+import { VehicleStatus } from "../../models/VehicleStatus";
 // import { createClient } from "@supabase/supabase-js";
 
 // const supabase = createClient(
@@ -16,18 +17,23 @@ import styles from "./CarList.module.css";
  * @param { any } sortOption - how to sort (inclusive of price and date posted)
  * @returns
  */
-function CarList({ searchQuery, carList, error, correctVehicleType }) {
-
+function CarList({
+  searchQuery,
+  vehicleStatus,
+  carList,
+  error,
+  correctVehicleType,
+}) {
   useEffect(() => {
     console.log(`carList.at(0)?.carType is`, carList.at(0)?.carType);
     console.log(`correctVehicleType is `, correctVehicleType);
   }, [correctVehicleType, carList]);
 
-
   let displayData;
 
   // displayData = Loading();
 
+  const isCarSoldTab = vehicleStatus === VehicleStatus.Sold;
   /* Initial Loading happening
 
   */
@@ -38,7 +44,12 @@ function CarList({ searchQuery, carList, error, correctVehicleType }) {
         <p>No Cars Found</p>
       </div>
     );
-  } else if (carList.length > 0 && (carList.at(0)?.carType === correctVehicleType?.value || correctVehicleType == null)) {
+  } else if (
+    carList.length > 0 &&
+    (carList.at(0)?.carType === correctVehicleType?.value ||
+      correctVehicleType == null) &&
+    carList.at(0)?.sold === isCarSoldTab
+  ) {
     /* Search has happened, results available
 
     */
@@ -49,6 +60,7 @@ function CarList({ searchQuery, carList, error, correctVehicleType }) {
             key={idx}
             name={car.name}
             price={car.price}
+            vehicleStatus={vehicleStatus}
             coverImage={car.coverImage}
             detailsPath={`/${car.carType}/${car.slugName}`}
           />
@@ -75,7 +87,3 @@ function CarList({ searchQuery, carList, error, correctVehicleType }) {
 }
 
 export default CarList;
-
-
-
-

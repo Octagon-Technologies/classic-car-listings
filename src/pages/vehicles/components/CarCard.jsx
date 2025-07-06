@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import styles from "../components/car-list/CarList.module.css"
+import styles from "../components/car-list/CarList.module.css";
 import "prop-types";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { VehicleStatus } from "../models/VehicleStatus";
 
 /**
  *
@@ -13,14 +14,18 @@ import { Link } from "react-router-dom";
  * @param {int} price - Price of Car
  * @returns
  */
-function CarCard({ name, coverImage, price, detailsPath }) {
+function CarCard({ name, coverImage, vehicleStatus, price, detailsPath }) {
   let formattedPrice = `KES ${price.toLocaleString("en-KE")}`;
 
   return (
     <Link className={styles.carCard} to={detailsPath}>
       <img src={coverImage} alt={`Image of the ${name}`} />
       <p className={styles.name}>{name}</p>
-      <p className={styles.price}>{formattedPrice}</p>
+      {vehicleStatus === VehicleStatus.Available ? (
+        <p className={styles.price}>{formattedPrice}</p>
+      ) : (
+        <></>
+      )}
     </Link>
   );
 }
