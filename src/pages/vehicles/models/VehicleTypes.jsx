@@ -18,9 +18,45 @@ export const VehicleTypes = Object.freeze({
     groupKeyword: "Bikes",
   },
   Automobiles: {
-    label: "Automobiles",
+    label: "Boats/Buggies/ATVs",
     value: "automobiles",
-    keyword: "Automobile",
-    groupKeyword: "Automobiles",
+    keyword: "Boat, Buggy, or ATV",
+    groupKeyword: "Boats, Buggies, or ATVs",
+  },
+  /**
+   *
+   *
+   *
+   *
+   *
+   */
+
+  // All: {
+  //   label: "Classic Cars",
+  //   value: "",
+  //   keyword: "Car",
+  //   groupKeyword: "Cars",
+  // },
+  // AllCars: {
+  //   label: "Classic Cars",
+  //   value: "all-cars",
+  //   keyword: "Car",
+  //   groupKeyword: "Cars",
+  // },
+});
+
+
+export const OtherTypes = Object.freeze({
+  AllCars: {
+    label: "All Cars",
+    value: "all-cars",
+    keyword: "Car",
+    groupKeyword: "Cars",
+  },
+  Everything: {
+    label: "EVERYTHING",
+    value: "",
+    keyword: "Car or Bike",
+    groupKeyword: "Cars or Bikes",
   },
 });

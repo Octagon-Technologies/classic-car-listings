@@ -11,7 +11,7 @@ export function useRequireAuth(redirectTo = "/admin") {
         data: { user },
       } = await supabase.auth.getUser();
 
-      console.log("user is", user);
+      // console.log("user is", user);
       if (!user) {
         navigate(redirectTo);
       }

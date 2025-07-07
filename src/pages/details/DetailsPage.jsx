@@ -1,27 +1,21 @@
 import { useParams } from "react-router-dom";
 import styles from "./DetailsPage.module.css";
-import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
   faClose,
-  faMagnifyingGlassPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import carPlaceholder from "../../assets/images/design/car-placeholder.jpg";
-import carSample from "../../assets/images/design/car-sample.webp";
 import tick from "../../assets/images/design/tick-svg.png";
+import carPlaceholder from "../../assets/images/design/car-placeholder.png";
 import Header from "../../home/Header.jsx";
 import { toKESPrice } from "../../utils/StringUtils.jsx";
-import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { supabase } from "../../config/config.jsx";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
-const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
-const supabase = createClient(
-  "https://xxsbhmnnstzhatmoivxp.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
-);
 
 function DetailsPage() {
   const [car, setCar] = useState();
@@ -62,20 +56,26 @@ function DetailsPage() {
   }, [carSlugName]);
 
   useEffect(() => {
+    if (!Number.isInteger(viewImageIndex)) return;
+
+    // Only push a new history state once when opening the image viewer
+    const isFirstImageView = window.history.state?.modal !== true;
+    if (isFirstImageView) {
+      window.history.pushState({ modal: true }, "");
+      console.log("History state pushed");
+    }
+
     const backHandler = (e) => {
-      if (Number.isInteger(viewImageIndex)) {
-        e.preventDefault();
-        setViewImageIndex(null);
-      }
+      console.log(`viewImageIndex is ${viewImageIndex}`);
+      setViewImageIndex(null);
     };
 
-    if (Number.isInteger(viewImageIndex)) {
-      window.addEventListener("popstate", backHandler);
-      window.history.pushState(null, document.title);
-    }
-      
+    window.addEventListener("popstate", backHandler);
+    console.log("Listener added");
+
     return () => {
       window.removeEventListener("popstate", backHandler);
+      console.log("Listener removed");
     };
   }, [viewImageIndex]);
 
@@ -96,126 +96,225 @@ function DetailsPage() {
   });
 
   return (
-    <div className={styles.main}>
+    <div style={{ width: "100vw" }}>
       {Number.isFinite(viewImageIndex) ? <></> : <Header />}
-      <div className={styles.header}>
-        <img
-          src={car?.coverImage}
-          alt=""
+
+      <div>
+        <div className={styles.header}>
+          <img
+            src={car?.coverImage}
+            alt=""
+            style={{
+              opacity: coverImageLoaded ? 1 : 0,
+              transition: "opacity 0.6s ease",
+            }}
+            onLoad={() => setCoverImageLoaded(true)}
+          />
+        </div>
+
+        <div
           style={{
             opacity: coverImageLoaded ? 1 : 0,
-            transition: "opacity 0.6s ease",
+            transition: "opacity 2s ease",
+            background: "#fefefe",
           }}
-          onLoad={() => setCoverImageLoaded(true)}
-        />
-      </div>
-
-      <div
-        style={{
-          opacity: coverImageLoaded ? 1 : 0,
-          transition: "opacity 2s ease",
-          background: "#fefefe",
-        }}
-      >
-        {car ? (
-          <div>
-            <div className={styles.body}>
-              <h2> {car.name} </h2>
-
-              <div className={styles.price}>
-                <h6>List price</h6> <p>{toKESPrice(car.price)}</p>
-              </div>
-
-              <div className={styles.features}>
-                <h3>Features</h3>
-                <ul>
-                  {car.features.map((feature, idx) => (
-                    <li key={idx}>
-                      <img src={tick} alt="" />
-                      <p> {feature}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className={styles.gallery}>
-                <h3>Gallery</h3>
-
-                <ul>
-                  {car.images.map((url, index) => (
-                    <img
-                      key={index}
-                      src={url}
-                      onClick={() => {
-                        setViewImageIndex(index);
-                        console.log(`index is ${index}`);
-                      }}
-                    ></img>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            {!Number.isFinite(viewImageIndex) ? (
-              <a
-                href={`https://wa.me/254794940110/?text=${encodeURIComponent(
-                  `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
-                )}`}
-                target="_blank"
-                className={styles.contactTab}
-              >
-                {/* <div> */}
-                <p>
-                  Contact on <span>Whatsapp</span>
-                </p>
-                <FontAwesomeIcon
-                  className={styles.whatsappIcon}
-                  icon={faSquareWhatsapp}
+        >
+          {car ? (
+            <div>
+              <Helmet>
+                <title>{`${car.name} for Sale | Classic Car Listings`}</title>
+                <meta
+                  name="description"
+                  content={`Explore details, features, and images of the ${car.name}: a well-maintained ${car.type} available for purchase in Kenya.`}
                 />
-                {/* </div> */}
-              </a>
-            ) : (
-              <></>
-            )}
+                <meta
+                  name="keywords"
+                  content={`classic cars, ${car.name}, buy ${car.name} Kenya, ${car.name} for sale Kenya, ${car.name} for sale, ${car.type}s in kenya, buy ${car.name} Nairobi`}
+                />
+                <link
+                  rel="canonical"
+                  href={`https://classiccarlistings.co.ke/${carType}/${carSlugName}`}
+                />
 
-            {Number.isFinite(viewImageIndex) ? (
-              <div className={styles.viewImage}>
-                <div className={styles.topBar}>
-                  <p>{`${viewImageIndex + 1}/${car.images.length}`}</p>
+                {/* Open Graph / Facebook */}
+                <meta
+                  property="og:title"
+                  content={`${car.name} | Classic Car Listings`}
+                />
+                <meta
+                  property="og:description"
+                  content={`Well-maintained ${car.name} now available. View full specs, features, and images.`}
+                />
+                <meta property="og:image" content={car.coverImage} />
+                <meta property="og:url" content={window.location.href} />
+                <meta property="og:type" content="website" />
 
-                  <div className={styles.icons}>
-                    {/* <FontAwesomeIcon icon={faMagnifyingGlassPlus} /> */}
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta
+                  name="twitter:title"
+                  content={`${car.name} | Classic Car Listings`}
+                />
+                <meta
+                  name="twitter:description"
+                  content={`Check out the ${car.name} on Classic Car Listings Kenya.`}
+                />
+                <meta name="twitter:image" content={car.coverImage} />
+
+                <script type="application/ld+json">
+                  {JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Product",
+                    name: car.name,
+                    image: car.coverImage,
+                    description: car.features
+                      .map((feature) =>
+                        feature
+                          .trim()
+                          .replace(/\s+/g, " ")
+                          .replace(/^./, (s) => s.toUpperCase())
+                      )
+                      .join(". "),
+                    brand: car.name,
+                    offers: {
+                      "@type": "Offer",
+                      priceCurrency: "KES",
+                      price: car.price,
+                     availability: car.sold ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+                    },
+                  })}
+                </script>
+              </Helmet>
+
+              <div className={styles.body}>
+                <h1> {car.name} </h1>
+
+                <div className={styles.price}>
+                  <h3>List price</h3>{" "}
+                  <p>
+                    {toKESPrice(car.price)} <span>(Neg)</span>
+                  </p>
+                </div>
+
+                <div className={styles.features}>
+                  <h2>Features</h2>
+                  <ul>
+                    {car.features.map((feature, idx) => (
+                      <li key={idx}>
+                        <img src={tick} alt="" />
+                        <p> {feature}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className={styles.gallery}>
+                  <h2>Gallery</h2>
+
+                  {/* <img
+                    key={index}
+                    src={url}
+                    onClick={() => {
+                      setViewImageIndex(index);
+                      console.log(`index is ${index}`);
+                    }}
+                  ></img> */}
+                  <ul>
+                    {car.images.map((url, index) => (
+                      <div key={url} className={styles.carImage}>
+                        <LazyLoadImage
+                          alt={`Image ${index} of the ${car.name}`}
+                          src={url}
+                          effect="blur"
+                          width="100%"
+                          height="100%"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                          placeholderSrc={carPlaceholder}
+                          wrapperProps={{
+                            // If you need to, you can tweak the effect transition using the wrapper style.
+                            style: {
+                              width: "100%",
+                              height: "100%",
+                            },
+                          }}
+                          onClick={() => {
+                            setViewImageIndex(index);
+                            console.log(`index is ${index}`);
+                          }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = carPlaceholder;
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              {!Number.isFinite(viewImageIndex) ? (
+                <a
+                  href={`https://wa.me/254748883598/?text=${encodeURIComponent(
+                    `I wish to inquire about the ${car.name} I saw on your page ${window.location.href}`
+                  )}`}
+                  target="_blank"
+                  className={styles.contactTab}
+                >
+                  {/* <div> */}
+                  <p>
+                    Contact on <span>Whatsapp</span>
+                  </p>
+                  <FontAwesomeIcon
+                    className={styles.whatsappIcon}
+                    icon={faSquareWhatsapp}
+                  />
+                  {/* </div> */}
+                </a>
+              ) : (
+                <></>
+              )}
+
+              {Number.isFinite(viewImageIndex) ? (
+                <div className={styles.viewImage}>
+                  <div className={styles.topBar}>
+                    <p>{`${viewImageIndex + 1}/${car.images.length}`}</p>
+
+                    <div className={styles.icons}>
+                      {/* <FontAwesomeIcon icon={faMagnifyingGlassPlus} /> */}
+                      <FontAwesomeIcon
+                        icon={faClose}
+                        onClick={() => setViewImageIndex(null)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* <div className={styles.actualImage}> */}
+                  <img src={car.images[viewImageIndex]} alt="" />
+                  {/* </div> */}
+
+                  <div className={styles.navigation}>
                     <FontAwesomeIcon
-                      icon={faClose}
-                      onClick={() => setViewImageIndex(null)}
+                      icon={faChevronLeft}
+                      onDoubleClick={null}
+                      onClick={handleLeftImagePreviewClick}
+                    />
+
+                    <FontAwesomeIcon
+                      icon={faChevronRight}
+                      onDoubleClick={null}
+                      onClick={handleRightImagePreviewClick}
                     />
                   </div>
                 </div>
-
-                {/* <div className={styles.actualImage}> */}
-                <img src={car.images[viewImageIndex]} alt="" />
-                {/* </div> */}
-
-                <div className={styles.navigation}>
-                  <FontAwesomeIcon
-                    icon={faChevronLeft}
-                    onDoubleClick={null}
-                    onClick={handleLeftImagePreviewClick}
-                  />
-
-                  <FontAwesomeIcon
-                    icon={faChevronRight}
-                    onDoubleClick={null}
-                    onClick={handleRightImagePreviewClick}
-                  />
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-        ) : (
-          <></>
-        )}
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,126 @@
+.faqH1 {
+  text-align: center;
+  font-family: "Iceberg";
+  font-weight: 500;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: var(--darkGreen);
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.step {
+  padding: 12px 8px;
+  margin: 0px 8px;
+  border-radius: 8px;
+  box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.05), 1px 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.step .title {
+  color: var(--green);
+  font-family: "Advent Pro";
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.step .content {
+  margin-top: 8px;
+  font-size: 1.05rem;
+}
+
+.step .content a {
+  text-decoration: none;
+  color: var(--clay);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.faqContainer {
+  margin-top: 32px;
+  padding-bottom: 80px;
+}
+
+.faqContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq {
+  margin: 0px 12px;
+  border-radius: 8px;
+  background: white;
+  padding: 8px 12px;
+  box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.05), 1px 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.faq .question {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 14px 0px;
+}
+
+.faq .question p {
+  width: 80%;
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1.2rem;
+  color: rgb(0, 0, 0);
+  font-family: "Radikal";
+}
+
+.faq .answer {
+  max-height: 0px;
+  overflow: hidden;
+  font-size: 1.05rem;
+  color: black;
+  transition: all 0.75s ease-in-out;
+}
+
+.faq.active .answer {
+  max-height: 175px;
+  padding-bottom: 12px;
+}
+
+@media screen and (min-width: 1025px) {
+  .body {
+    width: 70%;
+    margin: auto;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .step {
+    width: 45%;
+    padding: 16px 12px;
+  }
+
+  .step .content {
+    margin-top: 10px;
+  }
+
+  .faqContainer {
+    margin-top: 60px;
+  }
+
+  .faqContent {
+    width: 100%;
+    margin: auto;
+    gap: 16px;
+  }
+}

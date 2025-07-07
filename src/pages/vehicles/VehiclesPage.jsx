@@ -1,26 +1,30 @@
 import styles from "./VehiclePage.module.css";
-import logo from "../../assets/images/branding/cars-logo-nobg.png";
+import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpWideShort,
-  faBars,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CarList from "./components/car-list/CarList";
-import { VehicleTypes } from "./models/VehicleTypes";
 import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
 import { VehicleStatus } from "./models/VehicleStatus";
-// import wavy from "../../assets/images/design/green-v1.png";
-// import wavy from "../../assets/images/design/wavy-v3.png";
-// import wavy from "../../assets/images/design/wavy.webp";
-// import wavy from "../../assets/images/design/green-wavy.png";
+import { useEffect } from "react";
+import { supabase } from "../../config/config";
+import { OtherTypes } from "./models/VehicleTypes";
 
-function VehiclesPage({ vehicleType }) {
+function VehiclesPage({ vehicleType, otherType }) {
+  // Either vehicleType or othertype (meaning everything, all cars, classics, modern, bikes, and boats)
+  const daMachine = vehicleType ?? otherType;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState(null);
   const [vehicleStatus, setVehicleStatus] = useState(VehicleStatus.Available);
+  const [carList, setCarList] = useState([]);
+  const [error, setError] = useState(null);
+
+  // Morris: 0732074125
 
   function handlePriceAscend() {
     setSortOption(new SortOption("price-ascend", "price", "ascend"));
@@ -39,25 +43,271 @@ function VehiclesPage({ vehicleType }) {
     setVehicleStatus(e.target.value);
   }
 
+  useEffect(() => {
+    console.log(`vehicleType is ${vehicleType} and otherType is ${otherType}`);
+  }, [vehicleType, otherType]);
+
+  useEffect(() => {
+    if (searchQuery === "") return;
+
+    // Only push a new history state once when opening the image viewer
+    const isFirstSearchQuery = window.history.state?.modal !== true;
+    if (isFirstSearchQuery) {
+      window.history.pushState({ modal: true }, "");
+    }
+
+    const backHandler = (_) => {
+      setSearchQuery("");
+    };
+
+    window.addEventListener("popstate", backHandler);
+
+    return () => {
+      window.removeEventListener("popstate", backHandler);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    console.log("Before: setSearchQuery(``)");
+    setSearchQuery(""); // triggers the searchQuery effect below
+    console.log("After: setSearchQuery(``)");
+    setVehicleStatus(VehicleStatus.Available);
+  }, [daMachine]);
+
+  useEffect(() => {
+    console.log(
+      "Before: default fetchCarImages() call. Query is ",
+      searchQuery
+    );
+    fetchCarImages();
+    console.log("After: default fetchCarImages() call. Query is ", searchQuery);
+  }, [searchQuery, sortOption, vehicleStatus]);
+
+  useEffect(() => {
+    // Inital load already done
+    if (carList.at(0)?.carType === vehicleType) {
+      return;
+    }
+
+    fetchCarImages();
+    console.log("After: fetchCarImages() call");
+  }, [daMachine]);
+
+  async function fetchCarImages() {
+    let request = supabase.from("cars").select();
+
+    if (vehicleType?.value) {
+      request = request.eq("carType", vehicleType.value);
+      console.log(`fetchCarImages: vehicleType is `, vehicleType);
+    } else if (daMachine?.value === OtherTypes.AllCars) {
+      request = request.in("carType", ["classic-cars", "modern-classics"]);
+      console.log("fetchCarImages: otherType is ", otherType);
+    } else {
+      request = request;
+      console.log("daMachine?.value is ", daMachine?.value);
+      console.log("fetchCarImages: no filter applied to cars");
+    }
+
+    if (vehicleStatus === VehicleStatus.Available) {
+      request = request.eq("sold", "false");
+    } else if (vehicleStatus === VehicleStatus.Sold) {
+      request = request.eq("sold", "true");
+    }
+
+    request = searchQuery ? request.ilike("name", `%${searchQuery}%`) : request;
+
+    request = sortOption
+      ? request.order(sortOption.name, {
+          ascending: sortOption.order === "ascend",
+        })
+      : request.order("datePosted", { ascending: false });
+
+    const { data: carsData, error: carsError } = await request;
+
+    if (carsError) {
+      setError(carsError.message);
+    }
+
+    // console.log(`carsData is ${carsData.length}`);
+    // console.log(`sortOption is ${sortOption?.key}`);
+
+    // TEMPORARY FIX TO THE DOUBLE CAR FETCH
+    /**
+     * For some reason, the second call to this function resets the carList value to []. Why? Not sure.
+     * However, the searchQuery is empty when the inital call is made (according to the logs)
+     * So it can't be a situation of wrong search... Debug this later
+     */
+    if (searchQuery === "" || carsData.length > 0) {
+      setCarList(carsData);
+    }
+  }
+
+  const hasPartSchema = carList.map((car) => ({
+    "@type": "Product",
+    name: `${car.name}`,
+    image: car.coverImage, // full URL(s)
+    description: `At a price of KES ${car.price}, get yourself a well-maintained ${car.name}`,
+    sku: car.slugName,
+    // brand: { "@type": "Brand", name: car.make },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "KES",
+      price: car.price,
+      availability: "https://schema.org/InStock",
+      url: `https://classiccarlistings.co.ke/${car.carType}/${car.slugName}`,
+    },
+    itemCondition: "https://schema.org/UsedCondition",
+  }));
+
+  let pageDescription = "";
+  let keywords = "";
+
+  useEffect(() => {
+    // For dynamic descriptions
+    switch (daMachine?.value) {
+      case "all-cars":
+        pageDescription =
+          "Browse all classic and modern vehicles for sale in Kenya. Discover a wide variety of well-maintained cars from vintage classics to everyday rides on Classic Car Listings Kenya.";
+        break;
+      case "classic-cars":
+        pageDescription =
+          "Explore Kenya’s finest selection of classic cars for sale. Find vintage collectibles, timeless models, and rare classics from trusted sellers on Classic Car Listings Kenya.";
+        break;
+      case "modern-classics":
+        pageDescription =
+          "Shop modern classic cars for sale in Kenya. From early 2000s icons to everyday rides, find your next well-kept modern classic car on Classic Car Listings Kenya.";
+        break;
+      case "automobiles":
+        pageDescription =
+          "Buy boats, buggies, and ATVs for sale across Kenya. Classic Car Listings Kenya features a curated selection of adventure-ready off-road vehicles and watercraft.";
+        break;
+      case "bikes":
+        pageDescription =
+          "Find classic bikes and vintage motorcycles for sale in Kenya. Explore rare two-wheelers, Vespas, and collectible motorcycles on Classic Car Listings Kenya.";
+        break;
+      default:
+        pageDescription =
+          "Find, buy, and sell classic vehicles in Kenya. Classic Car Listings Kenya offers trusted listings for classic cars, modern classics, motorcycles, and more.";
+        break;
+    }
+
+    // For dynamic keywords
+    switch (daMachine?.value) {
+      case "all-cars":
+        keywords =
+          "classic cars Kenya, cars for sale Kenya, cheap cars in Kenya, modern classics Kenya, bikes for sale Kenya, classic car listings, classic cars for sale Kenya";
+        break;
+      case "classic-cars":
+        keywords =
+          "classic cars Kenya, vintage cars Kenya, cars for sale Kenya, classic car listings, classic cars for sale Kenya";
+        break;
+      case "modern-classics":
+        keywords =
+          "modern classics Kenya, modern classics for sale Kenya, classic cars Kenya, cars for sale Kenya, classic car listings";
+        break;
+      case "automobiles":
+        keywords =
+          "boats for sale Kenya, buggies for sale Kenya, ATVs for sale Kenya, classic cars Kenya, cars for sale Kenya, classic car listings";
+        break;
+      case "bikes":
+        keywords =
+          "bikes for sale Kenya, classic bikes Kenya, vespas Kenya, vespas for sale Kenya, classic motorcycles Kenya, classic car listings";
+        break;
+      default:
+        keywords =
+          "classic cars Kenya, bikes for sale, cheap cars in Kenya, cars for sale Kenya, classic car listings, classic cars for sale Kenya, modern classics Kenya, modern classics for sale Kenya, bikes for sale Kenya, vespas Kenya, vespas for sale Kenya";
+        break;
+    }
+  }, [vehicleType]);
+
   return (
     <div>
+      <Helmet>
+        <title>
+          {`Classic ${
+            daMachine?.groupKeyword ?? "Cars"
+          } for Sale Kenya | Classic Car Listings`}
+        </title>
+        <meta name="description" content={pageDescription} />
+        <meta
+          name="keywords"
+          content={keywords}
+        />
+        <link
+          rel="canonical"
+          href={`https://classiccarlistings.co.ke/${daMachine?.value ?? ""}`}
+        />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Classic Car Listings Kenya" />
+        <meta
+          property="og:description"
+          content={pageDescription}
+        />
+        <meta
+          property="og:image"
+          content="https://classiccarlistings.co.ke/og-image.png"
+        />
+        <meta
+          property="og:url"
+          content={`https://classiccarlistings.co.ke/${daMachine?.value ?? ""}`}
+        />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Classic Car Listings Kenya" />
+        <meta
+          name="twitter:description"
+          content="Kenya’s leading platform for classic cars."
+        />
+        <meta
+          name="twitter:image"
+          content="https://classiccarlistings.co.ke/og-image.png"
+        />
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: `Classic ${daMachine?.groupKeyword ?? "Cars"} for Sale`,
+            description: pageDescription,
+            url: `https://classiccarlistings.co.ke/${daMachine?.value ?? ""}`,
+            hasPart: hasPartSchema,
+          })}
+        </script>
+      </Helmet>
+
       <Header />
 
       <div className={styles.body}>
         <div className={styles.searchSection}>
-          <h3 className={styles.title}>
-            Explore a vast array of well-maintained classics
-          </h3>
+          <h1 className="seoHeader">{`Classic ${
+            daMachine?.groupKeyword?.toLowerCase() ?? "Cars"
+          } for sale in Kenya`}</h1>
 
+          <h2 className="seoHeader">{ pageDescription }</h2>
+          <h2 className="seoHeader">
+            Explore Classic Car Listings Across Kenya
+          </h2>
+
+          <h1 className={styles.title}>
+            {/* Explore a vast array of well-maintained classics */}
+            {`Explore our vast collection of well-maintained classic ${
+              daMachine?.groupKeyword?.toLowerCase() ?? "cars"
+            }`}
+          </h1>
           <div className={styles.searchBar}>
             <FontAwesomeIcon className={styles.icon} icon={faMagnifyingGlass} />
             <input
               type="text"
-              placeholder={`Search for your desired ${vehicleType ? vehicleType.keyword.toLowerCase() : "car"}`}
+              placeholder={`Search for your desired ${
+                daMachine?.keyword?.toLowerCase() ?? "car"
+              }`}
+              value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-
           <div className={styles.searchActions}>
             <div className={styles.sort}>
               <select
@@ -95,24 +345,19 @@ function VehiclesPage({ vehicleType }) {
           onChange={handleVehicleStatus}
         >
           <option value={VehicleStatus.Available}>
-            Show {VehicleStatus.Available}{" "}
-            {vehicleType ? vehicleType.groupKeyword : "Cars"}
+            Show {VehicleStatus.Available} {daMachine?.groupKeyword ?? "Cars"}
           </option>
           <option value={VehicleStatus.Sold}>
-            Show {VehicleStatus.Sold}{" "}
-            {vehicleType ? vehicleType.groupKeyword : "Cars"}
-          </option>
-          <option value={VehicleStatus.All}>
-            Show {VehicleStatus.All}{" "}
-            {vehicleType ? vehicleType.groupKeyword : "Cars"}
+            Show {VehicleStatus.Sold} {daMachine?.groupKeyword ?? "Cars"}
           </option>
         </select>
 
         <CarList
-          vehicleType={vehicleType}
           searchQuery={searchQuery}
-          sortOption={sortOption}
           vehicleStatus={vehicleStatus}
+          carList={carList}
+          correctVehicleType={vehicleType}
+          error={error}
           className={styles.carList}
         />
         {/* <div className={styles.carList}>

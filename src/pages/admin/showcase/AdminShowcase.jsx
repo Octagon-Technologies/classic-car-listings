@@ -7,12 +7,15 @@ import Loading from "../../../home/Loading.jsx";
 import { toKESPrice } from "../../../utils/StringUtils.jsx";
 import shockedPerson from "../../../assets/images/design/shocked-person.jpg";
 import { useRequireAuth } from "../../../utils/AuthUtils.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminShowcase() {
   const [carType, setCarType] = useState("");
   const [cars, setCars] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(null); // instance of Car
+
+  const navigate = useNavigate()
 
   useRequireAuth();
 
@@ -67,26 +70,6 @@ export default function AdminShowcase() {
     fetchCars();
   }
 
-  async function handleCarDelete() {
-    if (!isDeleting) {
-      return;
-    }
-
-    const car = isDeleting;
-    const images = car.images.map((image) => `list/${image}`);
-    console.log(images);
-    const { data, error } = await supabase.storage.from("cars").remove(images);
-    console.log(`Error is ${error}`);
-
-    const deleteResponse = await supabase
-      .from("cars")
-      .delete()
-      .eq("slugName", car.slugName);
-
-    console.log(`deleteResponse.status is ${deleteResponse.status}`);
-    setIsDeleting(null);
-    fetchCars();
-  }
 
   return (
     <>
@@ -136,12 +119,12 @@ export default function AdminShowcase() {
                         </label>
                       </div>
 
-                      <p
-                        className={styles.carDelete}
-                        onClick={() => setIsDeleting(car)}
+                      <button
+                        className={styles.carEdit}
+                        onClick={() => navigate(`/admin/upload?carSlugName=${car.slugName}`)}
                       >
-                        Delete
-                      </p>
+                        Edit
+                      </button>
                     </div>
                   </div>
                 </li>
@@ -155,20 +138,6 @@ export default function AdminShowcase() {
             >
               <div className={styles.spinner}></div>
               <p>Updating Database</p>
-            </div>
-
-            <div
-              className={`${styles.popup} ${styles.deleting} ${
-                isDeleting ? styles.active : ""
-              }`}
-            >
-              <img src={shockedPerson} alt="" />
-              <p>Are you sure you want to delete this car?</p>
-
-              <div className={styles.actions}>
-                <p onClick={() => setIsDeleting(null)}>Cancel</p>
-                <p onClick={handleCarDelete}>Delete</p>
-              </div>
             </div>
           </div>
         )}

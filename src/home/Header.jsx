@@ -24,21 +24,20 @@ function Header() {
   const activeMenuHref = useLocation().pathname;
 
   useEffect(() => {
-    console.log("Effect. activeMenuHref is ", activeMenuHref);
     setIsMenuOpen(false);
   }, [activeMenuHref]);
 
   const menuItems = [
     {
       title: "About Us",
-      href: "/about",
+      href: "/about-us",
     },
     {
       title: "Cars",
       subMenu: [
         {
           title: "All Cars",
-          href: "/",
+          href: "/all-cars",
         },
         {
           title: "Classic Cars",
@@ -57,8 +56,12 @@ function Header() {
     },
 
     {
-      title: "Automobiles",
+      title: "Boats/Buggies/ATVs",
       href: "/automobiles",
+    },
+    {
+      title: "How to Sell with Us",
+      href: "/how-to-sell-with-us",
     },
     ...(isAdmin
       ? [
@@ -81,13 +84,6 @@ function Header() {
       menuItems.forEach((item) => {
         if (item.subMenu) {
           item.subMenu.forEach((subMenuItem) => {
-            console.log(
-              `subMenuItem is ${
-                subMenuItem.title
-              }. subMenuItem.href === activeMenuHref is ${
-                subMenuItem.href === activeMenuHref
-              }`
-            );
             if (subMenuItem.href === activeMenuHref) {
               setExpandedMenuItem(subMenuItem);
             }
@@ -115,10 +111,10 @@ function Header() {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log("Auth state changed:", event);
+        // console.log("Auth state changed:", event);
 
         if (session) {
-          console.log("Session is valid:", session);
+          // console.log("Session is valid:", session);
           setIsAdmin(true);
         } else {
           console.log("Session is null or invalid");
@@ -170,9 +166,10 @@ function Header() {
         <div className="appBar">
           <Link className="logo" to="/">
             <img src={logo} alt="" />
-            <p className="logoName">
-              Classic Car<br></br>Listings
-            </p>
+            <div className="content">
+              <p className="logoName">Classic Car Listings KE</p>
+              <p className="slogan">It's just not a car, but an investment</p>
+            </div>
           </Link>
 
           <FontAwesomeIcon id="openMenu" onClick={toggleMenu} icon={faBars} />
@@ -207,7 +204,7 @@ function Header() {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center"
+                      alignItems: "center",
                     }}
                   >
                     {item.subMenu ? (
@@ -231,7 +228,7 @@ function Header() {
                         }
                         className="subMenuArrow"
                         style={{
-                          color: isDesktop ? "black" : "white" 
+                          color: isDesktop ? "black" : "white",
                         }}
                       />
                     ) : (
@@ -247,6 +244,7 @@ function Header() {
                       {item.subMenu.map((subMenuItem) => (
                         <Link
                           to={subMenuItem.href}
+                          key={subMenuItem.href}
                           onClick={() => setIsMenuOpen(false)}
                           className={`subMenuItem ${
                             subMenuItem.href === activeMenuHref ? "active" : ""

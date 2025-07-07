@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../home/Header";
 import styles from "./UploadPage.module.css";
+import { dataURLtoFile } from "../../../utils/FileUtils";
 import { ReactSortable } from "react-sortablejs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMediaQuery } from "react-responsive";
@@ -8,32 +9,37 @@ import {
   faChevronLeft,
   faChevronRight,
   faClose,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { createClient } from "@supabase/supabase-js";
 import { slugifyCarName, toKESPrice } from "../../../utils/StringUtils";
 import imageCompression from "browser-image-compression";
 import { VehicleTypes } from "../../vehicles/models/VehicleTypes";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useRequireAuth } from "../../../utils/AuthUtils";
+import shockedPerson from "../../../assets/images/design/shocked-person.jpg";
+import { makeInputVisible } from "../../../utils/HtmlUtils";
+import Loading from "../../../home/Loading";
+import { deleteVehicle } from "../../../repo/VehiclesRepo";
+import { supabase } from "../../../config/config";
 
-const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
-const supabase = createClient(
-  "https://xxsbhmnnstzhatmoivxp.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4c2JobW5uc3R6aGF0bW9pdnhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzczMDAsImV4cCI6MjA2Mjk1MzMwMH0.p8UVJF_QzsFh0yJFTtHbJ8pdrjR9LSDg0xjIGrZNuK0"
-);
+export const SUPABASE_URL = "https://xxsbhmnnstzhatmoivxp.supabase.co";
 
 function UploadPage() {
   const navigate = useNavigate();
-  const isDesktop = useMediaQuery({ query: "(min-width: 1080px)" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1025px)" });
 
   const carSlugName = useRef();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  carSlugName.current = params.get("carSlugName"); // this will be null if not provided
 
   useRequireAuth();
 
-  const [carName, setCarName] = useState(); //useState("2002 Land Rover");
-  const [carPrice, setCarPrice] = useState(); //3400000
-  const [formattedCarPrice, setFormattedCarPrice] = useState(); //KES 3,400,000
+  const [carName, setCarName] = useState(""); //useState("2002 Land Rover");
+  const [carPrice, setCarPrice] = useState(""); //3400000
+  const [formattedCarPrice, setFormattedCarPrice] = useState(""); //KES 3,400,000
 
   const [carType, setCarType] = useState();
   const [carFeatures, setCarFeatures] = useState("");
@@ -41,11 +47,9 @@ function UploadPage() {
 
   let remoteCoverImage = useRef();
 
-  const [formattedCarFeatures, setFormattedCarFeatures] = useState(
-    carFeatures.split(/✅|✔️|↪️/).filter(Boolean)
-  );
+  const [formattedCarFeatures, setFormattedCarFeatures] = useState([]);
   const [localImages, setLocalImages] = useState([]);
-  const [activePreviewImageIndex, setActivePreviewImageIndex] = useState(0);
+  const [activePreviewImageIndex, setActivePreviewImageIndex] = useState(4);
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -56,15 +60,72 @@ function UploadPage() {
     {
     isSuccess: true,
     message: "2002 Land Rover uploaded successfully"
+    slugName: "volvo-2006"
     }
     */
 
-  const makeInputVisible = (e) => {
-    // Scroll so the input is visible
-    setTimeout(() => {
-      e.target.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 300); // Slight delay to wait for the keyboard to appear (especially on mobile);
-  };
+  const existingCar = useRef();
+  const isEditing = () => existingCar.current != null;
+  const [isDeleting, setIsDeleting] = useState(null); // instance of Car
+
+  useEffect(() => {
+    async function fetchVehicleData() {
+      console.log("params.carSlugName is ", carSlugName.current);
+
+      if (!carSlugName.current) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("cars")
+        .select()
+        .eq("slugName", carSlugName.current)
+        .single();
+
+      if (error) {
+        console.error("Error", error);
+        return;
+      }
+
+      existingCar.current = data;
+      setCarName(data.name);
+
+      const plainPrice = data.price;
+      setCarPrice(plainPrice);
+      setFormattedCarPrice(toKESPrice(plainPrice));
+
+      setCarType(data.carType);
+      remoteCoverImage.current = data.coverImage;
+
+      const coverImageIndex = data.images.indexOf(data.coverImage);
+      console.log("coverImageIndex is ", coverImageIndex);
+      setCarCoverImage(coverImageIndex);
+      setActivePreviewImageIndex(coverImageIndex);
+      setLocalImages(
+        data.images.map((image) => ({ image: image, fileName: null }))
+      );
+
+      const plainCarFeatures = data.features
+        .map((feature) => `✅ ${feature}`)
+        .join("");
+      setCarFeatures(plainCarFeatures);
+      setFormattedCarFeatures(plainCarFeatures.split("✅").filter(Boolean));
+      console.log(data);
+    }
+
+    fetchVehicleData();
+  }, []);
+
+  async function handleCarDelete() {
+    if (!isDeleting) {
+      return;
+    }
+
+    console.log("existingCar is ", existingCar.current);
+    await deleteVehicle(existingCar.current);
+    setIsDeleting(null);
+    window.history.back();
+  }
 
   const onFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -113,18 +174,6 @@ function UploadPage() {
     setFormattedCarFeatures(plainCarFeatures.split("✅").filter(Boolean));
   }
 
-  function dataURLtoFile(dataurl, filename) {
-    let arr = dataurl.split(",");
-    let mime = arr[0].match(/:(.*?);/)[1];
-    let bstr = atob(arr[1]);
-    let n = bstr.length;
-    let u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-  }
-
   async function uploadCar() {
     if (!carName) {
       alert(`Car Name is missing`);
@@ -140,24 +189,38 @@ function UploadPage() {
       alert(
         `Upload some car images first. Can't buy what you can't see, right?`
       );
-    } else if (!carCoverImage) {
+    } else if (!Number.isFinite(carCoverImage)) {
       alert(`Select a cover image first by tapping onto one of the car images`);
     } else {
       setIsUploading(true);
 
-      carSlugName.current = slugifyCarName(carName);
-      const imageUrls = await uploadImages();
+      if (!carSlugName.current) {
+        carSlugName.current = slugifyCarName(carName);
+      }
 
+      const slugName = carSlugName.current;
+
+      console.log("SLUGNAME is ", slugName);
+
+      const imageUrls = await uploadImages(slugName);
+
+      console.log(
+        "Before insert — carSlugName.current is",
+        carSlugName.current
+      );
+      console.log("Before insert — slugName is", slugName);
       const newCar = {
         name: carName, // string
         price: carPrice, // number
         carType: carType, // string
         features: formattedCarFeatures, // list<string>
         images: imageUrls, // list<string>
-        coverImage: remoteCoverImage.current, // string
-        slugName: carSlugName.current, // string
-        sold: false, // string
+        coverImage: imageUrls[carCoverImage], // string
+        slugName: slugName, // string
+        sold: existingCar.current?.sold ?? false, // string
       };
+
+      console.log("After insert — slugName is", slugName);
 
       // Prevents duplicates in DB
       const { data: deleteStale, error: deleteStaleError } = await supabase
@@ -172,6 +235,9 @@ function UploadPage() {
 
       console.log("deleteStale is", deleteStale);
 
+      console.log("slugName before insert:", slugName);
+      console.log("car.slugName before insert:", newCar.slugName);
+      console.log("carSlugName.current before insert:", carSlugName.current);
       const { data, error } = await supabase
         .from("cars")
         .insert(newCar)
@@ -183,14 +249,20 @@ function UploadPage() {
         setStatusMessage({
           isSuccess: false,
           message: "Error occurred. Try again",
+          slugName: null,
         });
       } else {
         setStatusMessage({
           isSuccess: true,
           message: `${carName} uploaded successfully`,
+          slugName: newCar.slugName,
         });
 
         resetPage();
+      }
+
+      if (isEditing()) {
+        window.history.back();
       }
 
       console.log(`Status message is ${statusMessage}`);
@@ -200,12 +272,11 @@ function UploadPage() {
   }
 
   function resetPage() {
-    setCarName(null);
-    setCarPrice(null);
-    setFormattedCarPrice(null);
-    setCarType(null);
-    setCarFeatures(null);
-    setFormattedCarFeatures(null);
+    setCarName("");
+    setCarPrice("");
+    setFormattedCarPrice("");
+    setCarFeatures("");
+    setFormattedCarFeatures([]);
     setLocalImages([]);
     setActivePreviewImageIndex(null);
     remoteCoverImage.current = null;
@@ -224,13 +295,16 @@ function UploadPage() {
   // Check if photos exist first (due to an upload error)
   // If yes, get the images instead
   // If not, upload them
-  async function uploadImages() {
+  async function uploadImages(slugName) {
     setUploadAction("Checking for existing images");
 
-    const folderPath = `list/${carSlugName.current}`;
+    const folderPath = `list/${slugName}`;
+    console.log("folderPath is", folderPath);
+
     let existingFiles = [];
 
-    console.log("folderPath is", folderPath);
+    console.log("isEditing() is ", isEditing());
+
     const { data: listData, error: listError } = await supabase.storage
       .from("cars")
       .list(folderPath);
@@ -246,48 +320,62 @@ function UploadPage() {
       existingFiles = listData.map((file) =>
         getUrlFromFullPath(`cars/${folderPath}/${file.name}`)
       );
+      2;
       remoteCoverImage.current = existingFiles[carCoverImage];
 
       return existingFiles;
     }
     // Not all images uploaded. Delete then re-upload
     else if (listData && listData.length !== localImages.length) {
-      const deletePaths = listData.map(
-        (file) => `list/${carSlugName.current}/${file.name}`
-      );
+      const deletePaths = listData.map((file) => `${folderPath}/${file.name}`);
       console.log("deletePaths is", deletePaths);
 
-      if (deletePaths > 0) {
-        const { error: deleteError } = await supabase.storage
-          .from("cars")
-          .remove(deletePaths);
+      const { data: deleteData, error: deleteError } = await supabase.storage
+        .from("cars")
+        .remove(deletePaths);
 
-        console.error("Error deleting images: ", deleteError);
-      }
+      console.log("deleteData is ", deleteData);
+      console.error("Error deleting images: ", deleteError);
     }
+    // }
 
-    const promises = localImages.map(async (localImageFile, index) => {
+    const actualLocalImages = localImages.filter(
+      (localImage) => localImage.fileName !== null
+    );
+    console.log("actualLocalImages is ", actualLocalImages);
+    // Since some of the localImages (during editing) are remote - have no fileName
+    // filter them out so that you can compress any newly added image
+    const promises = actualLocalImages.map(async (localImageFile, index) => {
       const compressedFile = await imageCompression(
         dataURLtoFile(localImageFile.image, localImageFile.fileName),
         options
       );
-      console.log(`compressedFile size ${compressedFile.size / 1024} KB`);
-      console.log(`localImageFile size ${localImageFile.size / 1024} Kb`);
 
-      setUploadProgress(Math.round(((index + 1) / localImages.length) * 100));
+      setUploadProgress(
+        Math.round(((index + 1) / actualLocalImages.length) * 100)
+      );
       return compressedFile;
     });
 
     let compressedImages = await Promise.all(promises);
+
+    console.log("Before filter: compressedImages is ", compressedImages);
     compressedImages = compressedImages.filter(Boolean);
+    console.log("After filter: compressedImages is ", compressedImages);
 
     setUploadAction("Uploading photos");
 
+    // If we are in Edit mode, uploading a new image should give it an index of
+    // 12 instead of 0 (if we already have 11 images in the DB)
+    // This ensures no duplicates
+    const imageOffset = isEditing() ? localImages.length : 0;
+
     let urlList = await Promise.all(
       compressedImages.map(async (compImage, index) => {
+        const grandIndex = imageOffset + index; // Index in the grand full image list
         const { data, error } = await supabase.storage
           .from("cars")
-          .upload(`list/${carSlugName.current}/${index}`, compImage);
+          .upload(`list/${slugName}/${grandIndex}`, compImage);
 
         if (error) {
           console.log(`Failed to upload ${compImage}: ${error.message}`);
@@ -301,7 +389,7 @@ function UploadPage() {
         let remoteImage = getUrlFromFullPath(data.fullPath);
         console.log(`remoteImage is ${remoteImage}`);
 
-        if (index === carCoverImage) {
+        if (grandIndex === carCoverImage) {
           remoteCoverImage.current = remoteImage;
         }
 
@@ -309,14 +397,223 @@ function UploadPage() {
       })
     );
 
-    console.log(`urlList is ${urlList.toString()}`);
+    console.log(`Before filter: urlList is`, urlList);
     urlList = urlList.filter(Boolean);
-    console.log(`urlList is ${urlList.toString()}`);
+    console.log(`After filter: urlList is`, urlList);
 
     console.log(`remoteCoverImage.current is ${remoteCoverImage.current}`);
 
-    return urlList;
+    const fullList = [
+      ...localImages
+        .filter((value) => value.fileName === null)
+        .map((localImage) => localImage.image),
+      ...urlList,
+    ];
+    console.log("fullList is ", fullList);
+
+    return fullList;
   }
+
+  const displayData = (
+    <div className={styles.body}>
+      <div>
+        <h1 className="pageTitleInBlock">
+          {isEditing() ? "Update Car" : "New Car"}
+        </h1>
+
+        <div className={styles.field}>
+          <label htmlFor="carName">Car Name</label>
+          <input
+            type="text"
+            placeholder="2002 Land Rover"
+            required
+            onFocus={makeInputVisible}
+            value={carName}
+            onChange={(e) => setCarName(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="carPrice">Price</label>
+          <div className={styles.priceDisplay}>
+            <input
+              type="number"
+              placeholder="2 000 000"
+              required
+              onFocus={makeInputVisible}
+              value={carPrice}
+              onChange={handleCarPrice}
+            />
+            <p>{formattedCarPrice}</p>
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="carType">Vehicle Type</label>
+
+          <ul className={styles.carTypes}>
+            {Object.values(VehicleTypes).map((vehicle) => (
+              <li
+                key={vehicle.value}
+                className={vehicle.value === carType ? styles.active : ""}
+                onClick={() => setCarType(vehicle.value)}
+              >
+                {vehicle.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className={styles.field}>
+          <label htmlFor="carFeatures">Features</label>
+          <textarea
+            placeholder="(Use a ✅ at the start of each feature)"
+            required
+            rows={10}
+            onFocus={makeInputVisible}
+            value={carFeatures}
+            onChange={handleCarFeatures}
+          ></textarea>
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="carImages">Car Images</label>
+
+          <div className={styles.inputImagesContainer}>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onFocus={makeInputVisible}
+              required
+              onChange={onFileChange}
+            />
+
+            <ReactSortable
+              list={localImages}
+              setList={setLocalImages}
+              animation={200}
+              direction={isDesktop ? undefined : "horizontal"}
+              delayOnTouchStart={!isDesktop}
+              delay={isDesktop ? 0 : 120} // More forgiving for mobile touch
+              touchStartThreshold={5} // Optional, helps sensitivity
+              className={styles.inputImages}
+            >
+              {localImages.map((localImage, index) => (
+                <div key={localImage.image}>
+                  <img
+                    src={localImage.image ? localImage.image : null}
+                    onClick={() => {
+                      setCarCoverImage(index);
+                      setActivePreviewImageIndex(index);
+                    }}
+                  ></img>
+
+                  <FontAwesomeIcon
+                    className={styles.removeImageBtn}
+                    onClick={() => {
+                      setLocalImages([
+                        ...localImages.filter(
+                          (value) => value.image !== localImage.image
+                        ),
+                      ]);
+                    }}
+                    icon={faMinus}
+                  />
+                </div>
+              ))}
+            </ReactSortable>
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label
+            htmlFor="carCoverImage"
+            style={{
+              textAlign: "center",
+              margin: "auto",
+              marginTop: "20px",
+              fontSize: "1.25rem",
+            }}
+          >
+            Cover Image
+          </label>
+
+          <div className={styles.coverImage}>
+            {localImages[carCoverImage]?.image ? (
+              <img src={localImages[carCoverImage].image} alt="" />
+            ) : (
+              <p style={{}}>
+                👆🏾 <span>Click</span> on one of the images above to make it the
+                cover image 👆🏾
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className={styles.preview}>
+        <h1 className="pageTitleInBlock">Preview</h1>
+
+        <div className={styles.previewCar}>
+          <div className={styles.list}>
+            <img src={localImages.at(activePreviewImageIndex)?.image} alt="" />
+
+            <ul className={styles.sliderDots}>
+              {localImages.map((_, idx) => (
+                <li
+                  key={idx}
+                  className={
+                    idx === activePreviewImageIndex ? styles.active : ""
+                  }
+                  onClick={() => handleSliderDotClick(idx)}
+                ></li>
+              ))}
+            </ul>
+
+            <div className={styles.sliderArrows}>
+              <FontAwesomeIcon
+                icon={faChevronLeft}
+                style={{ fontSize: "1.15rem" }}
+                onClick={handleLeftArrowClick}
+              />
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                style={{ fontSize: "1.15rem" }}
+                onClick={handleRightArrowClick}
+              />
+            </div>
+          </div>
+
+          <h6 className={styles.name}>{carName}</h6>
+          <p className={styles.cost}>{formattedCarPrice}</p>
+
+          <div className={styles.features}>
+            {formattedCarFeatures?.map((feature, idx) => (
+              <p key={idx}>{feature}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p
+        className={styles.keyActionBtn}
+        style={{ marginTop: "20px" }}
+        onClick={uploadCar}
+      >
+        Upload
+      </p>
+      <p
+        className={styles.keyActionBtn}
+        onClick={() => setIsDeleting(existingCar.current)}
+        style={{
+          border: "2px rgb(246, 70, 70) solid",
+          marginBottom: "40px",
+          display: isEditing() ? "block" : "none",
+        }}
+      >
+        Delete
+      </p>
+      {/*  */}
+    </div>
+  );
 
   return (
     <div
@@ -328,183 +625,17 @@ function UploadPage() {
     >
       <Header />
 
-      <div className={styles.body}>
-        <div>
-          <h6 className={styles.title}>New Car</h6>
+      {carSlugName.current
+        ? existingCar.current
+          ? displayData
+          : Loading()
+        : displayData}
 
-          <div className={styles.field}>
-            <label htmlFor="carName">Car Name</label>
-            <input
-              type="text"
-              placeholder="2002 Land Rover"
-              autoFocus
-              required
-              onFocus={makeInputVisible}
-              value={carName}
-              onChange={(e) => setCarName(e.target.value)}
-            />
-          </div>
-
-          <div className={styles.field}>
-            <label htmlFor="carPrice">Price</label>
-            <div className={styles.priceDisplay}>
-              <input
-                type="number"
-                placeholder="2 000 000"
-                required
-                onFocus={makeInputVisible}
-                value={carPrice}
-                onChange={handleCarPrice}
-              />
-              <p>{formattedCarPrice}</p>
-            </div>
-          </div>
-
-          <div className={styles.field}>
-            <label htmlFor="carType">Vehicle Type</label>
-
-            <ul className={styles.carTypes}>
-              {Object.values(VehicleTypes).map((vehicle) => (
-                <li
-                  key={vehicle.value}
-                  className={vehicle.value === carType ? styles.active : ""}
-                  onClick={() => setCarType(vehicle.value)}
-                >
-                  {vehicle.label}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="carFeatures">Features</label>
-            <textarea
-              placeholder="(Use a ✅ at the start of each feature)"
-              required
-              rows={10}
-              onFocus={makeInputVisible}
-              value={carFeatures}
-              onChange={handleCarFeatures}
-            ></textarea>
-          </div>
-
-          <div className={styles.field}>
-            <label htmlFor="carImages">Car Images</label>
-
-            <div className={styles.inputImagesContainer}>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onFocus={makeInputVisible}
-                required
-                onChange={onFileChange}
-              />
-
-              <ReactSortable
-                list={localImages}
-                setList={setLocalImages}
-                animation={200}
-                direction={isDesktop ? undefined : "horizontal"}
-                delayOnTouchStart={!isDesktop}
-                delay={isDesktop ? 0 : 120} // More forgiving for mobile touch
-                touchStartThreshold={5} // Optional, helps sensitivity
-                className={styles.inputImages}
-              >
-                {localImages.map((localImage, index) => (
-                  <img
-                    key={localImage.image}
-                    src={localImage.image ? localImage.image : null}
-                    onClick={() => {
-                      setCarCoverImage(index);
-                      setActivePreviewImageIndex(index);
-                    }}
-                  ></img>
-                ))}
-              </ReactSortable>
-            </div>
-          </div>
-
-          <div className={styles.field}>
-            <label
-              htmlFor="carCoverImage"
-              style={{
-                textAlign: "center",
-                margin: "auto",
-                marginTop: "20px",
-                fontSize: "1.25rem",
-              }}
-            >
-              Cover Image
-            </label>
-
-            <div className={styles.coverImage}>
-              {Number.isFinite(carCoverImage) ? (
-                <img src={localImages[carCoverImage].image} alt="" />
-              ) : (
-                <p style={{}}>
-                  👆🏾 <span>Click</span> on one of the images above to make it
-                  the cover image 👆🏾
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.preview}>
-          <h6>Preview</h6>
-
-          <div className={styles.previewCar}>
-            <div className={styles.list}>
-              <img
-                src={localImages.at(activePreviewImageIndex)?.image}
-                alt=""
-              />
-
-              <ul className={styles.sliderDots}>
-                {localImages.map((_, idx) => (
-                  <li
-                    key={idx}
-                    className={
-                      idx === activePreviewImageIndex ? styles.active : ""
-                    }
-                    onClick={() => handleSliderDotClick(idx)}
-                  ></li>
-                ))}
-              </ul>
-
-              <div className={styles.sliderArrows}>
-                <FontAwesomeIcon
-                  icon={faChevronLeft}
-                  style={{ fontSize: "1.15rem" }}
-                  onClick={handleLeftArrowClick}
-                />
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  style={{ fontSize: "1.15rem" }}
-                  onClick={handleRightArrowClick}
-                />
-              </div>
-            </div>
-
-            <h6 className={styles.name}>{carName}</h6>
-            <p className={styles.cost}>{formattedCarPrice}</p>
-
-            <div className={styles.features}>
-              {formattedCarFeatures.map((feature, idx) => (
-                <p key={idx}>{feature}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <p className={styles.uploadBtn} onClick={uploadCar}>
-          Upload
-        </p>
-
-        <div
-          className={styles.uploadStatus}
-          style={{ display: isUploading || statusMessage ? "flex" : "none" }}
-        >
+      <div
+        className={`${styles.uploadStatusContainer}`}
+        style={{ display: isUploading || statusMessage ? "flex" : "none" }}
+      >
+        <div className={styles.uploadStatus}>
           {statusMessage ? (
             <div className={styles.finalStatus}>
               <FontAwesomeIcon
@@ -530,9 +661,9 @@ function UploadPage() {
               <button
                 onClick={() => {
                   console.log(
-                    `Opening url: /${carType}/${carSlugName.current}`
+                    `Opening url: /${carType}/${statusMessage.slugName}`
                   );
-                  navigate(`/${carType}/${carSlugName.current}`);
+                  navigate(`/${carType}/${statusMessage.slugName}`);
                 }}
               >
                 View Vehicle
@@ -549,6 +680,18 @@ function UploadPage() {
               </p>
             </>
           )}
+        </div>
+      </div>
+
+      <div className={`${styles.popup} ${isDeleting ? styles.active : ""}`}>
+        <div className={`${styles.deleting} `}>
+          <img src={shockedPerson} alt="" />
+          <p>Are you sure you want to delete this car?</p>
+
+          <div className={styles.actions}>
+            <button onClick={() => setIsDeleting(null)}>Cancel</button>
+            <button onClick={() => handleCarDelete()}>Delete</button>
+          </div>
         </div>
       </div>
     </div>
@@ -569,3 +712,34 @@ export default UploadPage;
           System. ✅Travelled 186,236KMS. ✅Runs & Drives Amazing. ✅New Gen
           Plate with Quick NTSA Transfer To You. */
 }
+
+// carType: "bikes";
+// coverImage: "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v1/object/public/cars/list/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/4";
+// datePosted: "2025-06-14T13:11:07.353351+00:00";
+// features: (8)[
+//   ("652cc DOHC Liquid Cooled.\n",
+//   "5-Speed (chain)\n",
+//   "18L Tank.\n",
+//   "Topbox.\n",
+//   "Travelled 33,000KMS\n",
+//   "New Mitas Tires.\n",
+//   "️Fully Kenyan Registered\n",
+//   "️Quick NTSA Transfer to You.")
+// ];
+// id: 53;
+// images: (10)[
+//   ("https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/0",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/1",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/2",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/3",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/4",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/5",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/6",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/7",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/8",
+//   "https://xxsbhmnnstzhatmoivxp.supabase.co/storage/v…/2004-bmw-f650gs-dakar-rally-edition-2025-06-14/9")
+// ];
+// name: "2004 BMW F650GS Dakar Rally Edition";
+// price: 650000;
+// slugName: "2004-bmw-f650gs-dakar-rally-edition-2025-06-14";
+// sold: false;
