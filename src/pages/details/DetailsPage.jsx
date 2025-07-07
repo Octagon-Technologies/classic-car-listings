@@ -13,6 +13,9 @@ import Header from "../../home/Header.jsx";
 import { toKESPrice } from "../../utils/StringUtils.jsx";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../../config/config.jsx";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import { div } from "framer-motion/client";
 
 function DetailsPage() {
   const [car, setCar] = useState();
@@ -93,7 +96,7 @@ function DetailsPage() {
   });
 
   return (
-    <div style={{width: "100vw"}}>
+    <div style={{ width: "100vw" }}>
       {Number.isFinite(viewImageIndex) ? <></> : <Header />}
 
       <div>
@@ -164,7 +167,15 @@ function DetailsPage() {
                     "@type": "Product",
                     name: car.name,
                     image: car.coverImage,
-                    description: `Well-maintained, affordable ${car.name} in Karen Nairobi.`,
+                    description: car.features
+                      .map((feature) =>
+                        feature
+                          .trim()
+                          .replace(/\s+/g, " ")
+                          .replace(/^./, (s) => s.toUpperCase())
+                      )
+                      .join(". "),
+                    brand: car.name,
                     // brand: "Mercedes-Benz",
                     offers: {
                       "@type": "Offer",
@@ -201,16 +212,45 @@ function DetailsPage() {
                 <div className={styles.gallery}>
                   <h2>Gallery</h2>
 
+                  {/* <img
+                    key={index}
+                    src={url}
+                    onClick={() => {
+                      setViewImageIndex(index);
+                      console.log(`index is ${index}`);
+                    }}
+                  ></img> */}
                   <ul>
                     {car.images.map((url, index) => (
-                      <img
-                        key={index}
-                        src={url}
-                        onClick={() => {
-                          setViewImageIndex(index);
-                          console.log(`index is ${index}`);
-                        }}
-                      ></img>
+                      <div key={url} className={styles.carImage}>
+                        <LazyLoadImage
+                          alt={`Image ${index} of the ${car.name}`}
+                          src={url}
+                          effect="blur"
+                          width="100%"
+                          height="100%"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                          placeholderSrc="https://classiccarlistings.co.ke/car-placeholder.png"
+                          wrapperProps={{
+                            // If you need to, you can tweak the effect transition using the wrapper style.
+                            style: {
+                              width: "100%",
+                              height: "100%",
+                            },
+                          }}
+                          onClick={() => {
+                            setViewImageIndex(index);
+                            console.log(`index is ${index}`);
+                          }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://classiccarlistings.co.ke/car-placeholder.png";
+                          }}
+                        />
+                      </div>
                     ))}
                   </ul>
                 </div>

@@ -230,9 +230,17 @@ nav ul li.active .menuItem {
   color: var(--darkGreen);
 }
 
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 768px) {
+
+}
+
+@media screen and (min-width: 1280px) {
   .appBar img {
     width: 95px;
+  }
+
+  .appBar .logo {
+    max-width: 40vw;
   }
 
   .appBar .logoName {
@@ -254,6 +262,7 @@ nav ul li.active .menuItem {
 
   nav {
     width: 50%;
+    max-width: 60vw;
     position: relative;
     height: 80px;
     border-radius: 8px;
