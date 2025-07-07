@@ -9,13 +9,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquareWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import tick from "../../assets/images/design/tick-svg.png";
+import carPlaceholder from "../../assets/images/design/car-placeholder.png";
 import Header from "../../home/Header.jsx";
 import { toKESPrice } from "../../utils/StringUtils.jsx";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../../config/config.jsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
-import { div } from "framer-motion/client";
+
 
 function DetailsPage() {
   const [car, setCar] = useState();
@@ -176,12 +176,11 @@ function DetailsPage() {
                       )
                       .join(". "),
                     brand: car.name,
-                    // brand: "Mercedes-Benz",
                     offers: {
                       "@type": "Offer",
                       priceCurrency: "KES",
                       price: car.price,
-                      availability: "https://schema.org/InStock",
+                     availability: car.sold ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
                     },
                   })}
                 </script>
@@ -232,7 +231,7 @@ function DetailsPage() {
                           style={{
                             objectFit: "cover",
                           }}
-                          placeholderSrc="https://classiccarlistings.co.ke/car-placeholder.png"
+                          placeholderSrc={carPlaceholder}
                           wrapperProps={{
                             // If you need to, you can tweak the effect transition using the wrapper style.
                             style: {
@@ -246,8 +245,7 @@ function DetailsPage() {
                           }}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src =
-                              "https://classiccarlistings.co.ke/car-placeholder.png";
+                            e.target.src = carPlaceholder;
                           }}
                         />
                       </div>

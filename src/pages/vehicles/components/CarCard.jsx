@@ -4,6 +4,7 @@ import "prop-types";
 import { Link } from "react-router-dom";
 import { VehicleStatus } from "../models/VehicleStatus";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import carPlaceholder from "../../../assets/images/design/car-placeholder.png";
 
 /**
  *
@@ -24,16 +25,16 @@ function CarCard({ name, coverImage, vehicleStatus, price, detailsPath }) {
         alt={`Image of the ${name}`}
         src={coverImage}
         effect="blur"
-        placeholderSrc="/car-placeholder.png"
+        placeholderSrc={carPlaceholder}
         wrapperProps={{
           // If you need to, you can tweak the effect transition using the wrapper style.
           style: {
-            transitionDelay: "0.5s"
+            
           },
         }}
         onError={(e) => {
           e.target.onerror = null;
-          e.target.src = "/car-placeholder.png";
+          e.target.src = {carPlaceholder};
         }}
       />
       <p className={styles.name}>{name}</p>

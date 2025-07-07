@@ -302,7 +302,7 @@ function AboutPage({ path }) {
                 }`}
                 onClick={() => setActiveShowroom(showroom)}
               >
-                <img src={showroom.image} alt="" />
+                <img src={showroom.image} loading="lazy" alt="" />
               </div>
             ))}
           </div>

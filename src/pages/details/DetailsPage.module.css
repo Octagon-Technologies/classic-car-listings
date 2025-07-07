@@ -297,7 +297,7 @@ h2 {
   }
 
   .viewImage {
-    width: 95%;
+    width: calc(100% - 16px);
     height: 100%;
     left: 50%;
     transform: translateX(-50%);
