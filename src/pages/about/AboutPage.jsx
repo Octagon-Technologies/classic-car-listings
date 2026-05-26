@@ -302,7 +302,9 @@ function AboutPage({ path }) {
                 }`}
                 onClick={() => setActiveShowroom(showroom)}
               >
-                <img src={showroom.image} loading="lazy" alt="" />
+                <img src={showroom.image}
+                  loading={(activeShowroom.image === showroom.image) ? "eager" : "lazy"}
+                  alt="" />
               </div>
             ))}
           </div>
