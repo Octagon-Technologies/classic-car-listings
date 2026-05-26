@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-222SEJRD20"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-222SEJRD20");
+    </script>
+
     <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -10,7 +25,7 @@
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Basic Meta -->
-    <title>Classic Car Listings Kenya | Buy & Sell Classic Cars in Kenya</title>
+    <title>Classic Car Listings Kenya | Buy &amp; Sell Classic Cars in Kenya</title>
     <meta
       name="description"
       content="Find, buy, and sell classic cars across Kenya. ClassicCarListings.co.ke is Kenya's premier marketplace for vintage and rare automobiles."
@@ -20,9 +35,8 @@
       content="classic cars Kenya, buy classic car Kenya, vintage cars Nairobi, old cars for sale Kenya, classic cars listings"
     />
 
-    <!-- Viewport and Charset -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Canonical -->
+    <link rel="canonical" href="https://classiccarlistings.co.ke/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -30,7 +44,7 @@
     <meta property="og:title" content="Classic Car Listings Kenya" />
     <meta
       property="og:description"
-      content="Kenya’s trusted platform for buying and selling classic cars."
+      content="Kenya's trusted platform for buying and selling classic cars."
     />
     <meta
       property="og:image"
@@ -50,17 +64,42 @@
       content="https://classiccarlistings.co.ke/twitter-image.jpg"
     />
 
-    <!-- Canonical -->
-    <link rel="canonical" href="https://classiccarlistings.co.ke/" />
-
-    <title>Classic Car Listings</title>
+    <!-- Viewport and Charset -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script
       src="https://kit.fontawesome.com/1b0c87ce69.js"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Google Tag Manager -->
+    <!-- <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NXHQXHG8");
+    </script> -->
+    <!-- End Google Tag Manager -->
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <!-- <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NXHQXHG8"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript> -->
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

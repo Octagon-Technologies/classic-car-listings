@@ -15,7 +15,7 @@ import { toKESPrice } from "../../utils/StringUtils.jsx";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../../config/config.jsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 function DetailsPage() {
   const [car, setCar] = useState();
@@ -180,7 +180,9 @@ function DetailsPage() {
                       "@type": "Offer",
                       priceCurrency: "KES",
                       price: car.price,
-                     availability: car.sold ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+                      availability: car.sold
+                        ? "https://schema.org/OutOfStock"
+                        : "https://schema.org/InStock",
                     },
                   })}
                 </script>
@@ -237,15 +239,16 @@ function DetailsPage() {
                             style: {
                               width: "100%",
                               height: "100%",
+                              transitionDelay: "0.6s",
                             },
-                          }}
-                          onClick={() => {
-                            setViewImageIndex(index);
-                            console.log(`index is ${index}`);
                           }}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = carPlaceholder;
+                          }}
+                          onClick={() => {
+                            setViewImageIndex(index);
+                            console.log(`index is ${index}`);
                           }}
                         />
                       </div>

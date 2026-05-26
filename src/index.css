@@ -61,6 +61,7 @@ footer {
 
 .appBar img {
   width: 70px;
+  object-fit: contain;
   height: fit-content;
 }
 
@@ -81,7 +82,7 @@ footer {
   margin-left: 16px;
 }
 
-.appBar .openMenu {
+.appBar #openMenu {
   font-size: 1.2rem;
 }
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+// import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../../config/config";
 
@@ -34,11 +34,11 @@ export default function LoginPage({ style }) {
   }
 
   const makeInputVisible = (e) => {
-      // Scroll so the input is visible
-      setTimeout(() => {
-        e.target.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 300); // Slight delay to wait for the keyboard to appear (especially on mobile);
-  }
+    // Scroll so the input is visible
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300); // Slight delay to wait for the keyboard to appear (especially on mobile);
+  };
 
   async function signUp() {
     const isValid = await verifyCredentials();
@@ -50,7 +50,7 @@ export default function LoginPage({ style }) {
       email: email,
       password: password,
       options: {
-        emailRedirectTo: "http://localhost:5173/admin/login",
+        emailRedirectTo: "/admin/login",
         data: {
           name: name,
         },
@@ -152,7 +152,12 @@ export default function LoginPage({ style }) {
     let allowedEmails = data.map((entry) => entry.email);
     console.log("Allowed emails:", allowedEmails);
 
-    if (!(email.endsWith("@gmail.com") || email.endsWith("@yahoo.com"))) {
+    if (
+      !(
+        email.endsWith("@gmail.com") ||
+        email.endsWith("@classiccarlistings.co.ke")
+      )
+    ) {
       setStatusMessage({
         message: "Wrong email format. Enter a valid email.",
         isError: true,

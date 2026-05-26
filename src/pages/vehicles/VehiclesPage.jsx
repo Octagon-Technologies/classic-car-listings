@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpWideShort,
+  faChevronDown,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
@@ -229,10 +230,7 @@ function VehiclesPage({ vehicleType, otherType }) {
           } for Sale Kenya | Classic Car Listings`}
         </title>
         <meta name="description" content={pageDescription} />
-        <meta
-          name="keywords"
-          content={keywords}
-        />
+        <meta name="keywords" content={keywords} />
         <link
           rel="canonical"
           href={`https://classiccarlistings.co.ke/${daMachine?.value ?? ""}`}
@@ -240,10 +238,7 @@ function VehiclesPage({ vehicleType, otherType }) {
 
         {/* Open Graph */}
         <meta property="og:title" content="Classic Car Listings Kenya" />
-        <meta
-          property="og:description"
-          content={pageDescription}
-        />
+        <meta property="og:description" content={pageDescription} />
         <meta
           property="og:image"
           content="https://classiccarlistings.co.ke/og-image.png"
@@ -286,7 +281,7 @@ function VehiclesPage({ vehicleType, otherType }) {
             daMachine?.groupKeyword?.toLowerCase() ?? "Cars"
           } for sale in Kenya`}</h1>
 
-          <h2 className="seoHeader">{ pageDescription }</h2>
+          <h2 className="seoHeader">{pageDescription}</h2>
           <h2 className="seoHeader">
             Explore Classic Car Listings Across Kenya
           </h2>
@@ -331,7 +326,11 @@ function VehiclesPage({ vehicleType, otherType }) {
                   Latest To Earliest (Date Posted)
                 </option>
               </select>
-              <FontAwesomeIcon icon={faArrowUpWideShort} />
+
+              <FontAwesomeIcon
+                className={styles.icon}
+                icon={faArrowUpWideShort}
+              />
             </div>
             <div className={styles.search}>
               <p>Search</p>
@@ -339,18 +338,18 @@ function VehiclesPage({ vehicleType, otherType }) {
           </div>
         </div>
 
-        <select
-          className={styles.filterCategory}
-          value={vehicleStatus}
-          onChange={handleVehicleStatus}
-        >
-          <option value={VehicleStatus.Available}>
-            Show {VehicleStatus.Available} {daMachine?.groupKeyword ?? "Cars"}
-          </option>
-          <option value={VehicleStatus.Sold}>
-            Show {VehicleStatus.Sold} {daMachine?.groupKeyword ?? "Cars"}
-          </option>
-        </select>
+        <div className={styles.filterCategory}>
+          <select value={vehicleStatus} onChange={handleVehicleStatus}>
+            <option value={VehicleStatus.Available}>
+              Show {VehicleStatus.Available} {daMachine?.groupKeyword ?? "Cars"}
+            </option>
+            <option value={VehicleStatus.Sold}>
+              Show {VehicleStatus.Sold} {daMachine?.groupKeyword ?? "Cars"}
+            </option>
+          </select>
+
+          <FontAwesomeIcon className={styles.icon} icon={faChevronDown} />
+        </div>
 
         <CarList
           searchQuery={searchQuery}
