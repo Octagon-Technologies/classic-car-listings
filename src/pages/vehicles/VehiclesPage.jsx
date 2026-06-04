@@ -1,12 +1,12 @@
 import styles from "./VehiclePage.module.css";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpWideShort,
   faChevronDown,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import CarList from "./components/car-list/CarList";
 import SortOption from "./models/SortOption";
 import Header from "../../home/Header";
@@ -160,66 +160,39 @@ function VehiclesPage({ vehicleType, otherType }) {
     itemCondition: "https://schema.org/UsedCondition",
   }));
 
-  let pageDescription = "";
-  let keywords = "";
-
-  useEffect(() => {
-    // For dynamic descriptions
+  const pageDescription = useMemo(() => {
     switch (daMachine?.value) {
       case "all-cars":
-        pageDescription =
-          "Browse all classic and modern vehicles for sale in Kenya. Discover a wide variety of well-maintained cars from vintage classics to everyday rides on Classic Car Listings Kenya.";
-        break;
+        return "Browse all classic and modern vehicles for sale in Kenya. Discover a wide variety of well-maintained cars from vintage classics to everyday rides on Classic Car Listings Kenya.";
       case "classic-cars":
-        pageDescription =
-          "Explore Kenya’s finest selection of classic cars for sale. Find vintage collectibles, timeless models, and rare classics from trusted sellers on Classic Car Listings Kenya.";
-        break;
+        return "Explore Kenya’s finest selection of classic cars for sale. Find vintage collectibles, timeless models, and rare classics from trusted sellers on Classic Car Listings Kenya.";
       case "modern-classics":
-        pageDescription =
-          "Shop modern classic cars for sale in Kenya. From early 2000s icons to everyday rides, find your next well-kept modern classic car on Classic Car Listings Kenya.";
-        break;
+        return "Shop modern classic cars for sale in Kenya. From early 2000s icons to everyday rides, find your next well-kept modern classic car on Classic Car Listings Kenya.";
       case "automobiles":
-        pageDescription =
-          "Buy boats, buggies, and ATVs for sale across Kenya. Classic Car Listings Kenya features a curated selection of adventure-ready off-road vehicles and watercraft.";
-        break;
+        return "Buy boats, buggies, and ATVs for sale across Kenya. Classic Car Listings Kenya features a curated selection of adventure-ready off-road vehicles and watercraft.";
       case "bikes":
-        pageDescription =
-          "Find classic bikes and vintage motorcycles for sale in Kenya. Explore rare two-wheelers, Vespas, and collectible motorcycles on Classic Car Listings Kenya.";
-        break;
+        return "Find classic bikes and vintage motorcycles for sale in Kenya. Explore rare two-wheelers, Vespas, and collectible motorcycles on Classic Car Listings Kenya.";
       default:
-        pageDescription =
-          "Find, buy, and sell classic vehicles in Kenya. Classic Car Listings Kenya offers trusted listings for classic cars, modern classics, motorcycles, and more.";
-        break;
+        return "Buy and sell classic cars, modern classics, vintage motorcycles, and more in Kenya. Browse Kenya’s premier marketplace for well-maintained classic vehicles — classiccarlistings.co.ke.";
     }
+  }, [daMachine?.value]);
 
-    // For dynamic keywords
+  const keywords = useMemo(() => {
     switch (daMachine?.value) {
       case "all-cars":
-        keywords =
-          "classic cars Kenya, cars for sale Kenya, cheap cars in Kenya, modern classics Kenya, bikes for sale Kenya, classic car listings, classic cars for sale Kenya";
-        break;
+        return "classic cars Kenya, cars for sale Kenya, cheap cars in Kenya, modern classics Kenya, bikes for sale Kenya, classic car listings, classic cars for sale Kenya";
       case "classic-cars":
-        keywords =
-          "classic cars Kenya, vintage cars Kenya, cars for sale Kenya, classic car listings, classic cars for sale Kenya";
-        break;
+        return "classic cars Kenya, vintage cars Kenya, cars for sale Kenya, classic car listings, classic cars for sale Kenya";
       case "modern-classics":
-        keywords =
-          "modern classics Kenya, modern classics for sale Kenya, classic cars Kenya, cars for sale Kenya, classic car listings";
-        break;
+        return "modern classics Kenya, modern classics for sale Kenya, classic cars Kenya, cars for sale Kenya, classic car listings";
       case "automobiles":
-        keywords =
-          "boats for sale Kenya, buggies for sale Kenya, ATVs for sale Kenya, classic cars Kenya, cars for sale Kenya, classic car listings";
-        break;
+        return "boats for sale Kenya, buggies for sale Kenya, ATVs for sale Kenya, classic cars Kenya, cars for sale Kenya, classic car listings";
       case "bikes":
-        keywords =
-          "bikes for sale Kenya, classic bikes Kenya, vespas Kenya, vespas for sale Kenya, classic motorcycles Kenya, classic car listings";
-        break;
+        return "bikes for sale Kenya, classic bikes Kenya, vespas Kenya, vespas for sale Kenya, classic motorcycles Kenya, classic car listings";
       default:
-        keywords =
-          "classic cars Kenya, bikes for sale, cheap cars in Kenya, cars for sale Kenya, classic car listings, classic cars for sale Kenya, modern classics Kenya, modern classics for sale Kenya, bikes for sale Kenya, vespas Kenya, vespas for sale Kenya";
-        break;
+        return "classic cars Kenya, bikes for sale, cheap cars in Kenya, cars for sale Kenya, classic car listings, classic cars for sale Kenya, modern classics Kenya, modern classics for sale Kenya, bikes for sale Kenya, vespas Kenya, vespas for sale Kenya";
     }
-  }, [vehicleType]);
+  }, [daMachine?.value]);
 
   return (
     <div>
@@ -277,16 +250,7 @@ function VehiclesPage({ vehicleType, otherType }) {
 
       <div className={styles.body}>
         <div className={styles.searchSection}>
-          <h1 className="seoHeader">{`Classic ${
-            daMachine?.groupKeyword?.toLowerCase() ?? "Cars"
-          } for sale in Kenya`}</h1>
-
-          <h2 className="seoHeader">{pageDescription}</h2>
-          <h2 className="seoHeader">
-            Explore Classic Car Listings Across Kenya
-          </h2>
-
-          <h1 className={styles.title}>
+            <h1 className={styles.title}>
             {/* Explore a vast array of well-maintained classics */}
             {`Explore our vast collection of well-maintained classic ${
               daMachine?.groupKeyword?.toLowerCase() ?? "cars"
@@ -303,7 +267,7 @@ function VehiclesPage({ vehicleType, otherType }) {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div className={styles.searchActions}>
+          <div className={styles.searchActions} data-nosnippet>
             <div className={styles.sort}>
               <select
                 value={sortOption ? sortOption.key : ""}
@@ -338,7 +302,7 @@ function VehiclesPage({ vehicleType, otherType }) {
           </div>
         </div>
 
-        <div className={styles.filterCategory}>
+        <div className={styles.filterCategory} data-nosnippet>
           <select value={vehicleStatus} onChange={handleVehicleStatus}>
             <option value={VehicleStatus.Available}>
               Show {VehicleStatus.Available} {daMachine?.groupKeyword ?? "Cars"}
